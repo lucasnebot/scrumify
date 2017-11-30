@@ -13,12 +13,13 @@ export default class Server {
     constructor() {
         this.app = express();
         this.config();
+        this.routes();
     }
 
     /**
      * Inherits the application config
      */
-    public config(): void {
+    private config(): void {
         // Load .env in process variable
         dotenv.load({ path: '.env' });
 
@@ -38,5 +39,17 @@ export default class Server {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(helmet());
+    }
+
+    /**
+     * Set the server routes
+     */
+    private routes(): void {
+        const ROUTER = express.Router();
+
+        // Insert application routes here
+
+        // Apply routes to application with /api prefix
+        this.app.use('/api', ROUTER);
     }
 }
