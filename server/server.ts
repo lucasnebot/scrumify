@@ -21,7 +21,7 @@ export default class Server {
      */
     private config(): void {
         // Load .env in process variable
-        dotenv.load({ path: '.env' });
+        dotenv.config({ path: '.env' });
 
         // MongoDB Connection
         const MONGO_URI: string = process.env.PROD_MONGODB || process.env.TEST_MONGODB;
