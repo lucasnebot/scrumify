@@ -57,8 +57,13 @@ export default class Server {
     const milestoneCtrl = new MilestoneCtrl();
     
     // Insert application routes here
-    this.app.get("/milestones",milestoneCtrl.readAll);
+
+    // Milestone
+    this.app.get("/milestone/:id",milestoneCtrl.read);
+    this.app.get("/milestone",milestoneCtrl.readAll);
     this.app.post("/milestone", milestoneCtrl.create);
+    this.app.put("/milestone/:id", milestoneCtrl.update);
+    this.app.delete("/milestone/:id", milestoneCtrl.delete);
   
   }
 }

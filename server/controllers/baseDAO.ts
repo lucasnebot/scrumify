@@ -1,12 +1,12 @@
-abstract class baseDAO {
-  abstract model: any;
-  
+import { Model } from "mongoose";
+
+export default abstract class baseDAO {
+  abstract model: Model<any>;
+
   //! ❗ Use Arrow functions for correct binding of 'this'!
 
   /**
    * Creates a document of a model and inserts it into the DB
-   * @param req
-   * @param res
    */
   create = (req, res): void => {
     // Builds model with received data object
@@ -22,9 +22,20 @@ abstract class baseDAO {
       });
   };
   /**
+   * Returns the document to a given ID
+   */
+  read = (req, res): void => {
+    this.model
+      .findById(req.params.id)
+      .then(doc => {
+        res.send(doc);
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      });
+  };
+  /**
    * Returns all the documents from a specific Collection
-   * @param req
-   * @param res
    */
   readAll = (req, res): void => {
     this.model
@@ -36,5 +47,30 @@ abstract class baseDAO {
         res.status(400).send(err);
       });
   };
+  /**
+   * Finds a document by ID and updates the given properties
+   */
+  update = (req, res): void => {
+    this.model
+      .findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+      .then(doc => {
+        res.send(doc);
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      });
+  };
+/**
+ * Deletes a document with the given ID
+ */
+  delete = (req, res): void => {
+    this.model
+      .findByIdAndRemove(req.params.id)
+      .then(doc => {
+        res.send(doc);
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      });
+  };
 }
-export default baseDAO;
