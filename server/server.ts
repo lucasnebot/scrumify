@@ -1,55 +1,64 @@
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as bodyParser from 'body-parser';
-import * as dotenv from 'dotenv';
-import * as helmet from 'helmet';
-import * as path from 'path';
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as dotenv from "dotenv";
+import * as helmet from "helmet";
+import * as path from "path";
+import * as mongoose from "mongoose";
+// Use Native ES6 Promise libary to use 'classic' Promise syntax
+// cryptic syntax nessessary because of TS rules
+require("mongoose").Promise = global.Promise;
 
+// Models and Controllers
+import MilestoneCtrl from "./controllers/milestoneCtrl";
+import Milestone from "./models/milestone";
 
 export default class Server {
-    // Set app to Express application
-    public app: express.Application;
+  // Set app to Express application
+  public app: express.Application;
 
-    constructor() {
-        this.app = express();
-        this.config();
-        this.routes();
-    }
+  constructor() {
+    this.app = express();
+    this.config();
+    this.routes();
+  }
 
-    /**
-     * Inherits the application config
-     */
-    private config(): void {
-        // Load .env in process variable
-        dotenv.config({ path: '.env' });
+  /**
+   * Connects to MongoDB and sets up Express middleware
+   */
+  private config(): void {
+    // Load .env in process variable
+    dotenv.config({ path: ".env" });
 
-        // MongoDB Connection
-        const MONGO_URI: string = process.env.PROD_MONGODB || process.env.TEST_MONGODB;
+    // MongoDB Connection
+    const MONGO_URI: string =
+      process.env.PROD_MONGODB || process.env.TEST_MONGODB;
 
-        mongoose.connect(MONGO_URI, { useMongoClient: true }, (err) => {
-            if (err) {
-                console.log('Connection to MongoDB refused: ' + err);
-            } else {
-                console.log('Successful connection to MongoDB');
-            }
-        });
+    mongoose
+      .connect(MONGO_URI, { useMongoClient: true })
+      .then(() => {
+        console.log("Successful connection to MongoDB");
+      })
+      .catch(err => {
+        console.log("Connection to MongoDB refused: " + err);
+      });
 
-        // Express middleware
-        this.app.use('/', express.static(path.join(__dirname, '../public')));
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: false }));
-        this.app.use(helmet());
-    }
+    // Express middleware
+    this.app.use("/", express.static(path.join(__dirname, "../public")));
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(helmet());
+  }
 
-    /**
-     * Set the server routes
-     */
-    private routes(): void {
-        const ROUTER = express.Router();
-
-        // Insert application routes here
-
-        // Apply routes to application with /api prefix
-        this.app.use('/api', ROUTER);
-    }
+  /**
+   * Set the server routes
+   */
+  private routes(): void {
+    // Instantiate Controllers
+    const milestoneCtrl = new MilestoneCtrl();
+    
+    // Insert application routes here
+    this.app.get("/milestones",milestoneCtrl.readAll);
+    this.app.post("/milestone", milestoneCtrl.create);
+  
+  }
 }
