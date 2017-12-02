@@ -9,12 +9,13 @@ import * as mongoose from "mongoose";
 require("mongoose").Promise = global.Promise;
 
 // Models and Controllers
-//? Index in models and controllers to export everything?
+import baseDAO from "controllers/baseDAO";
 import MilestoneCtrl from "./controllers/milestoneCtrl";
 import Milestone from "./models/milestone";
 import BacklogItemCtrl from "./controllers/backlogItemCtrl";
 import BacklogItem from "./models/backLogItem";
-import baseDAO from "controllers/baseDAO";
+import TaskCtrl from "./controllers/taskCtrl";
+import Task from "./models/task";
 
 export default class Server {
   // Set app to Express application
@@ -60,12 +61,14 @@ export default class Server {
     // Instantiate Controllers
     const milestoneCtrl = new MilestoneCtrl();
     const backlogItemCtrl = new BacklogItemCtrl();
+    const taskCtrl = new TaskCtrl();
 
     // Insert application routes here
     this.setCrudRoutes("milestone", milestoneCtrl);
     this.setCrudRoutes("backlogItem", backlogItemCtrl);
+    this.setCrudRoutes("task", taskCtrl);
   }
-  
+
   private setCrudRoutes(path: string, ctrl: baseDAO) {
     this.app.get(`/api/${path}/:id`, ctrl.read);
     this.app.get(`/api/${path}`, ctrl.readAll);
