@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 const milestoneSchema = new mongoose.Schema({
   title: {
@@ -15,6 +15,6 @@ const milestoneSchema = new mongoose.Schema({
   }
 });
 
-const milestone = mongoose.model("Milestone", milestoneSchema);
+const milestone = mongoose.model('Milestone', milestoneSchema);
 
 export default milestone;

@@ -1,9 +1,9 @@
-import { Model } from "mongoose";
+import { Model } from 'mongoose';
 
-export default abstract class baseDAO {
+export default abstract class BaseDAO {
   abstract model: Model<any>;
 
-  //! ❗ Use Arrow functions for correct binding of 'this'!
+  // ! ❗ Use Arrow functions for correct binding of 'this'!
 
   /**
    * Creates a document of a model and inserts it into the DB
@@ -20,7 +20,7 @@ export default abstract class baseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
-  };
+  }
   /**
    * Returns the document to a given ID
    */
@@ -33,7 +33,7 @@ export default abstract class baseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
-  };
+  }
   /**
    * Returns all the documents from a specific Collection
    */
@@ -46,7 +46,7 @@ export default abstract class baseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
-  };
+  }
   /**
    * Finds a document by ID and updates the given properties
    */
@@ -59,7 +59,7 @@ export default abstract class baseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
-  };
+  }
 /**
  * Deletes a document with the given ID
  */
@@ -72,5 +72,5 @@ export default abstract class baseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
-  };
+  }
 }

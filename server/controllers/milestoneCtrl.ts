@@ -1,6 +1,6 @@
-import baseDAO from "./baseDAO";
-import milestone from "../models/milestone";
+import baseDAO from './baseDAO';
+import milestone from '../models/milestone';
 
-export default class milestoneCtrl extends baseDAO {
+export default class MilestoneCtrl extends baseDAO {
   model = milestone;
 }
