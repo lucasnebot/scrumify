@@ -13,7 +13,7 @@ import baseDAO from "controllers/baseDAO";
 import MilestoneCtrl from "./controllers/milestoneCtrl";
 import Milestone from "./models/milestone";
 import BacklogItemCtrl from "./controllers/backlogItemCtrl";
-import BacklogItem from "./models/backLogItem";
+import BacklogItem from "./models/backlogItem";
 import TaskCtrl from "./controllers/taskCtrl";
 import Task from "./models/task";
 
