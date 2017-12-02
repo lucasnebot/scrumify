@@ -9,8 +9,12 @@ import * as mongoose from "mongoose";
 require("mongoose").Promise = global.Promise;
 
 // Models and Controllers
+//? Index in models and controllers to export everything?
 import MilestoneCtrl from "./controllers/milestoneCtrl";
 import Milestone from "./models/milestone";
+import BacklogItemCtrl from "./controllers/backlogItemCtrl";
+import BacklogItem from "./models/backLogItem";
+import baseDAO from "controllers/baseDAO";
 
 export default class Server {
   // Set app to Express application
@@ -55,15 +59,18 @@ export default class Server {
   private routes(): void {
     // Instantiate Controllers
     const milestoneCtrl = new MilestoneCtrl();
-    
-    // Insert application routes here
+    const backlogItemCtrl = new BacklogItemCtrl();
 
-    // Milestone
-    this.app.get("/milestone/:id",milestoneCtrl.read);
-    this.app.get("/milestone",milestoneCtrl.readAll);
-    this.app.post("/milestone", milestoneCtrl.create);
-    this.app.put("/milestone/:id", milestoneCtrl.update);
-    this.app.delete("/milestone/:id", milestoneCtrl.delete);
+    // Insert application routes here
+    this.setCrudRoutes("milestone", milestoneCtrl);
+    this.setCrudRoutes("backlogItem", backlogItemCtrl);
+  }
   
+  private setCrudRoutes(path: string, ctrl: baseDAO) {
+    this.app.get(`/api/${path}/:id`, ctrl.read);
+    this.app.get(`/api/${path}`, ctrl.readAll);
+    this.app.post(`/api/${path}`, ctrl.create);
+    this.app.put(`/api/${path}/:id`, ctrl.update);
+    this.app.delete(`/api/${path}/:id`, ctrl.delete);
   }
 }
