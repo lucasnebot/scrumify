@@ -61,7 +61,7 @@ export const authService = {
      */
     decodeJWTToken(token: string) {
         return new Promise<JWTClaimSet>((resolve, reject) => {
-            jwt.verify(token, JWT_SECRET, (err, claimSet) => {
+            jwt.verify(token || '', JWT_SECRET, (err, claimSet) => {
                 err ? reject(err) : resolve(claimSet as JWTClaimSet);
             });
         });
@@ -96,7 +96,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     if (res.locals.user) {
       next();
     } else {
-      res.redirect('/users/signin');
+      res.redirect('http://google.de');
     }
   }
 
