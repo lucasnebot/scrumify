@@ -1,9 +1,11 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
+import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as path from 'path';
+import { jwtClaimSetMiddleware } from './services/auth.service';
 
 
 export default class Server {
@@ -38,7 +40,9 @@ export default class Server {
         this.app.use('/', express.static(path.join(__dirname, '../public')));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(cookieParser);
         this.app.use(helmet());
+        this.app.use(jwtClaimSetMiddleware);
     }
 
     /**

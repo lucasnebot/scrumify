@@ -1,7 +1,19 @@
-import * as mongoose from 'mongoose';
-import { model } from 'mongoose';
+import { model, Schema} from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+export interface User {
+    email: string;
+    name: string;
+    surname: string;
+    password: string;
+}
+
+export enum UserRole {
+    scrumMaster = 1,
+    productOwner,
+    developer
+}
+
+const userSchema = new Schema({
     email: {
         type: String,
         required: true
@@ -17,7 +29,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    role: {
+        type: UserRole,
+        required: true
     }
 });
 
-export default model('User', userSchema);
+export const userModel = model('User', userSchema);
