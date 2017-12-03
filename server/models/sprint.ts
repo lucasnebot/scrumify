@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 const sprintSchema = new mongoose.Schema({
     start: {
@@ -18,5 +18,5 @@ const sprintSchema = new mongoose.Schema({
     }
 });
 
-const sprint = mongoose.model("Sprint", sprintSchema);
+const sprint = mongoose.model('Sprint', sprintSchema);
 export default sprint;

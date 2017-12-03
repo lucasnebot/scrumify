@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 
 const backlogItemSchema = new mongoose.Schema({
@@ -12,8 +12,8 @@ const backlogItemSchema = new mongoose.Schema({
   },
   backlogStatus: {
     type: String,
-    enum: ["new", "Ready for estimation", "Ready for Sprint"],
-    default: "new"
+    enum: ['new', 'Ready for estimation', 'Ready for Sprint'],
+    default: 'new'
   },
   order: {
     type: Number,
@@ -28,6 +28,6 @@ const backlogItemSchema = new mongoose.Schema({
   }
 });
 
-const backlogItem = mongoose.model("BacklogItem", backlogItemSchema);
+const backlogItem = mongoose.model('BacklogItem', backlogItemSchema);
 
 export default backlogItem;

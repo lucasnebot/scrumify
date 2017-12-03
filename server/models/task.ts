@@ -1,4 +1,4 @@
-import * as mongoose from "mongoose";
+import * as mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema({
     title: {
@@ -7,7 +7,7 @@ const taskSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        default: ""
+        default: ''
     },
     User: {
         type: mongoose.Schema.Types.ObjectId,
@@ -15,6 +15,6 @@ const taskSchema = new mongoose.Schema({
     }
 });
 
-const task = mongoose.model("Task", taskSchema);
+const task = mongoose.model('Task', taskSchema);
 
 export default task;
