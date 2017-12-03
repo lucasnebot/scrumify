@@ -8,19 +8,12 @@ import * as mongoose from 'mongoose';
 // cryptic syntax nessessary because of TS rules
 require('mongoose').Promise = global.Promise;
 
-<<<<<<< HEAD
-// Models and Controllers
-import MilestoneCtrl from './controllers/milestoneCtrl';
-import Milestone from './models/milestone';
-=======
 // Controllers
-import baseDAO from "controllers/baseDAO";
-import MilestoneCtrl from "./controllers/milestoneCtrl";
-import BacklogItemCtrl from "./controllers/backlogItemCtrl";
-import TaskCtrl from "./controllers/taskCtrl";
-import SprintCtrl from "./controllers/sprintCtrl";
-
->>>>>>> ccb331cb672c603f90f1c0ea059d7c543acace7c
+import baseDAO from 'controllers/baseDAO';
+import MilestoneCtrl from './controllers/milestoneCtrl';
+import BacklogItemCtrl from './controllers/backlogItemCtrl';
+import TaskCtrl from './controllers/taskCtrl';
+import SprintCtrl from './controllers/sprintCtrl';
 
 export default class Server {
   // Set app to Express application
@@ -70,10 +63,10 @@ export default class Server {
     const sprintCtrl = new SprintCtrl();
 
     // Insert application routes here
-    this.setCrudRoutes("milestone", milestoneCtrl);
-    this.setCrudRoutes("backlogItem", backlogItemCtrl);
-    this.setCrudRoutes("task", taskCtrl);
-    this.setCrudRoutes("sprint",sprintCtrl);
+    this.setCrudRoutes('milestone', milestoneCtrl);
+    this.setCrudRoutes('backlogItem', backlogItemCtrl);
+    this.setCrudRoutes('task', taskCtrl);
+    this.setCrudRoutes('sprint', sprintCtrl);
   }
   /**
    * Opens all crud routes for a model and connects to controller
