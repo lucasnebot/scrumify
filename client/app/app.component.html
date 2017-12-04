@@ -2,22 +2,23 @@
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" routerLink="/">Scrumify</a>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">Current</span></a>
-      <a class="nav-item nav-link" href="#">Features</a>
-      <a class="nav-item nav-link" href="#">Pricing</a>
-      <a class="nav-item nav-link disabled" href="#">Disabled</a>
+    <div class="navbar-nav ml-auto">
+      <a class="nav-item nav-link active" routerLink="/">Home <span class="sr-only">Current</span></a>
+      <a class="nav-item nav-link" routerLink="/backlog">Backlog</a>
+      <a class="nav-item nav-link" routerLink="/milestones">Milestones</a>
     </div>
   </div>
 </nav>
-<div class="jumbotron">
-  <h1 class="display-3">Scrumify X Bootstrap 4</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-  </p>
+<div class="container">
+  <router-outlet></router-outlet>
 </div>
+
+
+
+<footer class="footer">
+  <div class="container">
+    <span class="text-muted">Made with  &hearts;  in M&uuml;nster.</span>
+  </div>
+</footer>
