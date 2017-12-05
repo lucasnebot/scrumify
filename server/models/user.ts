@@ -13,7 +13,7 @@ export enum UserRole {
     developer
 }
 
-const userSchema = new Schema({
+export const userSchema = new Schema({
     email: {
         type: String,
         required: true

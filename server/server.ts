@@ -17,6 +17,7 @@ import MilestoneCtrl from './controllers/milestoneCtrl';
 import BacklogItemCtrl from './controllers/backlogItemCtrl';
 import TaskCtrl from './controllers/taskCtrl';
 import SprintCtrl from './controllers/sprintCtrl';
+import UserCtrl from './controllers/userCtrl';
 
 
 export default class Server {
@@ -67,12 +68,14 @@ export default class Server {
     const backlogItemCtrl = new BacklogItemCtrl();
     const taskCtrl = new TaskCtrl();
     const sprintCtrl = new SprintCtrl();
+    const userCtrl = new UserCtrl();
 
     // Insert application routes here
     this.setCrudRoutes('milestone', milestoneCtrl);
     this.setCrudRoutes('backlogItem', backlogItemCtrl);
     this.setCrudRoutes('task', taskCtrl);
     this.setCrudRoutes('sprint', sprintCtrl);
+    this.setCrudRoutes('user', userCtrl);
   }
   /**
    * Opens all crud routes for a model and connects to controller

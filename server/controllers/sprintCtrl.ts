@@ -1,6 +1,6 @@
 import baseDAO from './baseDAO';
-import sprint from '../models/sprint';
+import {sprintModel} from '../models/sprint';
 
-export default class backlogItemCtrl extends baseDAO {
-    model = sprint;
+export default class SprintModel extends baseDAO {
+    model = sprintModel;
 }

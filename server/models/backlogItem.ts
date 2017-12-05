@@ -1,33 +1,38 @@
 import * as mongoose from 'mongoose';
 
-
-const backlogItemSchema = new mongoose.Schema({
-  userStory: {
+/**
+ * Default backlog item schema
+ */
+export const backlogItemSchema = new mongoose.Schema({
+  title: {
     type: String,
     required: true
   },
-  estimation: {
-    type: Number,
-    default: null
-  },
-  backlogStatus: {
-    type: String,
-    enum: ['new', 'Ready for estimation', 'Ready for Sprint'],
-    default: 'new'
+  description: {
+    type: String
   },
   order: {
     type: Number,
-    default: null
-  },
-  tasks: {
-    type: [mongoose.Schema.Types.ObjectId]
-  },
-  sprint: {
-    type: mongoose.Schema.Types.ObjectId,
     required: true
+  }
+},  { discriminatorKey: 'kind' });
+
+/**
+ * User story, inherits from default backlog item schema
+ */
+export const userStorySchema = new mongoose.Schema({
+  estimation: {
+    type: Number
+  },
+  status: {
+    type: String,
+    enum: ['NEW', 'RFE', 'RFS'],
+    default: 'NEW'
+  },
+  task: {
+    type: [mongoose.Schema.Types.ObjectId]
   }
 });
 
-const backlogItem = mongoose.model('BacklogItem', backlogItemSchema);
-
-export default backlogItem;
+export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
+export const userStoryModel = backlogItemModel.discriminator('UserStory', userStorySchema);

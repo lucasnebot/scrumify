@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-const milestoneSchema = new mongoose.Schema({
+export const milestoneSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true
@@ -15,6 +15,4 @@ const milestoneSchema = new mongoose.Schema({
   }
 });
 
-const milestone = mongoose.model('Milestone', milestoneSchema);
-
-export default milestone;
+export const milestoneModel = mongoose.model('Milestone', milestoneSchema);
