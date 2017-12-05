@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 
+const options = { discriminatorKey: 'type' };
+
 /**
  * Default backlog item schema
  */
@@ -15,7 +17,9 @@ export const backlogItemSchema = new mongoose.Schema({
     type: Number,
     required: true
   }
-},  { discriminatorKey: 'kind' });
+},  options);
+
+export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
 
 /**
  * User story, inherits from default backlog item schema
@@ -32,7 +36,6 @@ export const userStorySchema = new mongoose.Schema({
   task: {
     type: [mongoose.Schema.Types.ObjectId]
   }
-});
+}, options);
 
-export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
 export const userStoryModel = backlogItemModel.discriminator('UserStory', userStorySchema);
