@@ -46,8 +46,16 @@ export class RoadmapComponent implements OnInit {
       this.ngOnInit();
     })
   }
+
   deleteMilestone(id: string): void {
     this.milestoneService.delete(id).subscribe((resp) => {
+      this.ngOnInit();
+    })
+  }
+  
+  achieveMilestone(id:string): void{
+    let update = {achieved: true};
+    this.milestoneService.edit(id, update).subscribe((resp) => {
       this.ngOnInit();
     })
   }

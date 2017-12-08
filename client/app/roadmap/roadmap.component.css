@@ -7,3 +7,9 @@ form {
 #roadmapContainer {
   margin-top: 16pt
 }
+.fa-times:hover {
+  color: darkred;
+}
+.fa-check:hover {
+  color: darkgreen;
+}
