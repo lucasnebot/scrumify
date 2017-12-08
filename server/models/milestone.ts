@@ -12,6 +12,10 @@ const milestoneSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true
+  },
+  achieved: {
+    type: Boolean,
+    default: false
   }
 });
 

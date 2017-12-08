@@ -1,9 +1,11 @@
+// Modules
 import { backlogService } from './shared/service/backlogService';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
-
+// Components
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BacklogComponent } from './backlog/backlog.component';
@@ -22,7 +24,8 @@ import { RoadmapComponent } from './roadmap/roadmap.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [backlogService],
   bootstrap: [AppComponent]
