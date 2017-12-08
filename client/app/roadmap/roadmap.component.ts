@@ -21,7 +21,7 @@ export class RoadmapComponent implements OnInit {
   ngOnInit() {
     this.milestoneService.getAll().subscribe((docs) => {
       this.milestones = docs;
-
+      this.sortMilestones();
     })
   }
 
@@ -52,11 +52,17 @@ export class RoadmapComponent implements OnInit {
       this.ngOnInit();
     })
   }
-  
+
   achieveMilestone(id:string): void{
     let update = {achieved: true};
     this.milestoneService.edit(id, update).subscribe((resp) => {
       this.ngOnInit();
+    })
+  }
+  
+  sortMilestones() {
+    this.milestones.sort((a: Milestone, b: Milestone): number => {
+      return Date.parse(a.date) - Date.parse(b.date);
     })
   }
 }

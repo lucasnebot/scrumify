@@ -23,27 +23,28 @@
   </form>
   <hr>
   <!-- Milestone Card -->
-  <div *ngFor="let m of milestones; let i = index" class="card card-outline-primary w-50">
-      <div class="card-block">
-    <div class="row">
-      <div class="col-sm-11">
-        
+  <div *ngFor="let m of milestones;" [class.card-outline-primary]="!m.achieved" [class.card-outline-success]="m.achieved"
+    class="card card-outline-primary w-50">
+    <div class="card-block">
+      <div class="row">
+        <div class="col-sm-11">
+
           <h4 [class.text-success]="m.achieved" class="card-title">
             <i [hidden]="!m.achieved" class="fa fa-trophy"></i> {{m.title}}
           </h4>
           <h6 class="card-subtitle mb-2 text-muted">{{m.date | date}}</h6>
           <p class="card-text">{{m.description}}.</p>
-        
-      </div>
-      <div class="col-sm-1">
-        
+
+        </div>
+        <div class="col-sm-1">
+
           <!-- Update Button-->
           <i [hidden]="m.achieved" (click)="achieveMilestone(m._id)" class="fa fa-check"></i>
           <!-- Delete Button-->
           <i (click)="deleteMilestone(m._id)" class="fa fa-times"></i>
-        
+
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </div>

@@ -1,10 +1,11 @@
 import { Observable} from 'rxjs/Observable';
-import {HttpClient, HttpResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 // Export
-export {HttpClient, HttpResponse} from '@angular/common/http';
+export {HttpClient} from '@angular/common/http';
 
-const BASE_URL = "http://localhost:3000/api";
+//* Local: "http://localhost:3000/api" | Web: "https://scrumify.herokuapp.com/api"
+const BASE_URL = "https://scrumify.herokuapp.com/api";
 
 export abstract class genericService<T> {
     constructor(protected http: HttpClient, protected actionUrl:string){
