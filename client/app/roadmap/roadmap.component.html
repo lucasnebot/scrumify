@@ -26,6 +26,9 @@
   <hr>
   <div *ngFor="let m of milestones; let i = index" class="card card-outline-primary w-50">
     <div class="card-block">
+      <button type="button" (click) ="deleteMilestone(m._id)" class="close" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
         <h4 class="card-title">{{m.title}}</h4>
         <h6 class="card-subtitle mb-2 text-muted">{{m.date | date}}</h6>
         <p class="card-text">{{m.description}}.</p>

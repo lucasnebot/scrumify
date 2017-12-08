@@ -17,7 +17,13 @@ export abstract class genericService<T> {
     getOne(id:string):Observable<T> {
       return this.http.get(BASE_URL + `${this.actionUrl}/${id}`).map(resp => resp as T);
     }
-    //TODO add delete edit 
+    add(document: T): Observable<any>{
+      return this.http.post(BASE_URL + this.actionUrl, document);
+    }
+    delete(id: string): Observable<any>{
+      return this.http.delete(BASE_URL + `${this.actionUrl}/${id}`);
+    }
+    //TODO delete edit 
   }
 
 

@@ -19,8 +19,9 @@ export class RoadmapComponent implements OnInit {
   constructor(private milestoneService: MilestoneService) {}
 
   ngOnInit() {
-    this.milestoneService.getAll().subscribe((data) => {
-      console.log(data);
+    this.milestoneService.getAll().subscribe((docs) => {
+      this.milestones = docs;
+
     })
   }
 
@@ -36,11 +37,19 @@ export class RoadmapComponent implements OnInit {
   }
 
   addMilestone(): void {
-    this.milestones.push({
+    let milestone: Milestone = {
       title: this.milestone.title,
       description: this.milestone.description,
       date: this.milestone.date,
-      achieved: false
-    });
+    }
+    this.milestoneService.add(milestone).subscribe((resp) => {
+      this.ngOnInit();
+    })
+  }
+  deleteMilestone(id: string): void {
+    this.milestoneService.delete(id).subscribe((resp) => {
+      this.ngOnInit();
+    })
   }
 }
+

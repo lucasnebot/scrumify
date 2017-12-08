@@ -1,7 +1,10 @@
+// Added optional mongo and mongoose properties to make object handling easier
 export class Milestone {
-    title: String;
-    description: String;
+    _id?: string;
+    title: string;
+    description: string;
     // Changed from date to string for easier two-way-databinding
-    date: String;
-    achieved?: Boolean
+    date: string;
+    achieved?: Boolean;
+    __v?: Number
 } 
