@@ -1,8 +1,10 @@
 import { Observable} from 'rxjs/Observable';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
+// Export
+export {HttpClient, HttpResponse} from '@angular/common/http';
 
-const BASE_URL = "/path/goes/here/api";
+const BASE_URL = "http://localhost:3000/api";
 
 export abstract class genericService<T> {
     constructor(protected http: HttpClient, protected actionUrl:string){
@@ -11,8 +13,9 @@ export abstract class genericService<T> {
     getAll():Observable<T[]> {
       return this.http.get(BASE_URL + this.actionUrl).map(resp => resp as T[]);
     }
-    getOne(id:number):Observable<T> {
-      return this.http.get(BASE_URL + `${this.actionUrl}${id}`).map(resp => resp as T);
+    // Changed id type to string and fix url
+    getOne(id:string):Observable<T> {
+      return this.http.get(BASE_URL + `${this.actionUrl}/${id}`).map(resp => resp as T);
     }
     //TODO add delete edit 
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import Milestone from '../shared/model/milestone';
+import { Milestone } from '../shared/model';
+import { MilestoneService } from '../shared/service';
 
 @Component({
   selector: 'app-roadmap',
@@ -15,9 +16,13 @@ export class RoadmapComponent implements OnInit {
     date: ''
   };
 
-  constructor() {}
+  constructor(private milestoneService: MilestoneService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.milestoneService.getAll().subscribe((data) => {
+      console.log(data);
+    })
+  }
 
   toggleForm(): void {
     if (!this.formHidden) {
