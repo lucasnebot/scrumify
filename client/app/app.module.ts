@@ -7,15 +7,16 @@ import {HttpClientModule} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BacklogComponent } from './backlog/backlog.component';
-import { MilestoneComponent } from './milestone/milestone.component';
 import { HomeComponent } from './home/home.component';
+import { RoadmapComponent } from './roadmap/roadmap.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     BacklogComponent,
-    MilestoneComponent,
+    RoadmapComponent,
     HomeComponent
   ],
   imports: [

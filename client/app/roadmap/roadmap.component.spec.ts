@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MilestoneComponent } from './milestone.component';
+import { RoadmapComponent } from './roadmap.component';
 
-describe('MilestoneComponent', () => {
-  let component: MilestoneComponent;
-  let fixture: ComponentFixture<MilestoneComponent>;
+describe('RoadmapComponent', () => {
+  let component: RoadmapComponent;
+  let fixture: ComponentFixture<RoadmapComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MilestoneComponent ]
+      declarations: [ RoadmapComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MilestoneComponent);
+    fixture = TestBed.createComponent(RoadmapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
