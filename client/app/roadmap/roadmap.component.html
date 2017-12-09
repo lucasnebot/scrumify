@@ -1,0 +1,50 @@
+<div class="container" id="roadmapContainer">
+  <h2>Roadmap</h2>
+  <p>
+    Here you can see the project roadmap with all its milestones.
+  </p>
+  <button [class.btn-primary]="!formHidden" class="btn" (click)="toggleForm()">{{formHidden ? 'Add' : 'Save' }} Milestone</button>
+  <button [hidden]="formHidden" (click)="formHidden = true" class="btn btn-danger">Close</button>
+  <!-- Add Milestone Form -->
+  <form [hidden]="formHidden">
+    <div class="form-group">
+      <label for="milestone">Title</label>
+      <input type="text" [(ngModel)]="milestone.title" name="title" class="form-control" id="milestone-title" placeholder="Enter a title">
+    </div>
+    <div class="form-group">
+      <label for="milestone">Description</label>
+      <input type="text" [(ngModel)]="milestone.description" name="description" class="form-control" id="milestone-description"
+        placeholder="Enter milestone description">
+    </div>
+    <div class="form-group">
+      <label for="date-input">Date</label>
+      <input class="form-control" type="date" [(ngModel)]="milestone.date" name="date" id="date-input">
+    </div>
+  </form>
+  <hr>
+  <!-- Milestone Card -->
+  <div *ngFor="let m of milestones;" [class.card-outline-primary]="!m.achieved" [class.card-outline-success]="m.achieved"
+    class="card card-outline-primary w-50">
+    <div class="card-block">
+      <div class="row">
+        <div class="col-sm-11">
+
+          <h4 [class.text-success]="m.achieved" class="card-title">
+            <i [hidden]="!m.achieved" class="fa fa-trophy"></i> {{m.title}}
+          </h4>
+          <h6 class="card-subtitle mb-2 text-muted">{{m.date | date}}</h6>
+          <p class="card-text">{{m.description}}.</p>
+
+        </div>
+        <div class="col-sm-1">
+
+          <!-- Update Button-->
+          <i [hidden]="m.achieved" (click)="achieveMilestone(m._id)" class="fa fa-check"></i>
+          <!-- Delete Button-->
+          <i (click)="deleteMilestone(m._id)" class="fa fa-times"></i>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

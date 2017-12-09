@@ -6,13 +6,14 @@ import * as helmet from 'helmet';
 import * as path from 'path';
 import * as mongoose from 'mongoose';
 import { jwtClaimSetMiddleware, authMiddleware} from './services/auth.service';
+import * as cors from 'cors';
 
 // Use Native ES6 Promise libary to use 'classic' Promise syntax
 // cryptic syntax nessessary because of TS rules
 require('mongoose').Promise = global.Promise;
 
 // Controllers
-import baseDAO from 'controllers/baseDAO';
+import baseDAO from './controllers/baseDAO';
 import MilestoneCtrl from './controllers/milestoneCtrl';
 import BacklogItemCtrl from './controllers/backlogItemCtrl';
 import TaskCtrl from './controllers/taskCtrl';
@@ -57,6 +58,12 @@ export default class Server {
     this.app.use(helmet());
     this.app.use(cookieParser());
     this.app.use(jwtClaimSetMiddleware);
+    //! CORS 
+    const corsOptions = {
+      origin: ['http://localhost:4200'],
+      optionsSuccessStatus: 200 
+    };
+    this.app.use(cors(corsOptions));
   }
 
   /**
