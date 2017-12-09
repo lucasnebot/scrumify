@@ -12,7 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 
 // Services
-import { backlogService } from './shared/service/backlogService';
+import { BacklogService } from './shared/service/backlog.service';
 import { MilestoneService } from './shared/service/milestone.service';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { MilestoneService } from './shared/service/milestone.service';
     FormsModule
   ],
   providers: [
-    backlogService,
+    BacklogService,
     MilestoneService
   ],
   bootstrap: [AppComponent]

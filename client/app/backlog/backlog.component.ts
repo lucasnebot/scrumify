@@ -1,4 +1,4 @@
-import { backlogService } from './../shared/service/backlogService';
+import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,10 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./backlog.component.css']
 })
 export class BacklogComponent implements OnInit {
-  backlogService: backlogService;
 
-  constructor(backlogService: backlogService) { 
-    this.backlogService = backlogService;
+  constructor(private backlogService: BacklogService) { 
   }
 
   ngOnInit() {

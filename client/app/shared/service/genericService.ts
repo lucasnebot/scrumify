@@ -7,7 +7,7 @@ export {HttpClient} from '@angular/common/http';
 //* Local: "http://localhost:3000/api" | Web: "https://scrumify.herokuapp.com/api"
 const BASE_URL = "https://scrumify.herokuapp.com/api";
 
-export abstract class genericService<T> {
+export abstract class GenericService<T> {
     constructor(protected http: HttpClient, protected actionUrl:string){
     }
   
