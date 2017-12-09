@@ -9,16 +9,16 @@
   <form [hidden]="formHidden">
     <div class="form-group">
       <label for="milestone">Title</label>
-      <input type="text" [(ngModel)]="milestone.title" name="title" class="form-control" id="milestone-title" placeholder="Enter a title"> {{title}}
+      <input type="text" [(ngModel)]="milestone.title" name="title" class="form-control" id="milestone-title" placeholder="Enter a title">
     </div>
     <div class="form-group">
       <label for="milestone">Description</label>
       <input type="text" [(ngModel)]="milestone.description" name="description" class="form-control" id="milestone-description"
-        placeholder="Enter milestone description"> {{description}}
+        placeholder="Enter milestone description">
     </div>
     <div class="form-group">
       <label for="date-input">Date</label>
-      <input class="form-control" type="date" [(ngModel)]="milestone.date" name="date" id="date-input"> {{date}}
+      <input class="form-control" type="date" [(ngModel)]="milestone.date" name="date" id="date-input">
     </div>
   </form>
   <hr>
