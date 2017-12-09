@@ -3,3 +3,7 @@
 </p>
 
 <button class="btn" (click)="getData()">Get Data</button>
+
+<ul class="list-group">
+  <li *ngFor="let item of backlogItems" class="list-group-item">{{item.title}} | {{item.description}}</li>
+</ul>

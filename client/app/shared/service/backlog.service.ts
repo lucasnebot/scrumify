@@ -7,6 +7,6 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 export class BacklogService extends GenericService<BacklogItem>{
     constructor(http: HttpClient){
         console.log("here");
-        super(http,"/backlog");  
+        super(http,"/backlogItem");  
     }
 }

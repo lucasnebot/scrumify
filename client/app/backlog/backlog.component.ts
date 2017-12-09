@@ -1,3 +1,4 @@
+import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -7,16 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./backlog.component.css']
 })
 export class BacklogComponent implements OnInit {
+  backlogItems: BacklogItem[];
 
   constructor(private backlogService: BacklogService) { 
   }
 
   ngOnInit() {
+   this.backlogService.getAll().subscribe(data => {this.backlogItems = data;});
   }
 
   getData(){
-    console.log("Get Data called");
-    this.backlogService.getAll().subscribe(data => data);    
+    this.ngOnInit();
   }
 
 }
