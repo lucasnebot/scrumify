@@ -1,7 +1,7 @@
 import {BaseModel} from './'
 
 export class BacklogItem extends BaseModel{
- title: String;
- description : Number;
-  order: Number;
+ title: string;
+ description : number;
+ order: number;
 }

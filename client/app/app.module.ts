@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import {DndModule} from 'ng2-dnd';
 
 // Components
 import { AppComponent } from './app.component';
@@ -26,7 +27,8 @@ import { MilestoneService } from './shared/service/milestone.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    DndModule.forRoot()
   ],
   providers: [
     BacklogService,
