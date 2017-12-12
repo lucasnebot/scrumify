@@ -5,7 +5,7 @@
   "author": "Lucas Nebot, Christian Pleister, Dennis Enselmann",
   "scripts": {
     "ng": "ng",
-    "postinstall": "ng build -aot -prod && tsc -p server",
+    "heroku-postbuild": "ng build -aot -prod && tsc -p server",
     "build": "ng build",
     "start": "node dist/server/app.js",
     "predev": "tsc -p server",

@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as path from 'path';
 import * as mongoose from 'mongoose';
-import { jwtClaimSetMiddleware, authMiddleware} from './services/auth.service';
+import { jwtClaimSetMiddleware, authMiddleware} from './services/authService';
 import * as cors from 'cors';
 
 // Use Native ES6 Promise libary to use 'classic' Promise syntax
@@ -45,7 +45,7 @@ export default class Server {
     mongoose
       .connect(MONGO_URI, { useMongoClient: true })
       .then(() => {
-        console.log('Successful connection to MongoDB');
+        console.log('Successful connection to' + MONGO_URI);
       })
       .catch(err => {
         console.log('Connection to MongoDB refused: ' + err);
@@ -58,10 +58,10 @@ export default class Server {
     this.app.use(helmet());
     this.app.use(cookieParser());
     this.app.use(jwtClaimSetMiddleware);
-    //! CORS 
+    // ! CORS
     const corsOptions = {
       origin: ['http://localhost:4200'],
-      optionsSuccessStatus: 200 
+      optionsSuccessStatus: 200
     };
     this.app.use(cors(corsOptions));
   }
@@ -78,6 +78,9 @@ export default class Server {
     const userCtrl = new UserCtrl();
 
     // Insert application routes here
+    this.app.post('/signUp', userCtrl.signUp)
+
+    // Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
     this.setCrudRoutes('backlogItem', backlogItemCtrl);
     this.setCrudRoutes('task', taskCtrl);
@@ -89,7 +92,7 @@ export default class Server {
    * --> url/api/model/(:id)
    */
   private setCrudRoutes(path: string, ctrl: baseDAO) {
-    this.app.get(`/api/${path}/:id`, authMiddleware, ctrl.read);
+    this.app.get(`/api/${path}/:id`, ctrl.read);
     this.app.get(`/api/${path}`, ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);

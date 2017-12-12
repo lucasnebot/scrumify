@@ -9,21 +9,14 @@
   background-color: #f5f5f5;
 }
 
-.dnd-drag-start {
-  -moz-transform:scale(1.1);
-  -webkit-transform:scale(1.1);
-  transform:scale(0.8);
-  opacity:0.7;
-  border: 2px dashed #000;
+.card {
+  margin-bottom: 3pt;
 }
-
-.dnd-drag-enter {
-  opacity:0.7;
-  border: 2px dashed #000;
+form {
+    margin-top: 16pt;
 }
-
-.dnd-drag-over {
-  border: 2px dashed #000;
+.mainContainer {
+  margin-top: 16pt
 }
 
 .dnd-sortable-drag {
@@ -32,4 +25,10 @@
 transform:scale(0.9);
 opacity:0.7;
 border: 1px dashed #000;
+}
+.fa-times:hover {
+  color: darkred;
+}
+.fa-check:hover {
+  color: darkgreen;
 }
