@@ -82,7 +82,7 @@ export default class Server {
    * --> url/api/model/(:id)
    */
   private setCrudRoutes(path: string, ctrl: baseDAO) {
-    this.app.get(`/api/${path}/:id`, authMiddleware, ctrl.read);
+    this.app.get(`/api/${path}/:id`, ctrl.read);
     this.app.get(`/api/${path}`, ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);
