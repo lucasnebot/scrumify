@@ -5,7 +5,6 @@
       <div class="col-8">    
     <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems">
       <li *ngFor="let item of backlogItems; let i = index"  class="list-group-item" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-          <i class="fa fa-bars fa-lg"  aria-hidden="true"></i>          
         {{item.id}} |{{item.title}} | {{item.description}} | {{item.order}} | {{item.estimation}} | {{item.type}}
         <button type="button" class="btn btn-sm float-right" (click)="open(content)">Edit</button>
       </li>
@@ -16,9 +15,6 @@
         {{item.title}}
       </li>
     </ul>
-</div>
-<div class="col-4">
-  <button class="btn" (click)="toggleSortable()">Sort</button>
 </div>
 <p><button class="btn" (click)="getBacklogItems()">Get Data</button></p>
 
