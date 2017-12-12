@@ -1,6 +1,7 @@
 import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
+import { UserStory } from '../shared/model/userStory';
 
 @Component({
   selector: 'app-backlog',
