@@ -21,6 +21,7 @@ export default abstract class BaseDAO {
         res.status(400).send(err);
       });
   }
+
   /**
    * Returns the document to a given ID
    */
@@ -34,6 +35,7 @@ export default abstract class BaseDAO {
         res.status(400).send(err);
       });
   }
+
   /**
    * Returns all the documents from a specific Collection
    */
@@ -47,6 +49,7 @@ export default abstract class BaseDAO {
         res.status(400).send(err);
       });
   }
+
   /**
    * Finds a document by ID and updates the given properties
    */
@@ -60,6 +63,7 @@ export default abstract class BaseDAO {
         res.status(400).send(err);
       });
   }
+
 /**
  * Deletes a document with the given ID
  */

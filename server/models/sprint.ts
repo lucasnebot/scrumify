@@ -1,6 +1,10 @@
 import * as mongoose from 'mongoose';
 
-const sprintSchema = new mongoose.Schema({
+export const sprintSchema = new mongoose.Schema({
+    sprintNo: {
+        type: Number,
+        required: true
+    },
     start: {
         type: Date,
         required: true
@@ -9,14 +13,9 @@ const sprintSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    description: {
-        type: String,
-        default: null
-    },
-    backlogItems: {
+    backlogitem: {
         type: [mongoose.Schema.Types.ObjectId]
     }
 });
 
-const sprint = mongoose.model('Sprint', sprintSchema);
-export default sprint;
+export const sprintModel = mongoose.model('Sprint', sprintSchema);

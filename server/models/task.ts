@@ -1,20 +1,19 @@
 import * as mongoose from 'mongoose';
+import { userSchema } from './user';
 
-const taskSchema = new mongoose.Schema({
+export const taskSchema = new mongoose.Schema({
     title: {
         type: String,
-        required:true,
+        required: true,
     },
     description: {
         type: String,
         default: ''
     },
     User: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: userSchema,
         default: null
     }
 });
 
-const task = mongoose.model('Task', taskSchema);
-
-export default task;
+export const taskModel = mongoose.model('Task', taskSchema);

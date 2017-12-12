@@ -1,4 +1,5 @@
-import { backlogService } from './../shared/service/backlogService';
+import { BacklogItem } from './../shared/model/backlogItem';
+import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,18 +8,39 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./backlog.component.css']
 })
 export class BacklogComponent implements OnInit {
-  backlogService: backlogService;
+  backlogItems: BacklogItem[];
+  sjsOptions: {};
 
-  constructor(backlogService: backlogService) { 
-    this.backlogService = backlogService;
+  constructor(private backlogService: BacklogService) { 
+    this.sjsOptions = {
+      onUpdate: (event: any) =>{this.updateOrder(event)}
+    }
   }
 
   ngOnInit() {
+   this.getBacklogItems();
   }
 
-  getData(){
-    console.log("Get Data called");
-    this.backlogService.getAll().subscribe(data => data);    
+  getBacklogItems(){
+    this.backlogService.getAll().subscribe(data => {
+      this.backlogItems = data;
+     this.backlogItems = this.backlogItems.sort(
+       (t1,t2) => {
+         return t1.order - t2.order})
+       })
+  }
+
+  updateOrder(event:any){
+    console.log(event);
+    //get Item
+    let item:BacklogItem = this.backlogItems.find(item => item.order === event.newIndex);
+    //get Item before that
+    let itemBefore:BacklogItem = this.backlogItems.find(item => item.order === event.newIndex--);
+    //    
+    item.order = itemBefore.order+1;
+
+    this.backlogService.edit(item._id,item).subscribe((data) => {console.log('Updated')});
+
   }
 
 }

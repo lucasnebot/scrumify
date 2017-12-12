@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { SortablejsModule } from 'angular-sortablejs';
 
 // Components
 import { AppComponent } from './app.component';
@@ -12,7 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 
 // Services
-import { backlogService } from './shared/service/backlogService';
+import { BacklogService } from './shared/service/backlog.service';
 import { MilestoneService } from './shared/service/milestone.service';
 
 @NgModule({
@@ -26,10 +27,11 @@ import { MilestoneService } from './shared/service/milestone.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    SortablejsModule.forRoot({ animation: 100 })
   ],
   providers: [
-    backlogService,
+    BacklogService,
     MilestoneService
   ],
   bootstrap: [AppComponent]

@@ -1,5 +1,16 @@
-<p>
-  backlog works!
-</p>
+<div class="container">
+    <h2>Backlog</h2>
+    <p><button class="btn" (click)="getBacklogItems()">Get Data</button></p>
+    
+    <ul class="list-group" [sortablejs]="backlogItems" [sortablejsOptions]="sjsOptions">
+      <li *ngFor="let item of backlogItems;" class="list-group-item">
+        {{item._id}} |{{item.title}} | {{item.description}} | {{item.order}}
+      </li>
+    </ul>
 
-<button class="btn" (click)="getData()">Get Data</button>
+    <ul>
+      <li *ngFor="let item of backlogItems">
+        {{item.title}}
+      </li>
+    </ul>
+</div>

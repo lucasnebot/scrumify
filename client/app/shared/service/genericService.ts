@@ -7,7 +7,7 @@ export {HttpClient} from '@angular/common/http';
 //* Local: "http://localhost:3000/api" | Web: "https://scrumify.herokuapp.com/api"
 const BASE_URL = "https://scrumify.herokuapp.com/api";
 
-export abstract class genericService<T> {
+export abstract class GenericService<T> {
     constructor(protected http: HttpClient, protected actionUrl:string){
     }
   
@@ -24,7 +24,7 @@ export abstract class genericService<T> {
     delete(id: string): Observable<any>{
       return this.http.delete(BASE_URL + `${this.actionUrl}/${id}`);
     }
-    edit(id: string, update: object):Observable<T>{
+    edit(id: string, update: Object):Observable<T>{
       return this.http.put(BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
     }
   }

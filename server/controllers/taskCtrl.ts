@@ -1,6 +1,6 @@
 import baseDAO from './baseDAO';
-import task from '../models/task';
+import {taskModel} from '../models/task';
 
-export default class taskCtrl extends baseDAO {
-    model = task;
+export default class TaskCtrl extends baseDAO {
+    model = taskModel;
 }

@@ -1,6 +1,7 @@
+import { userStoryModel } from './../models/backlogItem';
 import baseDAO from './baseDAO';
-import backlogItem from '../models/backlogItem';
+import {backlogItemModel} from '../models/backlogItem';
 
-export default class backlogItemCtrl extends baseDAO {
-    model = backlogItem;
+export default class BacklogItemCtrl extends baseDAO {
+    model = backlogItemModel;
 }
