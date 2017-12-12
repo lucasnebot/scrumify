@@ -1,7 +1,7 @@
 import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
-
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
@@ -9,13 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BacklogComponent implements OnInit {
   backlogItems: BacklogItem[];
-  sjsOptions: {};
-
-  constructor(private backlogService: BacklogService) { 
-    this.sjsOptions = {
-      onUpdate: (event: any) =>{this.updateOrder(event)}
-    }
+  selectedItem: BacklogItem;
+  dragEnabled = false;
+  constructor(private backlogService: BacklogService, private modalService: NgbModal){
+    this.selectedItem = {title: '', description: '', order: 0}
   }
+
+
 
   ngOnInit() {
    this.getBacklogItems();
@@ -30,17 +30,19 @@ export class BacklogComponent implements OnInit {
        })
   }
 
-  updateOrder(event:any){
-    console.log(event);
-    //get Item
-    let item:BacklogItem = this.backlogItems.find(item => item.order === event.newIndex);
-    //get Item before that
-    let itemBefore:BacklogItem = this.backlogItems.find(item => item.order === event.newIndex--);
-    //    
-    item.order = itemBefore.order+1;
-
-    this.backlogService.edit(item._id,item).subscribe((data) => {console.log('Updated')});
-
+  updateOrder(){
+console.log('updateOrder called')
+    //   this.backlogService.edit(item._id,item).subscribe((data) => {console.log('Updated')});
+  }
+  
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+    }, (reason) => {
+    });
   }
 
+
+  saveItem(){
+    console.log('Save Item')
+  }
 }
