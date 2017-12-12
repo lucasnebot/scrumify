@@ -1,10 +1,12 @@
 <div class="container">
     <h2>Backlog</h2>
-    <p><button class="btn" (click)="getBacklogItems()">Get Data</button></p>
-    
-    <ul class="list-group" [sortablejs]="backlogItems" [sortablejsOptions]="sjsOptions">
-      <li *ngFor="let item of backlogItems;" class="list-group-item">
-        {{item._id}} |{{item.title}} | {{item.description}} | {{item.order}}
+
+    <div class="row">
+      <div class="col-8">    
+    <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems">
+      <li *ngFor="let item of backlogItems; let i = index"  class="list-group-item" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
+        {{item.id}} |{{item.title}} | {{item.description}} | {{item.order}} | {{item.estimation}} | {{item.type}}
+        <button type="button" class="btn btn-sm float-right" (click)="open(content)">Edit</button>
       </li>
     </ul>
 
@@ -13,4 +15,31 @@
         {{item.title}}
       </li>
     </ul>
+</div>
+<p><button class="btn" (click)="getBacklogItems()">Get Data</button></p>
+
+
+<!-- MODAL EDIT BEGIN -->
+  <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Backlog Item</h4>
+      </div>
+      <div class="modal-body">
+          <div class="input-group">
+            <input [(ngModel)]="selectedItem.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title"
+              name="bli-titel" required>
+          </div>
+          <br/>
+          <div class="form-group">
+              <textarea [(ngModel)]="selectedItem.description" type="text" class="form-control"
+               id="description" placeholder="Description" name="description" required minlength="10"></textarea>
+            </div>
+      </div>
+
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="saveItem()">Save</button>          
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+      </div>
+    </ng-template>
 </div>

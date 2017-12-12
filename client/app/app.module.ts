@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { SortablejsModule } from 'angular-sortablejs';
+import {DndModule} from 'ng2-dnd';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 // Components
 import { AppComponent } from './app.component';
@@ -33,7 +34,8 @@ import {
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    SortablejsModule.forRoot({ animation: 100 })
+    DndModule.forRoot(),
+    NgbModule.forRoot()
   ],
   providers: [BacklogService, MilestoneService, UserService],
   bootstrap: [AppComponent]
