@@ -1,0 +1,31 @@
+<div class="container mainContainer">
+  <h2>Sign Up</h2>
+  <form>
+    <div class="form-group">
+      <label for="name">First Name</label>
+      <input type="text" [(ngModel)]="user.name" name="name" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="surname">Last Name</label>
+      <input type="text" [(ngModel)]="user.surname" name="surname" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="email">E-Mail</label>
+      <input type="email" [(ngModel)]="user.email" name="email" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" [(ngModel)]="user.password" name="password" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="role">Role</label>
+        <select class="form-control"  id="power"
+                [(ngModel)]="user.role" name="role">
+          <option *ngIf="!scrumMasterExists" value="0">Scrum Master</option>
+          <option *ngIf="!productOwnerExists" value="1">Product Owner</option>
+          <option value="2">Developer</option>
+        </select>
+      </div>
+      <button (click)="signUp()" class="btn btn-success">Sign Up</button>
+  </form>
+</div>
