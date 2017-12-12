@@ -45,7 +45,7 @@ export default class Server {
     mongoose
       .connect(MONGO_URI, { useMongoClient: true })
       .then(() => {
-        console.log('Successful connection to MongoDB');
+        console.log('Successful connection to' + MONGO_URI);
       })
       .catch(err => {
         console.log('Connection to MongoDB refused: ' + err);
@@ -58,10 +58,10 @@ export default class Server {
     this.app.use(helmet());
     this.app.use(cookieParser());
     this.app.use(jwtClaimSetMiddleware);
-    //! CORS 
+    // ! CORS
     const corsOptions = {
       origin: ['http://localhost:4200'],
-      optionsSuccessStatus: 200 
+      optionsSuccessStatus: 200
     };
     this.app.use(cors(corsOptions));
   }
@@ -80,7 +80,7 @@ export default class Server {
     // Insert application routes here
     this.app.post('/signUp', userCtrl.signUp)
 
-    //Entities
+    // Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
     this.setCrudRoutes('backlogItem', backlogItemCtrl);
     this.setCrudRoutes('task', taskCtrl);
