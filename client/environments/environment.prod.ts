@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  api_uri: 'https://scrumify.herokuapp.com/api'
 };
