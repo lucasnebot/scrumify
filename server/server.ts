@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 import * as helmet from 'helmet';
 import * as path from 'path';
 import * as mongoose from 'mongoose';
-import { jwtClaimSetMiddleware, authMiddleware} from './services/auth.service';
+import { jwtClaimSetMiddleware, authMiddleware} from './services/authService';
 import * as cors from 'cors';
 
 // Use Native ES6 Promise libary to use 'classic' Promise syntax
@@ -78,6 +78,9 @@ export default class Server {
     const userCtrl = new UserCtrl();
 
     // Insert application routes here
+    this.app.post('/signUp', userCtrl.signUp)
+
+    //Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
     this.setCrudRoutes('backlogItem', backlogItemCtrl);
     this.setCrudRoutes('task', taskCtrl);

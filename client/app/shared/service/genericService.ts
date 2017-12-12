@@ -5,10 +5,10 @@ import { environment } from '../../../environments/environment';
 // Export
 export {HttpClient} from '@angular/common/http';
 
-// * Local: "http://localhost:3000/api" | Web: "https://scrumify.herokuapp.com/api"
-const BASE_URL = environment.api_uri;
-
 export abstract class GenericService<T> {
+    // * Local: "http://localhost:3000/api" | Web: "https://scrumify.herokuapp.com/api"
+    private BASE_URL: string = environment.api_uri;
+
     constructor(protected http: HttpClient, protected actionUrl: string) {}
 
     getAll(): Observable<T[]> {
@@ -18,13 +18,13 @@ export abstract class GenericService<T> {
     getOne(id: string): Observable<T> {
       return this.http.get(BASE_URL + `${this.actionUrl}/${id}`).map(resp => resp as T);
     }
-    add(document: T): Observable<any>{
+    add(document: T): Observable<any> {
       return this.http.post(BASE_URL + this.actionUrl, document);
     }
-    delete(id: string): Observable<any>{
+    delete(id: string): Observable<any> {
       return this.http.delete(BASE_URL + `${this.actionUrl}/${id}`);
     }
-    edit(id: string, update: Object): Observable<T>{
+    edit(id: string, update: Object): Observable<T> {
       return this.http.put(BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
     }
   }
