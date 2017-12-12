@@ -1,4 +1,3 @@
-import { userStoryModel } from './../models/backlogItem';
 import baseDAO from './baseDAO';
 import {backlogItemModel, userStoryModel} from '../models/backlogItem';
 import * as mongoose from 'mongoose';
