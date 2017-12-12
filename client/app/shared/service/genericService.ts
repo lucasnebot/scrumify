@@ -24,7 +24,7 @@ export abstract class GenericService<T> {
     delete(id: string): Observable<any>{
       return this.http.delete(BASE_URL + `${this.actionUrl}/${id}`);
     }
-    edit(id: string, update: object):Observable<T>{
+    edit(id: string, update: Object):Observable<T>{
       return this.http.put(BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
     }
   }

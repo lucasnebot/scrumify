@@ -1,3 +1,4 @@
+import { userStoryModel } from './../models/backlogItem';
 import baseDAO from './baseDAO';
 import {backlogItemModel} from '../models/backlogItem';
 
