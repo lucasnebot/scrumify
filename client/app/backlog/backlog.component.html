@@ -5,8 +5,8 @@
       <div class="col-8">    
     <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems">
       <li *ngFor="let item of backlogItems; let i = index"  class="list-group-item" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-        {{item.id}} |{{item.title}} | {{item.description}} | {{item.order}} | {{item.estimation}} | {{item.type}}
-        <button type="button" class="btn btn-sm float-right" (click)="open(content)">Edit</button>
+        {{item.id}} |{{item.title}} | {{item.description}} | {{item.order}} | {{item.estimation}} | {{item.type}} | {{item.status}}
+        <button type="button" class="btn btn-sm float-right" (click)="open(content,i)">Edit</button>
       </li>
     </ul>
 
@@ -25,25 +25,38 @@
         <h4 class="modal-title">Edit Backlog Item</h4>
       </div>
       <div class="modal-body">
-          <div class="input-group">
-            <input [(ngModel)]="selectedItem.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title"
+          <div class="form-group">
+              <label for="bli-titel">Title</label>
+            <input [(ngModel)]="backlogItems[selectedIndex].title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title"
               name="bli-titel" required>
           </div>
-          <br/>
+          
           <div class="form-group">
-              <textarea [(ngModel)]="selectedItem.description" type="text" class="form-control"
+              <label for="description">Description</label>
+              <textarea [(ngModel)]="backlogItems[selectedIndex].description" type="text" class="form-control"
                id="description" placeholder="Description" name="description" required minlength="10"></textarea>
             </div>
+              <!-- User Story start -->
+              <div *ngIf="isUserStory()" class="form-group">
+                  <label for="estimation">Estimation</label>                  
+                  <input [(ngModel)]="backlogItems[selectedIndex].estimation" type="text" class="form-control"
+                   id="estimation" placeholder="Estimation in Days" name="estimation">
+                </div>
 
-            <div *ngIf="isUserStory()" class="form-group">
-                <textarea [(ngModel)]="selectedItem.description" type="text" class="form-control"
-                 id="description" placeholder="Description" name="description" required minlength="10"></textarea>
-              </div>
+                <div *ngIf="isUserStory()" class="form-group">
+                    <label for="sel1">Status</label>
+                    <select [(ngModel)]="backlogItems[selectedIndex].status" class="form-control" id="sel1">
+                      <option value="NEW">New</option>
+                      <option value="RFE">Ready for Estimation</option>
+                      <option value="RFS">Ready for Sprint</option>
+
+                    </select>
+                  </div>
       </div>
 
 
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="saveItem()">Save</button>          
+          <button type="button" class="btn btn-primary" (click)="saveItem(selectedIndex)">Save</button>          
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
       </div>
     </ng-template>

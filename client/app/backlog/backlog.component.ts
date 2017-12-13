@@ -11,10 +11,9 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 export class BacklogComponent implements OnInit {
   backlogItems: BacklogItem[];
-  selectedItem: BacklogItem;
-  dragEnabled = false;
+  selectedItem: BacklogItem = {title: '', description: '', order: 0}; 
+  selectedIndex;
   constructor(private backlogService: BacklogService, private modalService: NgbModal){
-    this.selectedItem = {title: '', description: '', order: 0}
   }
 
 
@@ -37,16 +36,21 @@ console.log('updateOrder called')
     //   this.backlogService.edit(item._id,item).subscribe((data) => {console.log('Updated')});
   }
   
-  open(content) {
+  open(content,index) {
+    this.selectedIndex = index;
+    console.log(this.selectedIndex);
     this.modalService.open(content).result.then((result) => {
+
     }, (reason) => {
     });
   }
 
-isUserStory(){
-  this.selectedItem.hasOwnProperty('type');
+  isUserStory(){
+  return  this.backlogItems[this.selectedIndex].hasOwnProperty('type'); 
 }
-  saveItem(){
-    console.log('Save Item')
+  saveItem(index){
+    console.log('Save Item');
+    this.backlogService.edit(this.backlogItems[index]._id,this.backlogItems[index]).subscribe((success) => {
+    })
   }
 }
