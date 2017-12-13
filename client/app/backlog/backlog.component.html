@@ -34,6 +34,11 @@
               <textarea [(ngModel)]="selectedItem.description" type="text" class="form-control"
                id="description" placeholder="Description" name="description" required minlength="10"></textarea>
             </div>
+
+            <div *ngIf="isUserStory()" class="form-group">
+                <textarea [(ngModel)]="selectedItem.description" type="text" class="form-control"
+                 id="description" placeholder="Description" name="description" required minlength="10"></textarea>
+              </div>
       </div>
 
 

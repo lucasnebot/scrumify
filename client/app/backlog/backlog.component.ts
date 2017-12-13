@@ -1,12 +1,9 @@
 import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD
 import { UserStory } from '../shared/model/userStory';
 
-=======
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
->>>>>>> 060c9e396a9af46e090b4fdcff493f9a039eaae3
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
@@ -46,7 +43,9 @@ console.log('updateOrder called')
     });
   }
 
-
+isUserStory(){
+  this.selectedItem.hasOwnProperty('type');
+}
   saveItem(){
     console.log('Save Item')
   }
