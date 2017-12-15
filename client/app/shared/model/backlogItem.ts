@@ -1,7 +1,7 @@
-import {BaseModel} from './'
+import {BaseModel} from './index';
 
-export class BacklogItem extends BaseModel{
+export class BacklogItem extends BaseModel {
  title: string;
- description : number;
+ description : string;
  order: number;
 }

@@ -18,6 +18,14 @@ form {
 .mainContainer {
   margin-top: 16pt
 }
+
+.dnd-sortable-drag {
+-moz-transform:scale(0.9);
+-webkit-transform:scale(0.9);
+transform:scale(0.9);
+opacity:0.7;
+border: 1px dashed #000;
+}
 .fa-times:hover {
   color: darkred;
 }
