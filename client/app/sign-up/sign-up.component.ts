@@ -39,6 +39,7 @@ export class SignUpComponent implements OnInit {
     })
   }
   signUp(){
+    // TODO : Add User to project!
     // Turns the value from the http-form-element e.g. "0" to a number
     this.user.role = Number(this.user.role);
     this.userService.signUp(this.user).subscribe((resp) => {

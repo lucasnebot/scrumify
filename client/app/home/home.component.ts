@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SignInData } from '../shared/model';
+import { AuthService } from '../shared/service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  signInData: SignInData = {
+    email: '',
+    password: ''
+  };
+  constructor(private authService: AuthService, private router: Router) {}
 
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit() {}
+  signIn() {
+    this.authService.signIn(this.signInData).subscribe(() => {
+      // Can be switched to every other route
+      this.router.navigate(['/']);
+    });
   }
-
 }

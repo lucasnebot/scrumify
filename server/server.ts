@@ -61,7 +61,8 @@ export default class Server {
     // ! CORS
     const corsOptions = {
       origin: ['http://localhost:4200'],
-      optionsSuccessStatus: 200
+      optionsSuccessStatus: 200,
+      exposedHeaders: 'X-JWT'
     };
     this.app.use(cors(corsOptions));
   }
@@ -78,7 +79,8 @@ export default class Server {
     const userCtrl = new UserCtrl();
 
     // Insert application routes here
-    this.app.post('/signUp', userCtrl.signUp)
+    this.app.post('/signUp', userCtrl.signUp);
+    this.app.post('/signIn', userCtrl.signIn);
 
     // Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
