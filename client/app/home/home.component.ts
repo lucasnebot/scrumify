@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
     email: '',
     password: ''
   };
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
   signIn() {
