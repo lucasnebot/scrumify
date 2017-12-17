@@ -2,9 +2,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthTokenInterceptor } from './shared/httpInterceptors/authTokenInterceptor';
 import { FormsModule } from '@angular/forms';
-import {DndModule} from 'ng2-dnd';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { DndModule } from 'ng2-dnd';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+// Services
+import {
+  MilestoneService,
+  UserService,
+  BacklogService,
+  AuthService,
+  AuthGuardService
+} from './shared/service';
 
 // Components
 import { AppComponent } from './app.component';
@@ -14,15 +25,6 @@ import { HomeComponent } from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './navbar/navbar.component';
-
-
-// Services
-import {
-  MilestoneService,
-  UserService,
-  BacklogService,
-  AuthService
-} from './shared/service';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,18 @@ import {
     DndModule.forRoot(),
     NgbModule.forRoot()
   ],
-  providers: [BacklogService, MilestoneService, UserService, AuthService],
+  providers: [
+    BacklogService,
+    MilestoneService,
+    UserService,
+    AuthService,
+    AuthGuardService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

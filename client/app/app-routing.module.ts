@@ -4,12 +4,13 @@ import {BacklogComponent} from './backlog/backlog.component';
 import {HomeComponent} from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { AuthGuardService } from './shared/service';
 
 
 const routes: Routes = [
   {path: '', component: HomeComponent},  
-  {path: 'backlog', component: BacklogComponent},
-  {path: 'roadmap', component: RoadmapComponent},
+  {path: 'backlog', component: BacklogComponent, canActivate: [AuthGuardService]},
+  {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService]},
   {path: '*', component: HomeComponent},
   {path: 'signUp', component: SignUpComponent}
 ]

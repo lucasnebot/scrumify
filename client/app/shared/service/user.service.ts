@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GenericService } from './genericService';
+import { GenericService } from './generic.service';
 import { User, SignInData } from '../model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';

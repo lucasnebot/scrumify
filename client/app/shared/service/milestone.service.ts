@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Milestone } from '../model';
-import {GenericService, HttpClient} from './genericService';
+import {GenericService, HttpClient} from './generic.service';
 
 
 @Injectable()

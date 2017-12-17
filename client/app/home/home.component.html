@@ -1,21 +1,31 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-3"> Welcome to Scrumify<span *ngIf="authService.authenticated">, <span class="text-primary">{{authService.activeUser.name}}</span>!</span></h1>
-    <p class="lead">The scrum tool for the whole family</p>
+    <h1 class="display-3"> Welcome to Scrumify<span *ngIf="authService.authenticated">,
+      <span class="text-primary">{{authService.activeUser.name}}</span>!</span>
+    </h1>
+    <p *ngIf="!authService.authenticated" class="lead">The scrum tool for the whole family</p>
+    <p *ngIf="authService.authenticated" class="lead">Time to shine as a <span class="text-primary">{{authService.determinRole(authService.activeUser.role)}}</span></p>
   </div>
 </div>
 <div class="container">
   <form *ngIf="!authService.authenticated" class="form-inline">
     <label class="sr-only" for="email">Username</label>
     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-      <div class="input-group-addon"><i class="fa fa-at" aria-hidden="true"></i></div>
-      <input type="email" [(ngModel)] = "signInData.email" class="form-control" id="email" name="email" placeholder="Mail">
+      <div class="input-group-addon">
+        <i class="fa fa-at" aria-hidden="true"></i>
+      </div>
+      <input type="email" [(ngModel)]="signInData.email" class="form-control" id="email" name="email" placeholder="Mail">
     </div>
     <label class="sr-only" for="password">Username</label>
     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-      <div class="input-group-addon"><i class="fa fa-key" aria-hidden="true"></i></div>
-      <input type="password" [(ngModel)] = "signInData.password" class="form-control" id="password" name="password" placeholder="Password">
+      <div class="input-group-addon">
+        <i class="fa fa-key" aria-hidden="true"></i>
+      </div>
+      <input type="password" [(ngModel)]="signInData.password" class="form-control" id="password" name="password" placeholder="Password">
     </div>
     <button type="submit" class="btn btn-primary" (click)="signIn()">Login</button>
   </form>
+  <p *ngIf="loginFailed" class="text-danger">
+    <strong>Oh no!</strong> Wrong email or password <i class="fa fa-lock" aria-hidden="true"></i>
+  </p>
 </div>

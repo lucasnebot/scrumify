@@ -14,10 +14,12 @@ export class HomeComponent implements OnInit {
     password: ''
   };
   constructor(public authService: AuthService, private router: Router) {}
+  loginFailed = false;
 
   ngOnInit() {}
   signIn() {
     this.authService.signIn(this.signInData).subscribe(() => {
+      this.loginFailed = !this.authService.authenticated;
       // Can be switched to every other route
       this.router.navigate(['/']);
     });
