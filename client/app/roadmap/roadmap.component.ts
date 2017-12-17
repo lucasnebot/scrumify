@@ -16,7 +16,7 @@ export class RoadmapComponent implements OnInit {
     date: ''
   };
 
-  constructor(private milestoneService: MilestoneService, private authService: AuthService) {}
+  constructor(private milestoneService: MilestoneService, public authService: AuthService) {}
 
   ngOnInit() {
     this.milestoneService.getAll().subscribe((docs) => {
