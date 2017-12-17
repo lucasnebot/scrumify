@@ -19,6 +19,7 @@ import BacklogItemCtrl from './controllers/backlogItemCtrl';
 import TaskCtrl from './controllers/taskCtrl';
 import SprintCtrl from './controllers/sprintCtrl';
 import UserCtrl from './controllers/userCtrl';
+import ProjectCtrl from './controllers/projectCtrl';
 
 
 export default class Server {
@@ -77,6 +78,7 @@ export default class Server {
     const taskCtrl = new TaskCtrl();
     const sprintCtrl = new SprintCtrl();
     const userCtrl = new UserCtrl();
+    const projectCtrl = new ProjectCtrl();
 
     // Insert application routes here
     this.app.post('/signUp', userCtrl.signUp);
@@ -88,6 +90,7 @@ export default class Server {
     this.setCrudRoutes('task', taskCtrl);
     this.setCrudRoutes('sprint', sprintCtrl);
     this.setCrudRoutes('user', userCtrl);
+    this.setCrudRoutes('project', projectCtrl);
   }
   /**
    * Opens all crud routes for a model and connects to controller

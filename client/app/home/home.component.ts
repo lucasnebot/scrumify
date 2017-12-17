@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SignInData } from '../shared/model';
-import { AuthService } from '../shared/service';
+import { SignInData, Project, User } from '../shared/model';
+import { AuthService, ProjectService, UserService } from '../shared/service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,10 +13,25 @@ export class HomeComponent implements OnInit {
     email: '',
     password: ''
   };
-  constructor(public authService: AuthService, private router: Router) {}
+  newProject: Project = {
+    name: '',
+    vision: '',
+  }
   loginFailed = false;
+  users: User[];
 
-  ngOnInit() {}
+  constructor(
+    public authService: AuthService,
+    public projectService: ProjectService,
+    public userService: UserService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.userService.getAll().subscribe((docs) => {
+      this.users = docs;
+    })
+  }
   signIn() {
     this.authService.signIn(this.signInData).subscribe(() => {
       this.loginFailed = !this.authService.authenticated;
@@ -24,4 +39,10 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['/']);
     });
   }
+  createProject(){
+    this.projectService.add(this.newProject).subscribe((resp) => {
+      this.projectService.fetchProject();
+    });
+  }
+
 }

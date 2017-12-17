@@ -11,13 +11,12 @@ export const projectSchema = new mongoose.Schema({
     },
     defDone: {
         type: String,
-        required: false,
         default: ''
     },
-    user: {
+    users: {
         type: [mongoose.Schema.Types.ObjectId]
     },
-    backlogitem: {
+    backlogitems: {
         type: [mongoose.Schema.Types.ObjectId]
     }
 });

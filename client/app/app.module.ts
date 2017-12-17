@@ -14,7 +14,8 @@ import {
   UserService,
   BacklogService,
   AuthService,
-  AuthGuardService
+  AuthGuardService,
+  ProjectService
 } from './shared/service';
 
 // Components
@@ -49,6 +50,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     UserService,
     AuthService,
     AuthGuardService,
+    ProjectService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,
