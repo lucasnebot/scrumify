@@ -22,9 +22,8 @@ export class BacklogComponent implements OnInit {
   }
 
   getBacklogItems() {
-    //this.backlogService.getAll().subscribe(data => {
       
-this.backlogService.getAll([['status','RFE']]).subscribe(data => {
+this.backlogService.getAll().subscribe(data => {
       this.backlogItems = data;
       this.backlogItems = this.backlogItems.sort((t1, t2) => {
         return t1.order - t2.order;
