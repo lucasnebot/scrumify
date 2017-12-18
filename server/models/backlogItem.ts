@@ -1,7 +1,4 @@
 import * as mongoose from 'mongoose';
-
-const options = { discriminatorKey: 'type' };
-
 /**
  * Default backlog item schema
  */
@@ -11,31 +8,26 @@ export const backlogItemSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
+    required: true
   },
   order: {
     type: Number,
     required: true
-  }
-},  options);
-
-export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
-
-/**
- * User story, inherits from default backlog item schema
- */
-export const userStorySchema = new mongoose.Schema({
+  },
   estimation: {
     type: Number
   },
   status: {
     type: String,
-    enum: ['NEW', 'RFE', 'RFS'],
-    default: 'NEW'
+    enum: ['EPIC','RFE', 'RFS','SPRINT','DONE'],
+    default: 'RFE'
   },
   task: {
     type: [mongoose.Schema.Types.ObjectId]
+  },
+  voted: {type: [mongoose.Schema.Types.Mixed]
   }
-}, options);
+});
 
-export const userStoryModel = backlogItemModel.discriminator('UserStory', userStorySchema);
+export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
