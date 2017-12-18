@@ -28,9 +28,11 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userService.getAll().subscribe((docs) => {
-      this.users = docs;
-    })
+    if(this.authService.authenticated){
+      this.userService.getAll().subscribe((docs) => {
+        this.users = docs;
+      })
+    }
   }
   signIn() {
     this.authService.signIn(this.signInData).subscribe(() => {
