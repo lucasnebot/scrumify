@@ -1,3 +1,121 @@
-<p>
-  home works!
+<!-- Jumbotron -->
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-3"> Welcome to Scrumify<span *ngIf="authService.authenticated">,
+        <span class="text-primary">{{authService.activeUser.name}}</span>!</span>
+    </h1>
+    <p *ngIf="!authService.authenticated; else LoggedInText" class="lead">The scrum tool for the whole family</p>
+    <ng-template #LoggedInText>
+      <p class="lead">Time to shine as a
+        <span class="text-primary">{{authService.determinRole(authService.activeUser.role)}}</span>
+      </p>
+    </ng-template>
+  </div>
+</div>
+<!-- Login form -->
+<form *ngIf="!authService.authenticated; else LoggedInContent" class="form-inline">
+  <label class="sr-only" for="email">Username</label>
+  <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+    <div class="input-group-addon">
+      <i class="fa fa-at" aria-hidden="true"></i>
+    </div>
+    <input type="email" [(ngModel)]="signInData.email" class="form-control" id="email" name="email" placeholder="Mail">
+  </div>
+  <label class="sr-only" for="password">Username</label>
+  <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+    <div class="input-group-addon">
+      <i class="fa fa-key" aria-hidden="true"></i>
+    </div>
+    <input type="password" [(ngModel)]="signInData.password" class="form-control" id="password" name="password" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-primary" (click)="signIn()">Login</button>
+</form>
+<!-- 'Login failed' message -->
+<p *ngIf="loginFailed" class="text-danger">
+  <strong>Oh no!</strong> Wrong email or password
+  <i class="fa fa-lock" aria-hidden="true"></i>
 </p>
+<!-- Logged-In-Content -->
+<ng-template #LoggedInContent>
+  <!-- Product Owner: Create Project -->
+  <div *ngIf="!projectService.project; else ProjectDashboard">
+    <form *ngIf="authService.allowedFor(['Product Owner']); else NoProjectWarning">
+      <h4>
+        <i class="fa fa-plus-circle" aria-hidden="true"></i> Create a project</h4>
+      <div class="form-group">
+        <label for="projectName">Project name</label>
+        <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
+      </div>
+      <div class="form-group">
+        <label for="projectVision">Project vision</label>
+        <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
+          rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
+    </form>
+  </div>
+  <!-- Not Product Owner: No Project created yet -->
+  <ng-template #NoProjectWarning>
+    <div class="alert alert-warning" role="alert">
+      The
+      <strong>Product Owner</strong> hasn't created a project yet!
+    </div>
+  </ng-template>
+  <!-- Dashboard -->
+  <ng-template #ProjectDashboard>
+    <div class="row">
+      <div class="col">
+        <!-- Project Card -->
+        <div class="card">
+          <h4 class="card-header">
+            <i class="fa fa-rocket text-warning" aria-hidden="true"></i> Project</h4>
+          <div class="card-block">
+            <h5 class="card-title">{{projectService.project.name}}</h5>
+            <p class="card-text">{{projectService.project.vision}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col col-left">
+        <!-- Team Card -->
+        <div class="card">
+          <h4 class="card-header">
+            <i class="fa fa-users text-info" aria-hidden="true"></i> Team</h4>
+          <div class="card-block">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of users">
+                  <td>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </td>
+                  <td>{{user.name}}</td>
+                  <td>{{authService.determinRole(user.role)}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col col-right">
+        <!-- Sprint Card -->
+        <div class="card">
+          <h4 class="card-header">
+            <i class="fa fa-refresh text-success" aria-hidden="true"></i> Sprint</h4>
+          <div class="card-block">
+            <p class="card-text">
+              Awesome information and KPIs about the current sprint.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

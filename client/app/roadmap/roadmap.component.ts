@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Milestone } from '../shared/model';
-import { MilestoneService } from '../shared/service';
+import { MilestoneService, AuthService } from '../shared/service';
 
 @Component({
   selector: 'app-roadmap',
@@ -16,7 +16,7 @@ export class RoadmapComponent implements OnInit {
     date: ''
   };
 
-  constructor(private milestoneService: MilestoneService) {}
+  constructor(private milestoneService: MilestoneService, public authService: AuthService) {}
 
   ngOnInit() {
     this.milestoneService.getAll().subscribe((docs) => {

@@ -8,6 +8,7 @@ const JWT_SECRET = 'jawollek';
 export interface JWTClaimSet {
     name: string;
     email: string;
+    role: number;
 }
 
 /**
@@ -47,7 +48,8 @@ export const authService = {
         return new Promise<string>((resolve, reject) => {
             const claimSet: JWTClaimSet = {
                 name: user.name,
-                email: user.email
+                email: user.email,
+                role: user.role
             };
             jwt.sign(claimSet, JWT_SECRET, { algorithm: 'HS256'}, (err, token) => {
                 err ? reject(err) : resolve(token);

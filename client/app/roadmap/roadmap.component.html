@@ -1,9 +1,10 @@
-<div class="container mainContainer">
+<div class="mainContainer">
   <h2>Roadmap</h2>
   <p>
-    Here you can see the project roadmap with all its milestones.
+    Here you can see the project roadmap with all its milestones. Only the <strong>Product Owner</strong> can add and edit milestones.
   </p>
-  <button [class.btn-primary]="!formHidden" class="btn" (click)="toggleForm()">{{formHidden ? 'Add' : 'Save' }} Milestone</button>
+  <!-- Use authService.allowedFor(['RoleX', 'RoleY']) to allow access only for specific roles | Alternative: authService.activeUser.role === X -->
+  <button [class.btn-primary]="!formHidden" [disabled]="!authService.allowedFor(['Product Owner'])" class="btn" (click)="toggleForm()">{{formHidden ? 'Add' : 'Save' }} Milestone</button>
   <button [hidden]="formHidden" (click)="formHidden = true" class="btn btn-danger">Close</button>
   <!-- Add Milestone Form -->
   <form [hidden]="formHidden">
@@ -36,7 +37,7 @@
           <p class="card-text">{{m.description}}.</p>
 
         </div>
-        <div class="col-sm-1">
+        <div [hidden]="!authService.allowedFor(['Product Owner'])" class="col-sm-1">
 
           <!-- Update Button-->
           <i [hidden]="m.achieved" (click)="achieveMilestone(m._id)" class="fa fa-check"></i>
