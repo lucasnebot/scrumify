@@ -9,15 +9,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class BacklogComponent implements OnInit {
   backlogItems: BacklogItem[];
-  newBacklogItem: BacklogItem = {
-    title: '',
-    description: '',
-    order: 0,
-    estimation: 0,
-    status: 'RFE',
-    task: [],
-    voted: []
-  };
+  newBacklogItem:BacklogItem;
   selectedIndex;
   modal;
   constructor(
@@ -30,7 +22,9 @@ export class BacklogComponent implements OnInit {
   }
 
   getBacklogItems() {
-    this.backlogService.getAll().subscribe(data => {
+    //this.backlogService.getAll().subscribe(data => {
+      
+this.backlogService.getAll([['status','RFE']]).subscribe(data => {
       this.backlogItems = data;
       this.backlogItems = this.backlogItems.sort((t1, t2) => {
         return t1.order - t2.order;

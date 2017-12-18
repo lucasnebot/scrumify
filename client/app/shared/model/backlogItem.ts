@@ -1,4 +1,4 @@
-import {BaseModel,Task} from './index';
+import {BaseModel,Task} from './';
 
 export interface Vote{
     votedBy: string,
