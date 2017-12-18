@@ -41,7 +41,7 @@ export default abstract class BaseDAO {
    */
   readAll = (req, res): void => {
     this.model
-      .find({})
+      .find(req.query)
       .then(doc => {
         res.send(doc);
       })
