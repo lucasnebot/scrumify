@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 // Export
@@ -9,7 +9,7 @@ export abstract class GenericService<T> {
     private BASE_URL: string = environment.api_uri;
 
     constructor(protected http: HttpClient, protected actionUrl: string) {}
-    //? Add mongodb operators (less than etc)
+    //? Add mongodb operators (less than etc), try to get bodyparser/middleware to work
     getAll(filterBy?: [string,string][]) : Observable<T[]> {      
       let params = new HttpParams();
       if(filterBy){

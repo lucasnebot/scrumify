@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Model } from 'mongoose';
 
 export default abstract class BaseDAO {

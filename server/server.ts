@@ -55,7 +55,7 @@ export default class Server {
     // Express middleware
     this.app.use('/', express.static(path.join(__dirname, '../public')));
     this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(express.urlencoded({ extended: false }));    
     this.app.use(helmet());
     this.app.use(cookieParser());
     this.app.use(jwtClaimSetMiddleware);
@@ -86,7 +86,7 @@ export default class Server {
 
     // Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
-    this.setCrudRoutes('backlogItem', backlogItemCtrl);
+    this.setCrudRoutes('backlogItem',backlogItemCtrl);
     this.setCrudRoutes('task', taskCtrl);
     this.setCrudRoutes('sprint', sprintCtrl);
     this.setCrudRoutes('user', userCtrl);
@@ -98,7 +98,7 @@ export default class Server {
    */
   private setCrudRoutes(path: string, ctrl: baseDAO) {
     this.app.get(`/api/${path}/:id`, ctrl.read);
-    this.app.get(`/api/${path}`, ctrl.readAll);
+    this.app.get(`/api/${path}`, express.urlencoded({ extended: true }), ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);
     this.app.delete(`/api/${path}/:id`, ctrl.delete);

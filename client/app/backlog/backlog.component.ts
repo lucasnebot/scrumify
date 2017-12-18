@@ -57,4 +57,5 @@ console.log('updateOrder called')
       this.modal.close();
     })
   }
+  
 }
