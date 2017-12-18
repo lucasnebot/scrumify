@@ -7,9 +7,9 @@ export { HttpClient } from '@angular/common/http';
 
 export abstract class GenericService<T> {
     private BASE_URL: string = environment.api_uri;
-
+  
     constructor(protected http: HttpClient, protected actionUrl: string) {}
-    //? Add mongodb operators (less than etc), try to get bodyparser/middleware to work
+    //! Add mongodb operators (less than etc), try to get bodyparser/middleware to work
     getAll(filterBy?: [string,string][]) : Observable<T[]> {      
       let params = new HttpParams();
       if(filterBy){
