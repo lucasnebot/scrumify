@@ -13,6 +13,10 @@ export const projectSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    sprintDuration: {
+        type: Number,
+        default:0
+    },
     users: {
         type: [mongoose.Schema.Types.ObjectId]
     },

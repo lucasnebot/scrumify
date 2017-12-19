@@ -1,7 +1,8 @@
 <!-- Jumbotron -->
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-3"> Welcome to Scrumify<span *ngIf="authService.authenticated">,
+    <h1 class="display-3"> Welcome to Scrumify
+      <span *ngIf="authService.authenticated">,
         <span class="text-primary">{{authService.activeUser.name}}</span>!</span>
     </h1>
     <p *ngIf="!authService.authenticated; else LoggedInText" class="lead">The scrum tool for the whole family</p>
@@ -51,6 +52,10 @@
         <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
           rows="3"></textarea>
       </div>
+      <div class="form-group">
+        <label for="sprintDuration">Sprint Duration</label>
+        <input type="text" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration" placeholder="Enter Duration of a Sprint">
+      </div>
       <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
     </form>
   </div>
@@ -71,7 +76,10 @@
             <i class="fa fa-rocket text-warning" aria-hidden="true"></i> Project</h4>
           <div class="card-block">
             <h5 class="card-title">{{projectService.project.name}}</h5>
-            <p class="card-text">{{projectService.project.vision}}</p>
+            <div class="card-text">
+              <p>{{projectService.project.vision}}</p>
+              <p>Sprint Duration: {{projectService.project.sprintDuration}}</p>
+            </div>
           </div>
         </div>
       </div>
