@@ -41,8 +41,9 @@ export default abstract class BaseDAO {
    * Returns all the documents from a specific Collection
    */
   readAll = (req, res): void => {
+    const queryOps = req.query.queryOps ? JSON.parse(req.query.queryOps) : {};
     this.model
-      .find(req.query)
+      .find(queryOps)
       .then(doc => {
         res.send(doc);
       })

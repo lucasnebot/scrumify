@@ -9,13 +9,10 @@ export abstract class GenericService<T> {
     private BASE_URL: string = environment.api_uri;
   
     constructor(protected http: HttpClient, protected actionUrl: string) {}
-    //! Add mongodb operators (less than etc), try to get bodyparser/middleware to work
-    getAll(filterBy?: [string,string][]) : Observable<T[]> {      
+    getAll(queryOps?: Object) : Observable<T[]> {      
       let params = new HttpParams();
-      if(filterBy){
-        filterBy.forEach((element) => {
-          params = params.set(element[0], element[1]);
-        })
+      if(queryOps){
+          params = params.set('queryOps',JSON.stringify(queryOps) );
       }
       return this.http.get(this.BASE_URL + this.actionUrl,{params: params}).map(resp => resp as T[]);              
     }
