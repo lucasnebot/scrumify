@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { HttpHeaders } from '@angular/common/http';
 import { Model } from 'mongoose';
 
@@ -63,6 +64,10 @@ export default abstract class BaseDAO {
       .catch(err => {
         res.status(400).send(err);
       });
+  }
+
+  updateMany = (req,res) : void => {
+    //TODO figure this shit out
   }
 
 /**

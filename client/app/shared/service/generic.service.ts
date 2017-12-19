@@ -32,6 +32,9 @@ export abstract class GenericService<T> {
     edit(id: string, update: Object): Observable<T> {
       return this.http.put(this.BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
     }
+    editAll(update: Object[]): Observable<T> {
+      return this.http.put(this.BASE_URL + `${this.actionUrl}`, update);
+    }
   }
 
 
