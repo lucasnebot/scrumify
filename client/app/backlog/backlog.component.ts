@@ -11,15 +11,7 @@ import { TruncateModule } from 'ng2-truncate';
 })
 export class BacklogComponent implements OnInit {
   backlogItems: BacklogItem[];
-  newBacklogItem: BacklogItem = {
-    title: '',
-    description: '',
-    order: 0,
-    estimation: 0,
-    status: 'EPIC',
-    task: [],
-    voted: []
-  };
+  newBacklogItem: BacklogItem;
   selectedIndex;
   newMode = 'User Story';
   modal;
@@ -31,7 +23,7 @@ export class BacklogComponent implements OnInit {
 
   ngOnInit() {
     this.getBacklogItems();
-    console.log(this.newMode);
+    this.newBacklogItem = this.getBacklogItem();
   }
 
   getBacklogItems() {
@@ -79,11 +71,24 @@ export class BacklogComponent implements OnInit {
     if (this.newMode === 'Epic') {
       this.newBacklogItem.status = 'EPIC';
     } else {
-      this.newBacklogItem.status = 'RFS';
+      this.newBacklogItem.status = 'RFE';
     }
     this.backlogService.add(this.newBacklogItem).subscribe((data) => {
       this.backlogItems.push(data);
+      this.newBacklogItem = this.getBacklogItem();
       this.modal.close();
     })
+  }
+
+  getBacklogItem() : BacklogItem{
+    return {
+      title: '',
+      description: '',
+      order: 0,
+      estimation: 0,
+      status: 'EPIC',
+      task: [],
+      voted: []
+    };
   }
 }
