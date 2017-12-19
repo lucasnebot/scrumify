@@ -7,6 +7,7 @@ import { AuthTokenInterceptor } from './shared/httpInterceptors/authTokenInterce
 import { FormsModule } from '@angular/forms';
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TruncateModule } from 'ng2-truncate';
 
 // Services
 import {
@@ -42,7 +43,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     HttpClientModule,
     FormsModule,
     DndModule.forRoot(),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    TruncateModule
   ],
   providers: [
     BacklogService,

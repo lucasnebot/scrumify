@@ -2,6 +2,8 @@ import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { TruncateModule } from 'ng2-truncate';
+
 @Component({
   selector: 'app-backlog',
   templateUrl: './backlog.component.html',
@@ -9,9 +11,19 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class BacklogComponent implements OnInit {
   backlogItems: BacklogItem[];
-  newBacklogItem:BacklogItem;
+  newBacklogItem : BacklogItem = {
+    title: '',
+    description : '',
+    order: 0,
+    estimation: 0,
+    status: 'EPIC',
+    task: [],
+    voted: []
+   }
   selectedIndex;
+  editMode = 'Epic';
   modal;
+
   constructor(
     private backlogService: BacklogService,
     private modalService: NgbModal
@@ -19,6 +31,8 @@ export class BacklogComponent implements OnInit {
 
   ngOnInit() {
     this.getBacklogItems();
+    console.log(this.editMode);
+    this.editMode = 'Epic';
   }
 
   getBacklogItems() {
@@ -29,6 +43,12 @@ this.backlogService.getAll().subscribe(data => {
         return t1.order - t2.order;
       });
     });
+  }
+
+  remove(index:number){
+    this.backlogService.delete(this.backlogItems[index]._id).subscribe((element) => {
+      this.backlogItems.splice(index,1);
+    })
   }
 
   updateOrder() {
@@ -43,8 +63,8 @@ this.backlogService.getAll().subscribe(data => {
     this.modal.result.then(result => {}, reason => {});
   }
 
-  isUserStory() {
-    return this.backlogItems[this.selectedIndex].hasOwnProperty('type');
+  selectedIsUserstory() {
+    return this.backlogItems[this.selectedIndex].status != 'EPIC';
   }
 
   saveItem(index) {
