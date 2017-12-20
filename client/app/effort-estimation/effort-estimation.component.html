@@ -6,6 +6,5 @@
   </p>
   <hr>
   <!-- Cards -->
-  <app-bli-card *ngFor="let bli of blisToEstimate" [item] = "bli"></app-bli-card>
-
+  <app-bli-card *ngFor="let bli of blisToEstimate" [item] = "bli" [context]="constructor.name"></app-bli-card>
 </div>

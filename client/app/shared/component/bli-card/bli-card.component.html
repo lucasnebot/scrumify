@@ -4,14 +4,19 @@
     <h6 class="card-subtitle mb-2 text-muted">User Story | Ready for Estimation</h6>
     <p class="card-text">{{item.description}}</p>
     <hr>
-    <form class="form-inline">
-      <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-        <div class="input-group-addon">Effort</div>
-        <select class="form-control" id="effortSelect" name="effortSelect">
-          <option *ngFor="let value of estimationValues" [value]="value">{{value}}</option>
-        </select>
-      </div>
-      <button class="btn">Vote</button>
-    </form>
+      <form *ngIf="!alreadyVoted; else votedInfoBlock" class="form-inline">
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+          <div class="input-group-addon">Effort</div>
+          <select [(ngModel)] = "estimation" class="form-control" id="effortSelect" name="effortSelect">
+            <option *ngFor="let value of estimationValues" [value]="value">{{value}}</option>
+          </select>
+        </div>
+        <button class="btn" (click)="vote()">Vote</button>
+      </form>
+      <!-- TODO: Display Information on current vote status -->
+    <ng-template #votedInfoBlock>
+      You voted!
+
+    </ng-template>
   </div>
 </div>
