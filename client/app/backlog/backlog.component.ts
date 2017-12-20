@@ -44,18 +44,17 @@ export class BacklogComponent implements OnInit {
   }
 
   updateOrder() {
-    console.log('updateOrder called');
     let updateOrderItems = [];
     this.backlogItems.forEach((element,index) => {
       updateOrderItems.push(element._id)
     });
-      console.log(updateOrderItems)
-    this.backlogService.editAll(updateOrderItems).subscribe((data) => {console.log('Updated')});
+    this.backlogService.updateOrder(updateOrderItems).subscribe((data) => {}, error =>{
+      //TODO Error Message display
+    });
   }
 
   open(content, index) {
     this.selectedIndex = index;
-    console.log(this.selectedIndex);
     this.modal = this.modalService.open(content);
     this.modal.result.then(result => {}, reason => {});
   }

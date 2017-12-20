@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 export { HttpClient } from '@angular/common/http';
 
 export abstract class GenericService<T> {
-    private BASE_URL: string = environment.api_uri;
+    protected BASE_URL: string = environment.api_uri;
   
     constructor(protected http: HttpClient, protected actionUrl: string) {}
     getAll(queryOps?: Object) : Observable<T[]> {      
@@ -28,9 +28,6 @@ export abstract class GenericService<T> {
     }
     edit(id: string, update: Object): Observable<T> {
       return this.http.put(this.BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
-    }
-    editAll(update: Object[]): Observable<any> {
-      return this.http.put(this.BASE_URL + `${this.actionUrl}`, update);
     }
   }
 

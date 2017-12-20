@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { BacklogItem } from './../model/.';
 import {GenericService} from './generic.service';
 import { Injectable } from '@angular/core';
@@ -8,4 +9,7 @@ export class BacklogService extends GenericService<BacklogItem>{
     constructor(http: HttpClient){
         super(http,"/backlogItem");  
     }
+    updateOrder(update: Object[]): Observable<any> {
+        return this.http.put(this.BASE_URL + `${this.actionUrl}`, update);
+      }
 }
