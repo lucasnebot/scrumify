@@ -45,8 +45,12 @@ export class BacklogComponent implements OnInit {
 
   updateOrder() {
     console.log('updateOrder called');
-    //TODO implement server side
-      //this.backlogService.editAll(this.backlogItems).subscribe((data) => {console.log('Updated')});
+    let updateOrderItems = [];
+    this.backlogItems.forEach((element,index) => {
+      updateOrderItems.push(element._id)
+    });
+      console.log(updateOrderItems)
+    this.backlogService.editAll(updateOrderItems).subscribe((data) => {console.log('Updated')});
   }
 
   open(content, index) {
