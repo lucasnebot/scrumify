@@ -98,7 +98,7 @@ export default class Server {
    */
   private setCrudRoutes(path: string, ctrl: baseDAO) {
     this.app.get(`/api/${path}/:id`, ctrl.read);
-    this.app.get(`/api/${path}`, express.urlencoded({ extended: true }), ctrl.readAll);
+    this.app.get(`/api/${path}`, ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);
     this.app.put(`/api/${path}` , ctrl.updateMany);
