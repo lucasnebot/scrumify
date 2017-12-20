@@ -1,4 +1,5 @@
-import {BaseModel,Task} from './';
+import {Task} from './task';
+import {BaseModel} from './baseModel';
 
 export interface Vote{
     voterEmail: string,

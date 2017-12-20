@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BacklogItem, Vote } from '../shared/model';
+import { BacklogItem, Vote } from '../shared/model/backlogItem';
 import { BacklogService, AuthService } from '../shared/service';
 import { forEach } from '@angular/router/src/utils/collection';
 

@@ -1,5 +1,4 @@
-import { BaseModel } from './';
-
+import {BaseModel} from './baseModel';
 export class Project extends BaseModel {
     name: string;
     vision: string;

@@ -9,8 +9,7 @@ import { BacklogService } from '../../service';
 })
 export class BliCardComponent implements OnInit {
   context: string;
-  //@Input() 
-  item: BacklogItem;
+  @Input() item: BacklogItem;
   estimationValues = [0, 1, 2, 3, 5, 8, 13, 20, 40, 100];
   constructor(public backlogService: BacklogService) { }
   ngOnInit() {

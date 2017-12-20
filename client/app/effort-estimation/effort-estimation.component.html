@@ -5,7 +5,7 @@
     <strong>Developer</strong> has voted, the user story is ready to be added to a sprint.
   </p>
   <hr>
-  <!-- Cards [item] = "bli"-->
-  <app-bli-card *ngFor="let bli of blisToEstimate"></app-bli-card>
+  <!-- Cards -->
+  <app-bli-card *ngFor="let bli of blisToEstimate" [item] = "bli"></app-bli-card>
 
 </div>
