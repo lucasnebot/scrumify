@@ -10,26 +10,13 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class EffortEstimationComponent implements OnInit {
   blisToEstimate: BacklogItem[];
-  votes: Vote[] = [];
-  estimationValues = [0, 1, 2, 3, 5, 8, 13, 20, 40, 100];
   constructor(public backlogService: BacklogService, private authService: AuthService) {}
 
   ngOnInit() {
     this.backlogService.getAll({ status: 'RFE'}).subscribe(docs => {
       this.blisToEstimate = docs;
-      this.createVoteTemplates();
-      console.log(this.votes);
+      console.log(this.constructor.name);
     });
-  }
-  // TODO delete
-  createVoteTemplates(){
-    const emptyUserVote: Vote = {
-      voterEmail: this.authService.activeUser.email,
-      estimation: 0
-    }
-    for(let i = 0; i < this.blisToEstimate.length; i++){
-      this.votes.push(emptyUserVote);
-    }
   }
   // could be extracted to backlog.service
   /**
