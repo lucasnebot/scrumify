@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
       this.loginFailed = !this.authService.authenticated;
       // Can be switched to every other route
       this.router.navigate(['/']);
+      this.ngOnInit();
     });
   }
   createProject(){
