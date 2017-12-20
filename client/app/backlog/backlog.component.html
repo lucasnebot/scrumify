@@ -3,10 +3,11 @@
   <br>
 
   <div class="row">
-    <div class="col-8">
+    <div class="col-10">
       <table class="table table-hover table-striped">
         <thead>
           <tr>
+            <th>Type</th>
             <th>Title</th>
             <th>Description</th>
             <th>Estimation</th>
@@ -16,11 +17,12 @@
         </thead>
         <tbody dnd-sortable-container [sortableData]="backlogItems">
           <tr *ngFor="let item of backlogItems; let i = index" class="" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-            <th scope="row">{{item.title}}</th>
+            <td><span class="badge badge-info">{{backlogService.getType(item)}}</span></td>
+            <th>{{item.title}}</th>
             <td>{{item.description | truncate: 15}}</td>
             <td>{{item.estimation || 'Not estimated yet'}}</td>
             <td>
-              <span class="badge badge-primary">{{item.status}}</span>
+              <span class="badge badge-primary">{{backlogService.getReadableStatus(item.status)}}</span>
             </td>
             <td>
               <button type="button" class="btn btn-sm fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
@@ -56,11 +58,7 @@
         </div>
         <!-- User Story start -->
         <div *ngIf="selectedIsUserstory()" class="form-group">
-          <label for="sel1">Status</label>
-          <select [(ngModel)]="backlogItems[selectedIndex].status" class="form-control" id="sel1">
-            <option value="RFE">Ready for Estimation</option>
-            <option value="RFS">Ready for Sprint</option>
-          </select>
+          Status: {{backlogService.getReadableStatus(backlogItems[selectedIndex].status)}}
         </div>
       </div>
       <div class="modal-footer">
