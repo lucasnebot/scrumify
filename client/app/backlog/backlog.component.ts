@@ -79,7 +79,7 @@ export class BacklogComponent implements OnInit {
     if (this.newMode === 'Epic') {
       this.newBacklogItem.status = 'EPIC';
     } else {
-      this.newBacklogItem.status = 'RFS';
+      this.newBacklogItem.status = 'RFE';
     }
     this.backlogService.add(this.newBacklogItem).subscribe((data) => {
       this.backlogItems.push(data);

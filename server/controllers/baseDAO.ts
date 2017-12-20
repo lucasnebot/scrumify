@@ -56,8 +56,9 @@ export default abstract class BaseDAO {
    * Finds a document by ID and updates the given properties
    */
   update = (req, res): void => {
+    const queryOps = req.query.advancedQuery ? req.body : { $set: req.body };
     this.model
-      .findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+      .findByIdAndUpdate(req.params.id, queryOps, { new: true })
       .then(doc => {
         res.send(doc);
       })
