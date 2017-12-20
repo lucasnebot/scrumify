@@ -1,4 +1,4 @@
-import { BacklogItem } from './../model/.';
+import { BacklogItem } from './../model';
 import {GenericService} from './generic.service';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';

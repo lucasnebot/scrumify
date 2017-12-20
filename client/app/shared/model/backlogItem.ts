@@ -1,7 +1,7 @@
 import {BaseModel,Task} from './';
 
 export interface Vote{
-    votedBy: string,
+    voterEmail: string,
     estimation: number
 }
 export class BacklogItem extends BaseModel {

@@ -5,6 +5,7 @@ import {HomeComponent} from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { AuthGuardService } from './shared/service';
+import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component' 
 
 
 const routes: Routes = [
@@ -12,7 +13,8 @@ const routes: Routes = [
   {path: 'backlog', component: BacklogComponent, canActivate: [AuthGuardService]},
   {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService]},
   {path: '*', component: HomeComponent},
-  {path: 'signUp', component: SignUpComponent}
+  {path: 'signUp', component: SignUpComponent},
+  {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService]}
 ]
 
 @NgModule({

@@ -27,6 +27,7 @@ import { HomeComponent } from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { NavbarComponent } from './navbar/navbar.component';
     RoadmapComponent,
     HomeComponent,
     SignUpComponent,
-    NavbarComponent
+    NavbarComponent,
+    EffortEstimationComponent
   ],
   imports: [
     BrowserModule,
