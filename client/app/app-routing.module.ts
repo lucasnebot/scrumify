@@ -1,3 +1,4 @@
+import { SprintPlanningComponent } from './sprint-planning/sprint-planning.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {BacklogComponent} from './backlog/backlog.component';
@@ -12,7 +13,8 @@ const routes: Routes = [
   {path: 'backlog', component: BacklogComponent, canActivate: [AuthGuardService]},
   {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService]},
   {path: '*', component: HomeComponent},
-  {path: 'signUp', component: SignUpComponent}
+  {path: 'signUp', component: SignUpComponent},
+  {path: 'sprint-planning',component: SprintPlanningComponent}
 ]
 
 @NgModule({
