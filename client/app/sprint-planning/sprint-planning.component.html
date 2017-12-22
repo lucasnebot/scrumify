@@ -1,3 +1,51 @@
-<p>
-  sprint-planning works!
-</p>
+<div class="mainContainer">
+  <h2>Sprint Planning</h2>
+</div>
+<br>
+<br>
+<div class="row">
+  <div class="col">
+    <h3>Ready for Sprint</h3>
+    <ul class="list-group">
+      <li *ngFor="let item of backlogItems" class="list-group-item ">{{item.title}}</li>
+    </ul>
+  </div>
+  <div class="col">
+    <h3>Selected Sprint</h3>
+    <!-- Initial Sprint Setup-->
+    <div *ngIf="sprints.length == 0;else sprintView">
+      <ul class="list-group">
+        <li class="list-group-item">
+          Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="sprint-start-date">Start Date</label>
+                <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
+                  required>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="sprint-end-date">End Date</label>
+                <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
+                  disabled>
+              </div>              
+            </div>            
+            <div class="col">
+                <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button><br><br>
+                <p class="bg-secondary text-white">Hint: You can set the sprint duration in general project setup.</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #sprintView>
+      There is a sprint !!!
+      <ul class="list-group">
+        <li *ngFor="let item of backlogItems" class="list-group-item ">{{item.title}}</li>
+      </ul>
+    </ng-template>
+  </div>
+</div>

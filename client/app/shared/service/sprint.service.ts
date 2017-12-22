@@ -8,5 +8,4 @@ export class SprintService extends GenericService<Sprint>{
   constructor(http: HttpClient) {
     super(http, '/sprint');
   }
-
 }
