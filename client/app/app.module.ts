@@ -16,7 +16,8 @@ import {
   BacklogService,
   AuthService,
   AuthGuardService,
-  ProjectService
+  ProjectService,
+  SprintService
 } from './shared/service';
 
 // Components
@@ -59,7 +60,8 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,
       multi: true
-    }
+    },
+    SprintService
   ],
   bootstrap: [AppComponent]
 })

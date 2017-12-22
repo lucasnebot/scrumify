@@ -1,3 +1,4 @@
+export { SprintService } from './sprint.service';
 export { MilestoneService } from './milestone.service';
 export { UserService } from './user.service';
 export { BacklogService } from './backlog.service';
