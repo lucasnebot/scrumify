@@ -22,7 +22,7 @@
               <div class="form-group">
                 <label for="sprint-start-date">Start Date</label>
                 <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
-                  required>
+                (ngModelChange)="myFunc()" required>
               </div>
             </div>
             <div class="col">
@@ -30,11 +30,19 @@
                 <label for="sprint-end-date">End Date</label>
                 <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
                   disabled>
-              </div>              
-            </div>            
+              </div>
+            </div>
             <div class="col">
-                <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button><br><br>
-                <p class="bg-secondary text-white">Hint: You can set the sprint duration in general project setup.</p>
+              <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button>
+              <br>
+              <br>
+              <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>Hint:</strong> Hint: You can set the sprint duration in general project setup.
+              </div>
+
             </div>
           </div>
         </li>

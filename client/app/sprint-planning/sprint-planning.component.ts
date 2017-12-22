@@ -1,3 +1,4 @@
+import { ProjectService } from './../shared/service/project.service';
 import { BacklogItem, Sprint} from './../shared/model/.';
 import { BacklogService, SprintService } from './../shared/service/.';
 import { Component, OnInit } from '@angular/core';
@@ -17,7 +18,8 @@ export class SprintPlanningComponent implements OnInit {
     backlogItem: []
   }
   constructor(private backlogService : BacklogService,
-              private sprintService: SprintService) { }
+              private sprintService: SprintService,
+              private projectService: ProjectService) { }
 
   ngOnInit() {
     this.getBacklogItems();
@@ -39,6 +41,10 @@ export class SprintPlanningComponent implements OnInit {
 
   saveSprint(){
     
+  }
+
+  calcEndDate(){
+    //this.projectService.project.sprintDuration
   }
 
 }
