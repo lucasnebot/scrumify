@@ -17,7 +17,7 @@
     <ng-template #votedInfoBlock>
       <div class="row">
         <div class="col">You voted <i class="fa fa-check" aria-hidden="true"></i></div>
-        <div class="col"> {{backlogService.countVotes(item)}} / X <i class="fa fa-user" aria-hidden="true"></i></div>
+        <div class="col"> {{backlogService.countVotes(item)}} / {{projectService.numberOfDevelopers}} <i class="fa fa-user" aria-hidden="true"></i></div>
         <div class="col"></div>
       </div>
 
