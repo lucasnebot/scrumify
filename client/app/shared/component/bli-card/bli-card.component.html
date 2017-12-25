@@ -1,0 +1,26 @@
+<div class="card">
+  <div class="card-block">
+    <h4 class="card-title">{{item.title}}</h4>
+    <h6 class="card-subtitle mb-2 text-muted">User Story | Ready for Estimation</h6>
+    <p class="card-text">{{item.description}}</p>
+    <hr>
+      <form *ngIf="!alreadyVoted; else votedInfoBlock" class="form-inline">
+        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+          <div class="input-group-addon">Effort</div>
+          <select [(ngModel)] = "estimation" class="form-control" id="effortSelect" name="effortSelect" [disabled]="!authService.allowedFor(['Developer'])">
+            <option *ngFor="let value of estimationValues" [value]="value">{{value}}</option>
+          </select>
+        </div>
+        <button class="btn" (click)="vote()" [disabled]="!authService.allowedFor(['Developer'])" >Vote</button>
+      </form>
+      <!-- TODO: Display Information on current vote status -->
+    <ng-template #votedInfoBlock>
+      <div class="row">
+        <div class="col">You voted <i class="fa fa-check" aria-hidden="true"></i></div>
+        <div class="col"> {{backlogService.countVotes(item)}} / X <i class="fa fa-user" aria-hidden="true"></i></div>
+        <div class="col"></div>
+      </div>
+
+    </ng-template>
+  </div>
+</div>

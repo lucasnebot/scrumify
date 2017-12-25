@@ -9,6 +9,10 @@ export abstract class GenericService<T> {
     protected BASE_URL: string = environment.api_uri;
   
     constructor(protected http: HttpClient, protected actionUrl: string) {}
+    /**
+     * 
+     * @param queryOps optional query operators
+     */
     getAll(queryOps?: Object) : Observable<T[]> {      
       let params = new HttpParams();
       if(queryOps){
@@ -16,7 +20,6 @@ export abstract class GenericService<T> {
       }
       return this.http.get(this.BASE_URL + this.actionUrl,{params: params}).map(resp => resp as T[]);              
     }
-    // Changed id type to string and fix url
     getOne(id: string): Observable<T> {
       return this.http.get(this.BASE_URL + `${this.actionUrl}/${id}`).map(resp => resp as T);
     }
@@ -26,8 +29,16 @@ export abstract class GenericService<T> {
     delete(id: string): Observable<any> {
       return this.http.delete(this.BASE_URL + `${this.actionUrl}/${id}`);
     }
-    edit(id: string, update: Object): Observable<T> {
-      return this.http.put(this.BASE_URL + `${this.actionUrl}/${id}`, update).map(resp => resp as T);
+    /**
+     * 
+     * @param advancedQuery If set 'true' an valid (more complex) mongoDB queryObject is expected
+     */
+    edit(id: string, update: Object, advancedQuery?: boolean): Observable<T> {
+      let params = new HttpParams();
+      if(advancedQuery){
+        params = params.set('advancedQuery', 'true');
+      }
+      return this.http.put(this.BASE_URL + `${this.actionUrl}/${id}`, update,{params: params}).map(resp => resp as T);
     }
   }
 

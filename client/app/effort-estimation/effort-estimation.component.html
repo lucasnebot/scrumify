@@ -1,0 +1,10 @@
+<div class="mainContainer">
+  <h2>Effort Estimation</h2>
+  <p>
+    Estimate the effort needed for a specific User Story. When every
+    <strong>Developer</strong> has voted, the user story is ready to be added to a sprint.
+  </p>
+  <hr>
+  <!-- Cards -->
+  <app-bli-card *ngFor="let bli of blisToEstimate" [item] = "bli" [context]="constructor.name"></app-bli-card>
+</div>

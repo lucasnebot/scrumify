@@ -1,4 +1,4 @@
-import { BaseModel } from './';
+import { BaseModel } from './baseModel';
 
 export class Sprint extends BaseModel {
   sprintNo: number;

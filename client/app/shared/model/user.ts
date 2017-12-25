@@ -1,4 +1,4 @@
-import {BaseModel} from './'
+import {BaseModel} from './baseModel';
 
 export interface SignInData {
     email: string;

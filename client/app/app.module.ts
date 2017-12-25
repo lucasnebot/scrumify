@@ -29,6 +29,8 @@ import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SprintPlanningComponent } from './sprint-planning/sprint-planning.component';
+import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
+import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
     HomeComponent,
     SignUpComponent,
     NavbarComponent,
-    SprintPlanningComponent
+    SprintPlanningComponent,
+    EffortEstimationComponent,
+    BliCardComponent
   ],
   imports: [
     BrowserModule,
