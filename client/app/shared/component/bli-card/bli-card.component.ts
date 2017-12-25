@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BacklogItem } from '../../model/backlogItem';
-import { BacklogService } from '../../service';
+import { BacklogService, AuthService } from '../../service';
 import { allResolved } from 'q';
 
 @Component({
@@ -14,7 +14,7 @@ export class BliCardComponent implements OnInit {
   alreadyVoted = false;
   estimation = 0;
   estimationValues = [0, 1, 2, 3, 5, 8, 13, 20, 40, 100];
-  constructor(public backlogService: BacklogService) { }
+  constructor(protected backlogService: BacklogService, public authService: AuthService) { }
   ngOnInit() {
     this.alreadyVoted = this.backlogService.hasAlreadyVotedOn(this.item);
   }

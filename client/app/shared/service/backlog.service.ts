@@ -32,4 +32,8 @@ export class BacklogService extends GenericService<BacklogItem> {
     });
     return alreadyVoted;
   }
+
+  countVotes(item: BacklogItem): number{
+    return item.voted.length;
+ }
 }
