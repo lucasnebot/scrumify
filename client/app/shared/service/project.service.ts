@@ -13,9 +13,14 @@ export class ProjectService extends GenericService<Project> {
     super(http, '/project');
     this.fetchProject();
   }
+  // TODO change to multi project
+  /**
+   * Retrieves the project with all of its data and saves it into the singleton project service
+   */
   fetchProject() {
     this.getAll().subscribe(resp => {
       if (resp.length >= 1) {
+        // TODO
         this.project = resp[0];
         this.getNumberOfDevelopers();
       } else {
@@ -23,6 +28,10 @@ export class ProjectService extends GenericService<Project> {
       }
     });
   }
+  /**
+   * Adds the given id to the user field of the active project in the db
+   * @param userId 
+   */
   addProjectMember(userId: string) {
    this.edit(
       this.project._id,
@@ -34,7 +43,9 @@ export class ProjectService extends GenericService<Project> {
       console.log('Project Member added');
     });
   }
-  // TODO : Extract a getProjectMembers() method
+  /**
+   * Saves the number of developers in the given project into the project singleton service
+   */
   getNumberOfDevelopers() {
     this.userService.getAll({_id: {$in: this.project.users}, role: 2}).subscribe((resp) => {
       this.numberOfDevelopers = resp.length;

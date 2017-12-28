@@ -10,11 +10,17 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class EffortEstimationComponent implements OnInit {
   blisToEstimate: BacklogItem[];
+  blisToReestimate: BacklogItem[];
   constructor(public backlogService: BacklogService) {}
 
   ngOnInit() {
-    this.backlogService.getAll({ status: 'RFE'}).subscribe(docs => {
-      this.blisToEstimate = docs;
+    // Gets 
+    this.backlogService.getAll({ status: {$in: ['RFE', 'REEST']}}).subscribe(docs => {
+      this.blisToEstimate = docs.filter(element => element.status === 'RFE');
+      console.log(this.blisToEstimate);
+      this.blisToReestimate = docs.filter(element => element.status === 'REEST');
+      console.log(this.blisToReestimate);
+
     });
   }
 }

@@ -6,5 +6,16 @@
   </p>
   <hr>
   <!-- Cards -->
-  <app-bli-card *ngFor="let bli of blisToEstimate" [item] = "bli" [context]="constructor.name"></app-bli-card>
+  <!-- Reestimate -->
+  <div *ngIf="blisToReestimate.length != 0">
+    <p class="text-warning">
+      <i class="fa fa-exclamation" aria-hidden="true"></i>
+      <strong>Watch out!</strong> Looks like you and your teammembers estimated the effort quiet differently for these items. Talk
+      to your fellow developers or vote again.
+    </p>
+    <app-bli-card *ngFor="let bliRe of blisToReestimate" [item]="bliRe" [context]="constructor.name"></app-bli-card>
+    <hr>
+  </div>
+  <!--Estimate -->
+  <app-bli-card *ngFor="let bli of blisToEstimate" [item]="bli" [context]="constructor.name"></app-bli-card>
 </div>

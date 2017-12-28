@@ -1,9 +1,11 @@
 <div class="card">
   <div class="card-block">
     <h4 class="card-title">{{item.title}}</h4>
-    <h6 class="card-subtitle mb-2 text-muted">User Story | Ready for Estimation</h6>
+    <h6 class="card-subtitle mb-2 text-muted">User Story | {{backlogService.getReadableStatus(item.status)}}</h6>
     <p class="card-text">{{item.description}}</p>
     <hr>
+    <!-- Bottom side of card | variable content -->
+    <!-- First estimation and user hasn't voted-->
       <form *ngIf="!alreadyVoted; else votedInfoBlock" class="form-inline">
         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
           <div class="input-group-addon">Effort</div>
@@ -13,7 +15,7 @@
         </div>
         <button class="btn" (click)="vote()" [disabled]="!authService.allowedFor(['Developer'])" >Vote</button>
       </form>
-      <!-- TODO: Display Information on current vote status -->
+      <!-- First estimation and user has already voted-->
     <ng-template #votedInfoBlock>
       <div class="row">
         <div class="col">You voted <i class="fa fa-check" aria-hidden="true"></i></div>
@@ -24,7 +26,7 @@
           </div>
         </div>
       </div>
-
     </ng-template>
+    
   </div>
 </div>

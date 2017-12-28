@@ -25,6 +25,8 @@ export class BacklogService extends GenericService<BacklogItem> {
         return '';
       case 'RFE':
         return 'Ready for Estimation';
+      case 'REEST':
+        return 'Reestimation needed'
       case 'RFS':
         return 'Ready for Sprint';
       case 'SPRINT':
@@ -43,15 +45,16 @@ export class BacklogService extends GenericService<BacklogItem> {
       return 'User Story';
     }
   }
-
+// TODO : extract code blocks
   /**
    * Adds a vote object with the estimation
-   * @param id
-   * @param estimation
+   * @param id Id of the BLI
+   * @param estimation Estimated effort for BLI
    */
   voteOn(item: BacklogItem, estimation: number): Observable<BacklogItem> {
     // Construct new vote
     const vote: Vote = {
+      voterName: this.authService.activeUser.name,
       voterEmail: this.authService.activeUser.email,
       estimation: estimation
     };
@@ -60,11 +63,12 @@ export class BacklogService extends GenericService<BacklogItem> {
     if (item.voted.length + 1 === this.projectService.numberOfDevelopers) {
       // Add vote locally
       item.voted.push(vote);
-      // ! Calculate median
       // Sort by estimation in ascending order
       item.voted.sort((a: Vote, b: Vote) => {
         return a.estimation - b.estimation;
       });
+
+      // ! Calculate estimation median
       let median: number;
       // Number of votes is even --> calculate median in between estimations
       if (item.voted.length % 2 === 0) {
@@ -87,7 +91,10 @@ export class BacklogService extends GenericService<BacklogItem> {
     // Only the new vote is added
     return this.edit(item._id, { $push: { voted: vote } }, true);
   }
-
+  /**
+   * Checks if the active user already voted on a given BLI
+   * @param item The BLI to be checked
+   */
   hasAlreadyVotedOn(item: BacklogItem): boolean {
     let alreadyVoted = false;
     item.voted.forEach(vote => {
@@ -96,9 +103,5 @@ export class BacklogService extends GenericService<BacklogItem> {
       }
     });
     return alreadyVoted;
-  }
-
-  countVotes(item: BacklogItem): number {
-    return item.voted.length;
   }
 }

@@ -28,7 +28,6 @@ export class BliCardComponent implements OnInit {
     this.backlogService
       .voteOn(this.item, this.estimation)
       .subscribe(resp => {
-        console.log(resp);
         this.item = resp;
         this.alreadyVoted = true;
         //if this was the last vote
