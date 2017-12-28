@@ -16,7 +16,8 @@ export class HomeComponent implements OnInit {
   newProject: Project = {
     name: '',
     vision: '',
-    sprintDuration: null
+    sprintDuration: null,
+    storyPointsPerSprint:null
   }
   loginFailed = false;
   users: User[];

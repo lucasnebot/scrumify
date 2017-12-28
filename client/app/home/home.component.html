@@ -53,8 +53,12 @@
           rows="3"></textarea>
       </div>
       <div class="form-group">
-        <label for="sprintDuration">Sprint Duration</label>
-        <input type="text" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration" placeholder="Enter Duration of a Sprint">
+        <label for="sprintDuration">Sprint Duration in Days</label>
+        <input type="number" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration" placeholder="Enter Duration of a Sprint">
+      </div>
+      <div class="form-group">
+        <label for="availableStoryPoints">Story Points available per Sprint</label>
+        <input type="number" min="1" [(ngModel)]="newProject.storyPointsPerSprint" class="form-control" id="availableStoryPoints" name="availableStoryPoints" placeholder="Enter available Story Points">
       </div>
       <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
     </form>
@@ -79,6 +83,7 @@
             <div class="card-text">
               <p>{{projectService.project.vision}}</p>
               <p>Sprint Duration: {{projectService.project.sprintDuration}}</p>
+              <p>Story Points Available: {{projectService.project.storyPointsPerSprint}}</p>
             </div>
           </div>
         </div>
