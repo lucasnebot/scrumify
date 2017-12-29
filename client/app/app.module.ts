@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TruncateModule } from 'ng2-truncate';
+import {MomentModule} from 'angular2-moment';
 
 // Services
 import {
@@ -47,7 +48,8 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
     FormsModule,
     DndModule.forRoot(),
     NgbModule.forRoot(),
-    TruncateModule
+    TruncateModule,
+    MomentModule
   ],
   providers: [
     BacklogService,
