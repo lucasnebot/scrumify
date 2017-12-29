@@ -17,7 +17,8 @@ import {
   AuthService,
   AuthGuardService,
   ProjectService,
-  SprintService
+  SprintService,
+  EstimationHelperService
 } from './shared/service';
 
 // Components
@@ -65,7 +66,8 @@ import { BliCardComponent } from './shared/component/bli-card/bli-card.component
       useClass: AuthTokenInterceptor,
       multi: true
     },
-    SprintService
+    SprintService,
+    EstimationHelperService
   ],
   bootstrap: [AppComponent]
 })

@@ -4,18 +4,11 @@
     Estimate the effort needed for a specific User Story. When every
     <strong>Developer</strong> has voted, the user story is ready to be added to a sprint.
   </p>
+  <!-- Reestimation Warning -->
+  <div *ngIf="estHelper.reestimationNeeded" class="alert alert-warning" role="alert">
+      <strong>Watch out!</strong> You and your team members have different opinions about the effort of some user stories. Time for discussions and reestimation.
+    </div>
   <hr>
   <!-- Cards -->
-  <!-- Reestimate -->
-  <div *ngIf="blisToReestimate.length != 0">
-    <p class="text-warning">
-      <i class="fa fa-exclamation" aria-hidden="true"></i>
-      <strong>Watch out!</strong> Looks like you and your teammembers estimated the effort quiet differently for these items. Talk
-      to your fellow developers or vote again.
-    </p>
-    <app-bli-card *ngFor="let bliRe of blisToReestimate" [item]="bliRe" [context]="constructor.name"></app-bli-card>
-    <hr>
-  </div>
-  <!--Estimate -->
   <app-bli-card *ngFor="let bli of blisToEstimate" [item]="bli" [context]="constructor.name"></app-bli-card>
 </div>

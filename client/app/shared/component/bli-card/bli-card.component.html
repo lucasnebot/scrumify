@@ -1,32 +1,69 @@
 <div class="card">
   <div class="card-block">
     <h4 class="card-title">{{item.title}}</h4>
-    <h6 class="card-subtitle mb-2 text-muted">User Story | {{backlogService.getReadableStatus(item.status)}}</h6>
+    <h6 class="card-subtitle mb-2 text-muted">User Story |
+      <!-- Card subtitle varies depending of status | add more cases if nessessary -->
+      <span [ngSwitch]="item.status">
+        <ng-container *ngSwitchCase="'REEST'">
+          <span class="text-warning">
+            <i class="fa fa-flag" aria-hidden="true"></i>
+            <strong> {{backlogService.getReadableStatus(item.status)}}</strong>
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'RFS'">
+            <span class="text-success">
+              <i class="fa fa-check" aria-hidden="true"></i>
+              <strong> {{backlogService.getReadableStatus(item.status)}}</strong>
+            </span>
+          </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{backlogService.getReadableStatus(item.status)}}
+        </ng-container>
+      </span>
+    </h6>
     <p class="card-text">{{item.description}}</p>
     <hr>
     <!-- Bottom side of card | variable content -->
-    <!-- First estimation and user hasn't voted-->
-      <form *ngIf="!alreadyVoted; else votedInfoBlock" class="form-inline">
-        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-          <div class="input-group-addon">Effort</div>
-          <select [(ngModel)] = "estimation" class="form-control" id="effortSelect" name="effortSelect" [disabled]="!authService.allowedFor(['Developer'])">
-            <option *ngFor="let value of estimationValues" [value]="value">{{value}}</option>
-          </select>
-        </div>
-        <button class="btn" (click)="vote()" [disabled]="!authService.allowedFor(['Developer'])" >Vote</button>
-      </form>
-      <!-- First estimation and user has already voted-->
-    <ng-template #votedInfoBlock>
-      <div class="row">
-        <div class="col">You voted <i class="fa fa-check" aria-hidden="true"></i></div>
-        <div class="col"> {{backlogService.countVotes(item)}} / {{projectService.numberOfDevelopers}} <i class="fa fa-user" aria-hidden="true"></i></div>
-        <div class="col">
-          <div *ngIf="voteCompleted">
-            Team Estimation: {{item.estimation}}
+    <div class="row">
+      <!-- Col 1-->
+      <div class="col-5">
+        <!-- User is allowed to vote-->
+        <form *ngIf="!alreadyVoted; else youVoted" class="form-inline mt-0">
+          <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+            <div class="input-group-addon">Effort</div>
+            <select [(ngModel)]="estimation" class="form-control" id="effortSelect" name="effortSelect" [disabled]="!authService.allowedFor(['Developer'])">
+              <option *ngFor="let value of estimationValues" [value]="value">{{value}}</option>
+            </select>
           </div>
-        </div>
+          <button class="btn" (click)="vote()" [disabled]="!authService.allowedFor(['Developer'])">Vote</button>
+        </form>
+        <!-- User is not allowed to vote-->
+        <ng-template #youVoted>
+          You've voted
+          <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+        </ng-template>
       </div>
-    </ng-template>
-    
+      <!-- Col 2-->
+      <div class="col-7">
+        <div *ngIf="item.status === 'RFE'; else everybodyVoted">
+          {{item.voted.length}} / {{projectService.numberOfDevelopers}}
+          <i class="fa fa-user" aria-hidden="true"></i>
+        </div>
+        <ng-template #everybodyVoted>
+          <ul class="x-inline-list">
+            <li>
+              <i class="fa fa-users" aria-hidden="true"></i>
+            </li>
+            <li *ngFor="let vote of item.voted">
+              {{vote.voterName}}: {{vote.estimation}} | </li>
+          </ul>
+          <div class="text-success" *ngIf="item.status === 'RFS'">
+            <i class="fa fa-trophy" aria-hidden="true"></i>
+            Vote finished! Estimated effort:
+            <strong>{{item.estimation}}</strong>
+          </div>
+        </ng-template>
+      </div>
+    </div>
   </div>
 </div>
