@@ -1,3 +1,4 @@
+import { ScrumboardComponent } from './scrumboard/scrumboard.component';
 import { SprintPlanningComponent } from './sprint-planning/sprint-planning.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService]},
   {path: '*', component: HomeComponent},
   {path: 'signUp', component: SignUpComponent},
-  {path: 'sprint-planning',component: SprintPlanningComponent}
+  {path: 'sprint-planning',component: SprintPlanningComponent},
+  {path: 'scrumboard', component: ScrumboardComponent}
 ]
 
 @NgModule({

@@ -30,6 +30,7 @@ import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SprintPlanningComponent } from './sprint-planning/sprint-planning.component';
+import { ScrumboardComponent } from './scrumboard/scrumboard.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
     HomeComponent,
     SignUpComponent,
     NavbarComponent,
-    SprintPlanningComponent
+    SprintPlanningComponent,
+    ScrumboardComponent
   ],
   imports: [
     BrowserModule,
