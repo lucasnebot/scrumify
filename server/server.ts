@@ -102,7 +102,7 @@ export default class Server {
     this.app.get(`/api/${path}`, ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);
-    this.app.put(`/api/${path}`, ctrl.update);
+    this.app.put(`/api/${path}`, ctrl.updateMany);
     this.app.delete(`/api/${path}/:id`, ctrl.delete);
   }
 }

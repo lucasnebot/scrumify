@@ -58,7 +58,8 @@ export default abstract class BaseDAO {
    * Finds a document by ID and updates the given properties
    */
   update = (req, res): void => {
-    this.model
+
+      this.model
       .findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
       .then(doc => {
         res.send(doc);
@@ -67,6 +68,15 @@ export default abstract class BaseDAO {
         res.status(400).send(err);
       });
   }
+
+  updateMany = (req,res): void => {
+    this.model.update(req.body[0],
+      req.body[1],{multi:true}).then((result) =>{
+    }).catch(err => {
+      res.status(400).send(err);
+    })
+  }
+
 
 /**
  * Deletes a document with the given ID
