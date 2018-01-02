@@ -10,7 +10,7 @@ export class BacklogService extends GenericService<BacklogItem>{
         super(http,"/backlogItem");  
     }
     updateOrder(update: Object[]): Observable<any> {
-        return this.http.put(this.BASE_URL + `${this.actionUrl}`, update);
+        return this.http.put(this.BASE_URL + `${this.actionUrl}/order`, update);
       }
 
       getReadableStatus(status: string):string{

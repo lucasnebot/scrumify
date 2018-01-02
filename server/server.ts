@@ -83,7 +83,7 @@ export default class Server {
     // Insert application routes here
     this.app.post('/signUp', userCtrl.signUp);
     this.app.post('/signIn', userCtrl.signIn);
-    this.app.put(`/api/backlogItem` , backlogItemCtrl.updateOrder);
+    this.app.put(`/api/backlogItem/order` , backlogItemCtrl.updateOrder);
 
     // Entities
     this.setCrudRoutes('milestone', milestoneCtrl);
@@ -102,6 +102,7 @@ export default class Server {
     this.app.get(`/api/${path}`, ctrl.readAll);
     this.app.post(`/api/${path}`, ctrl.create);
     this.app.put(`/api/${path}/:id`, ctrl.update);
+    this.app.put(`/api/${path}`, ctrl.update);
     this.app.delete(`/api/${path}/:id`, ctrl.delete);
   }
 }
