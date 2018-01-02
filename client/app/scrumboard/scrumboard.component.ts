@@ -1,3 +1,5 @@
+import { BacklogItem } from './../shared/model/backlogItem';
+import { BacklogService } from './../shared/service/backlog.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScrumboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private backlogService: BacklogService) { }
+  backlogItems: BacklogItem[];
 
   ngOnInit() {
+    this.backlogService.getAll({ status: 'SPRINT' }).subscribe(result => {
+      this.backlogItems = result;
+    });
   }
 
 }
