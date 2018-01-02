@@ -82,8 +82,6 @@
             <h5 class="card-title">{{projectService.project.name}}</h5>
             <div class="card-text">
               <p>{{projectService.project.vision}}</p>
-              <p>Sprint Duration: {{projectService.project.sprintDuration}}</p>
-              <p>Story Points Available: {{projectService.project.storyPointsPerSprint}}</p>
             </div>
           </div>
         </div>
@@ -126,6 +124,9 @@
             <p class="card-text">
               Awesome information and KPIs about the current sprint.
             </p>
+            <p>Sprint Duration: {{projectService.project.sprintDuration}}</p>
+            <p>Story Points Available per Sprint: {{projectService.project.storyPointsPerSprint}}</p>
+
           </div>
         </div>
       </div>

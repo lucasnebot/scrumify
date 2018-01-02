@@ -1,59 +1,109 @@
 <div class="mainContainer">
-  <h2>Sprint Planning</h2>
-</div>
-<br>
-<br>
-<div class="row">
-  <div class="col">
-    <h3>Ready for Sprint</h3>
-    <ul class="list-group">
-      <li *ngFor="let item of backlogItems" class="list-group-item ">{{item.title}}</li>
-    </ul>
-  </div>
-  <div class="col">
-    <h3>Selected Sprint</h3>
-    <!-- Initial Sprint Setup-->
-    <div *ngIf="sprints.length == 0;else sprintView">
-      <ul class="list-group">
-        <li class="list-group-item">
-          Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
-          <div class="row">
-            <div class="col">
-              <div class="form-group">
-                <label for="sprint-start-date">Start Date</label>
-                <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
-                (ngModelChange)="myFunc()" required>
-              </div>
-            </div>
-            <div class="col">
-              <div class="form-group">
-                <label for="sprint-end-date">End Date</label>
-                <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
-                  disabled>
-              </div>
-            </div>
-            <div class="col">
-              <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button>
-              <br>
-              <br>
-              <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <strong>Hint:</strong> Hint: You can set the sprint duration in general project setup.
-              </div>
+  <h2>Sprint Planning </h2>
+  <br>
+  <br>
 
-            </div>
-          </div>
-        </li>
+  <div class="row">
+    <div class="col-4">
+      <span class="h4">Ready For Sprint</span>
+      <br>
+      <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
+        <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
+        <li *ngFor="let item of backlogItems; let i = index" dnd-sortable [sortableIndex]="i" draggable="true" class="list-group-item "
+          [dragData]="i">{{item.title}}</li>
       </ul>
     </div>
+    <div class="col-6">
+      <span class="h4">Sprint #{{selectedSprint.sprintNo}} {{selectedSprint.start | amDateFormat:'LL'}} - {{selectedSprint.end | amDateFormat:'LL'}}</span>
+      <!-- Initial Sprint Setup-->
+      <div *ngIf="sprints.length == 0; else sprintView">
+        <ul class="list-group">
+          <li class="list-group-item">
+            Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
+            <button class="btn" (click)="open(newModal,true)">New Sprint</button>
+          </li>
+        </ul>
+      </div>
 
-    <ng-template #sprintView>
-      There is a sprint !!!
-      <ul class="list-group">
-        <li *ngFor="let item of backlogItems" class="list-group-item ">{{item.title}}</li>
-      </ul>
-    </ng-template>
+      <ng-template #sprintView>
+        <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']" (onDropSuccess)="addToSprint($event)">
+          <li *ngIf="backlogItemsForSprint.length == 0 && !backlogItemsForSprintLoading" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
+          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item ">{{item.title}}</li>
+        </ul>
+        <div *ngIf="backlogItemsForSprintLoading" class="sk-cube-grid">
+          <div class="sk-cube sk-cube1"></div>
+          <div class="sk-cube sk-cube2"></div>
+          <div class="sk-cube sk-cube3"></div>
+          <div class="sk-cube sk-cube4"></div>
+          <div class="sk-cube sk-cube5"></div>
+          <div class="sk-cube sk-cube6"></div>
+          <div class="sk-cube sk-cube7"></div>
+          <div class="sk-cube sk-cube8"></div>
+          <div class="sk-cube sk-cube9"></div>
+        </div><br>
+        <button class="btn btn-primary" (click)="saveBliToSprint()">Save</button>
+        <!-- TODO if 3 days before sprint -->
+        <button *ngIf="true" class="btn" (click)="open(newModal)">New Sprint</button>
+        <!-- -->
+      </ng-template>
+    </div>
+
+    <div class="col-2">
+      <span class="h4">Select Sprint</span>
+      <div *ngIf="sprints.length > 0">
+        <div class="list-group">
+          <a *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)" [class.list-group-item-info]="sprint.sprintNo == selectedSprint.sprintNo" class="list-group-item list-group-item-action">Sprint # {{sprint.sprintNo}}</a>
+          <!-- {{sprint.start | amDateFormat:'LL'}} - {{sprint.end | amDateFormat:'LL'}} -->
+        </div>
+      </div>
+      {{selectedSprint.sprintNo}}
+    </div>
   </div>
-</div>
+
+  <!-- MODAL NEW BEGIN -->
+  <ng-template #newModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">New Sprint</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="sprint-start-date">Start Date</label>
+            <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" [min]="sprintMinDate" placeholder="Enter Date" name="sprint-start-date"
+              (ngModelChange)="calcEndDate()" required>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="sprint-end-date">End Date</label>
+            <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date"  placeholder="Enter Date" name="sprint-start-date"
+              disabled>
+          </div>
+        </div>
+        <div class="col">
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Hint: </strong>You can set the sprint duration in general project setup.
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    </div>
+  </ng-template>
+
+
+
+  <form>
+    <div class="form-group">
+      <label for="fakeTime">Fake Date</label>
+      <input type="date" [(ngModel)]="fakeDate" class="form-control" id="fakeDate" name="fakeDate">
+    </div>
+    <button type="submit" class="btn btn-success" (click)="setFakeDate()">Fake !</button>
+  </form>
