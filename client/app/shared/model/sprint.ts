@@ -5,4 +5,5 @@ export class Sprint extends BaseModel {
   start: Date;
   end: Date;
   backlogItem: string[];
+  project: string;
 }

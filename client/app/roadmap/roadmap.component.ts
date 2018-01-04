@@ -17,7 +17,7 @@ export class RoadmapComponent implements OnInit {
   };
 
   constructor(private milestoneService: MilestoneService, public authService: AuthService) {}
-
+// TODO : get only milestones of project
   ngOnInit() {
     this.milestoneService.getAll().subscribe((docs) => {
       this.milestones = docs;

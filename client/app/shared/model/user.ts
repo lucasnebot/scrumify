@@ -11,4 +11,6 @@ export class User extends BaseModel{
     email: string;
     password: string;
     role: number;
+    project: string[];
+
 }

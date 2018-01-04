@@ -1,4 +1,4 @@
-import { model, Schema, Document } from 'mongoose';
+import * as mongoose from 'mongoose';
 
 export interface User extends Document {
   email: string;
@@ -8,7 +8,7 @@ export interface User extends Document {
   role: number;
 }
 
-export const userSchema = new Schema({
+export const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -31,7 +31,11 @@ export const userSchema = new Schema({
     required: true,
     min: 0,
     max: 2
+  },
+  project: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: true
   }
 });
 
-export const userModel = model('User', userSchema);
+export const userModel = mongoose.model('User', userSchema);

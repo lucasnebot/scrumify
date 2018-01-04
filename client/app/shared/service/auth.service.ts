@@ -48,6 +48,7 @@ export class AuthService {
    * Check for token and get user information
    */
   checkForSessionToken() {
+    // TODO get project info! 
     this.activeUser = this.getJWTPayload(localStorage.getItem(LS_TOKEN_KEY));
     if (this.activeUser) {
       this.authenticated = true;
