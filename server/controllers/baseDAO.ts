@@ -72,6 +72,8 @@ export default abstract class BaseDAO {
   updateMany = (req,res): void => {
     this.model.update(req.body[0],
       req.body[1],{multi:true}).then((result) =>{
+        console.log(result);
+        res.status(200).send(result);
     }).catch(err => {
       res.status(400).send(err);
     })
