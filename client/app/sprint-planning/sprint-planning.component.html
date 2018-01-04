@@ -26,10 +26,16 @@
       </div>
 
       <ng-template #sprintView>
-        <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']" (onDropSuccess)="addToSprint($event)">
+        <label for="progressbar">Storypoint Usage: {{getTotalStoryPointUsage()}} / {{projectService.project.storyPointsPerSprint}}</label>
+        <p>
+          <ngb-progressbar id="progressbar" type="success" [type]="sprintTooFull() ? 'danger' : 'info'"  [value]="(getTotalStoryPointUsage()/projectService.project.storyPointsPerSprint)*100"></ngb-progressbar>
+        </p>
+        <br>
+        <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
           <li *ngIf="backlogItemsForSprint.length == 0 && !backlogItemsForSprintLoading" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
-          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item ">{{item.title}}</li>
+          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item ">Title: {{item.title}} Estimation: {{item.estimation}}</li>
         </ul>
+
         <div *ngIf="backlogItemsForSprintLoading" class="sk-cube-grid">
           <div class="sk-cube sk-cube1"></div>
           <div class="sk-cube sk-cube2"></div>
@@ -40,11 +46,17 @@
           <div class="sk-cube sk-cube7"></div>
           <div class="sk-cube sk-cube8"></div>
           <div class="sk-cube sk-cube9"></div>
-        </div><br>
-        <button class="btn btn-primary" (click)="saveBliToSprint()">Save</button>
+        </div>
+        <br>
+        <button class="btn btn-primary" [disabled]="sprintTooFull()" (click)="saveBliToSprint()">Save</button>
         <!-- TODO if 3 days before sprint -->
         <button *ngIf="true" class="btn" (click)="open(newModal)">New Sprint</button>
         <!-- -->
+        <br>
+        <br>
+        <div *ngIf="sprintTooFull()" class="alert alert-info show" role="alert">
+          <strong>Hint: </strong>The sprint is too full ! You can't safe it until you remove some Backlog Items from it.
+        </div>
       </ng-template>
     </div>
 
@@ -52,11 +64,11 @@
       <span class="h4">Select Sprint</span>
       <div *ngIf="sprints.length > 0">
         <div class="list-group">
-          <a *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)" [class.list-group-item-info]="sprint.sprintNo == selectedSprint.sprintNo" class="list-group-item list-group-item-action">Sprint # {{sprint.sprintNo}}</a>
+          <a *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)" [class.list-group-item-info]="sprint.sprintNo == selectedSprint.sprintNo"
+            class="list-group-item list-group-item-action">Sprint # {{sprint.sprintNo}}</a>
           <!-- {{sprint.start | amDateFormat:'LL'}} - {{sprint.end | amDateFormat:'LL'}} -->
         </div>
       </div>
-      {{selectedSprint.sprintNo}}
     </div>
   </div>
 
@@ -70,14 +82,14 @@
         <div class="col">
           <div class="form-group">
             <label for="sprint-start-date">Start Date</label>
-            <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" [min]="sprintMinDate" placeholder="Enter Date" name="sprint-start-date"
-              (ngModelChange)="calcEndDate()" required>
+            <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" [min]="sprintMinDate" placeholder="Enter Date"
+              name="sprint-start-date" (ngModelChange)="calcEndDate()" required>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label for="sprint-end-date">End Date</label>
-            <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date"  placeholder="Enter Date" name="sprint-start-date"
+            <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
               disabled>
           </div>
         </div>

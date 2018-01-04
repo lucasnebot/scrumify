@@ -13,6 +13,10 @@ import * as moment from 'moment';
 export class SprintPlanningComponent implements OnInit {
   modal;
   fakeDate: string;
+  saveButtonEnabled:boolean =true;
+  progressBarValue: number = 0;
+  progressbarLabel: string;
+  currentStoryPointUsage: number;
   sprintMinDate: string;
   backlogItems: BacklogItem[] = [];
   backlogItemsForSprint: BacklogItem[] = [];
@@ -43,7 +47,6 @@ export class SprintPlanningComponent implements OnInit {
     this.getSprints();
   }
 
-  //TODO Switch back to RFS
   getBacklogItems() {
     this.backlogService.getAll({ status: 'RFE' }).subscribe(result => {
       this.backlogItems = result;
@@ -71,6 +74,23 @@ export class SprintPlanningComponent implements OnInit {
       });
   }
 
+  getTotalStoryPointUsage(): number{
+    let usage = 0;
+    this.backlogItemsForSprint.forEach((item)=>{
+      usage += item.estimation;
+    })
+    return usage;
+  }
+
+  sprintTooFull(){
+    if(this.getTotalStoryPointUsage() > this.projectService.project.storyPointsPerSprint){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
   /**
    * If inital is not set, a sprint is added to existing sprint list. Therefore a min property is bound to the datepicker.
    */
@@ -96,6 +116,7 @@ export class SprintPlanningComponent implements OnInit {
   getDate() {
     Date.prototype.getTime();
   }
+
   saveSprint() {
     if (this.getLatestSprint()) {
       this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
@@ -111,6 +132,7 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   saveBliToSprint() {
+    console.log('update many called');
     this.backlogItemsForSprint.forEach(item => {
       //no array entry yet
       if (!this.selectedSprint.backlogItems) {
@@ -118,10 +140,19 @@ export class SprintPlanningComponent implements OnInit {
       }
       this.selectedSprint.backlogItems.push(item._id);
     });
+
     this.sprintService
       .edit(this.selectedSprint._id, this.selectedSprint)
       .subscribe(() => {
-        console.log('bli updated');
+        console.log('selectedSprint updated')
+        this.backlogService
+          .editMany(
+            { _id: { $in: this.selectedSprint.backlogItems } },
+            { $set: { status: 'SPRINT' } }
+          )
+          .subscribe(result => {
+            console.log('Save complete');
+          });
       });
   }
 
@@ -129,15 +160,6 @@ export class SprintPlanningComponent implements OnInit {
     () => {
       return true;
     };
-  }
-
-  addToSprint($event: any) {
-    //undefined, no bli's yet
-    if (!this.sprints[0].backlogItems) {
-      this.sprints[0].backlogItems = [];
-    }
-    //  this.sprints[0].backlogItem.push(this.backlogItems[$event.dragData])
-    //this.backlogItems.splice($event.dragData,1)
   }
 
   setSelectedSprint(sprint: Sprint) {
