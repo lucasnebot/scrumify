@@ -18,7 +18,8 @@ import {
   AuthService,
   AuthGuardService,
   ProjectService,
-  SprintService
+  SprintService,
+  EstimationHelperService
 } from './shared/service';
 
 // Components
@@ -31,6 +32,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SprintPlanningComponent } from './sprint-planning/sprint-planning.component';
 import { ScrumboardComponent } from './scrumboard/scrumboard.component';
+import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
+import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,9 @@ import { ScrumboardComponent } from './scrumboard/scrumboard.component';
     SignUpComponent,
     NavbarComponent,
     SprintPlanningComponent,
-    ScrumboardComponent
+    ScrumboardComponent,
+    EffortEstimationComponent,
+    BliCardComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +70,8 @@ import { ScrumboardComponent } from './scrumboard/scrumboard.component';
       useClass: AuthTokenInterceptor,
       multi: true
     },
-    SprintService
+    SprintService,
+    EstimationHelperService
   ],
   bootstrap: [AppComponent]
 })

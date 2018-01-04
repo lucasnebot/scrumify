@@ -14,6 +14,8 @@
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/backlog">Backlog</a>
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/sprint-planning">Sprint Planning</a>
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/scrumboard">Scrumboard</a>            
+      <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/effortEstimation">Effort Estimation</a>
+      <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/sprint-planning">Sprint Planning</a>      
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/roadmap">Roadmap</a>
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/" (click)="authService.signOut()">
         <i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>

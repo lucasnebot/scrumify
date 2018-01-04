@@ -1,4 +1,4 @@
-import { BaseModel } from './';
+import {BaseModel} from './baseModel';
 export class Milestone extends BaseModel{
     title: string;
     description: string;
