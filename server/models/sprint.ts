@@ -13,7 +13,7 @@ export const sprintSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  backlogitem: {
+  backlogitems: {
     type: [mongoose.Schema.Types.ObjectId]
   },
   project: {

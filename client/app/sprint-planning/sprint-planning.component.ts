@@ -25,14 +25,16 @@ export class SprintPlanningComponent implements OnInit {
     start: '',
     end: '',
     sprintNo: 0,
-    backlogItems: []
+    backlogItems: [],
+    project: ''
   };
 
   newSprint: Sprint = {
     start: '',
     end: '',
     sprintNo: 0,
-    backlogItems: []
+    backlogItems: [],
+    project: ''
   };
   constructor(
     public projectService: ProjectService,
