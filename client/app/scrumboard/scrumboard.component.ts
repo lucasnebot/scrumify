@@ -10,7 +10,8 @@ import { Component, OnInit } from '@angular/core';
 export class ScrumboardComponent implements OnInit {
 
   constructor(private backlogService: BacklogService) { }
-  backlogItems: BacklogItem[];
+  backlogItems: BacklogItem[] =[];
+  taskStates: string[] = ['Todo','Doing','Review','Done'];
 
   ngOnInit() {
     this.backlogService.getAll({ status: 'SPRINT' }).subscribe(result => {
