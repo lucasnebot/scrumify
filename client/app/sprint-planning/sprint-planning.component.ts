@@ -12,8 +12,7 @@ import * as moment from 'moment';
 })
 export class SprintPlanningComponent implements OnInit {
   modal;
-  fakeDate: string;
-  saveButtonEnabled:boolean =true;
+  enableEditing: boolean = true;
   progressBarValue: number = 0;
   progressbarLabel: string;
   currentStoryPointUsage: number;
@@ -36,9 +35,9 @@ export class SprintPlanningComponent implements OnInit {
     backlogItems: []
   };
   constructor(
+    public projectService: ProjectService,
     public backlogService: BacklogService,
     public sprintService: SprintService,
-    public projectService: ProjectService,
     private modalService: NgbModal
   ) {}
 
@@ -48,7 +47,7 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   getBacklogItems() {
-    this.backlogService.getAll({ status: 'RFE' }).subscribe(result => {
+    this.backlogService.getAll({ status: 'RFS' }).subscribe(result => {
       this.backlogItems = result;
     });
   }
@@ -64,29 +63,44 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   getSprintItems() {
+    this.enableEditing = true;
     this.backlogItemsForSprintLoading = true;
     this.backlogService
       .getAll({ _id: { $in: this.selectedSprint.backlogItems } })
       .subscribe(result => {
+        if (result.length > 0) {
+          this.enableEditing = false;
+        }
         this.backlogItemsForSprint = result;
         this.backlogItemsForSprintLoading = false;
-        console.log(result);
       });
   }
 
-  getTotalStoryPointUsage(): number{
+  getTotalStoryPointUsage(): number {
     let usage = 0;
-    this.backlogItemsForSprint.forEach((item)=>{
-      usage += item.estimation;
-    })
+    if (this.backlogItemsForSprint) {
+      this.backlogItemsForSprint.forEach(item => {
+        usage += item.estimation;
+      });
+    }
     return usage;
   }
 
-  sprintTooFull(){
-    if(this.getTotalStoryPointUsage() > this.projectService.project.storyPointsPerSprint){
+  sprintTooFull() {
+    if (
+      this.getTotalStoryPointUsage() >
+      this.projectService.project.storyPointsPerSprint
+    ) {
       return true;
+    } else {
+      return false;
     }
-    else{
+  }
+
+  disableInteraction(): boolean {
+    if (this.backlogItemsForSprint.length > 0) {
+      return true;
+    } else {
       return false;
     }
   }
@@ -107,16 +121,6 @@ export class SprintPlanningComponent implements OnInit {
     this.modal.result.then(result => {}, reason => {});
   }
 
-  setFakeDate() {
-    Date.prototype.getTime = function() {
-      return moment(this.fakeTime).unix();
-    };
-  }
-
-  getDate() {
-    Date.prototype.getTime();
-  }
-
   saveSprint() {
     if (this.getLatestSprint()) {
       this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
@@ -124,6 +128,7 @@ export class SprintPlanningComponent implements OnInit {
     this.sprintService.add(this.newSprint).subscribe(() => {
       this.getSprints();
       this.modal.close();
+      this.setSelectedSprint(this.getLatestSprint());
     });
   }
 
@@ -132,7 +137,7 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   saveBliToSprint() {
-    console.log('update many called');
+    this.enableEditing = false;
     this.backlogItemsForSprint.forEach(item => {
       //no array entry yet
       if (!this.selectedSprint.backlogItems) {
@@ -142,17 +147,16 @@ export class SprintPlanningComponent implements OnInit {
     });
 
     this.sprintService
+      //Write Bli's to Sprint
       .edit(this.selectedSprint._id, this.selectedSprint)
       .subscribe(() => {
-        console.log('selectedSprint updated')
+        //Change Status to SPRINT
         this.backlogService
           .editMany(
             { _id: { $in: this.selectedSprint.backlogItems } },
             { $set: { status: 'SPRINT' } }
           )
-          .subscribe(result => {
-            console.log('Save complete');
-          });
+          .subscribe(result => {});
       });
   }
 
@@ -163,7 +167,6 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   setSelectedSprint(sprint: Sprint) {
-    console.log('www');
     this.selectedSprint = sprint;
     this.getSprintItems();
   }
