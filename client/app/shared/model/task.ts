@@ -3,5 +3,6 @@ import {BaseModel} from './baseModel';
 export class Task extends BaseModel {
     title: string;
     description: string;
+    status: string;
     user: User;
 }

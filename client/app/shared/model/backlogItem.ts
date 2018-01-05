@@ -12,6 +12,6 @@ export class BacklogItem extends BaseModel {
   order: number;
   estimation: number;
   status: 'EPIC' | 'RFE' | 'REEST' | 'RFS' | 'SPRINT' | 'DONE';
-  tasks: Task[];
+  tasks: string[];
   voted: Vote[];
 }

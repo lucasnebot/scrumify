@@ -10,9 +10,14 @@ export const taskSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    status: {
+        type: String,
+        enum: ['TODO','DOING', 'REVIEW','DONE'],
+        default: 'TODO',
+        required: false
+      },
     User: {
-        type: userSchema,
-        default: null
+        type: [mongoose.Schema.Types.ObjectId]
     }
 });
 
