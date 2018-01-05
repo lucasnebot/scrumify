@@ -19,7 +19,8 @@ import {
   AuthGuardService,
   ProjectService,
   SprintService,
-  EstimationHelperService
+  EstimationHelperService,
+  TaskService
 } from './shared/service';
 
 // Components
@@ -34,6 +35,7 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
 import { ScrumboardComponent } from './scrumboard/scrumboard.component';
 import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
+import { CanbanRowComponent } from './shared/component/canban-row/canban-row.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { BliCardComponent } from './shared/component/bli-card/bli-card.component
     SprintPlanningComponent,
     ScrumboardComponent,
     EffortEstimationComponent,
-    BliCardComponent
+    BliCardComponent,
+    CanbanRowComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +68,7 @@ import { BliCardComponent } from './shared/component/bli-card/bli-card.component
     AuthService,
     AuthGuardService,
     ProjectService,
+    TaskService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptor,
