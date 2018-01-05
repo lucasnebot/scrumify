@@ -92,7 +92,8 @@ export class BacklogComponent implements OnInit {
       estimation: 0,
       status: 'EPIC',
       tasks: [],
-      voted: []
+      voted: [],
+      project: ''
     };
   }
 }

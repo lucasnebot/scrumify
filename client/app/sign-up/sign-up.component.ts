@@ -16,7 +16,8 @@ export class SignUpComponent implements OnInit {
     surname: '',
     email: '',
     password: '',
-    role: 2
+    role: 2,
+    project: []
   };
   constructor(
     private userService: UserService,

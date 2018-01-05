@@ -13,7 +13,8 @@ export class RoadmapComponent implements OnInit {
   milestone: Milestone = {
     title: '',
     description: '',
-    date: ''
+    date: '',
+    project: ''
   };
 
   constructor(private milestoneService: MilestoneService, public authService: AuthService) {}
@@ -31,7 +32,7 @@ export class RoadmapComponent implements OnInit {
       // Clear Form and hide it
       this.milestone.title = '';
       this.milestone.description = '';
-      this.milestone.date = '';
+      this.milestone.date = ''; 
     }
     this.formHidden = !this.formHidden;
   }
@@ -41,6 +42,7 @@ export class RoadmapComponent implements OnInit {
       title: this.milestone.title,
       description: this.milestone.description,
       date: this.milestone.date,
+      project: this.milestone.project
     }
     this.milestoneService.add(milestone).subscribe((resp) => {
       this.ngOnInit();
