@@ -29,15 +29,14 @@ export class SignUpComponent implements OnInit {
   }
 
   checkExistingRoles(): void {
+    // TODO : project specific call
     this.userService.getAll().subscribe(docs => {
       // Find Scrum Master in Team
-      let scrumMaster = docs.find(doc => doc.role === 0);
-      if (scrumMaster) {
+      if (docs.some(doc => doc.role === 0)) {
         this.scrumMasterExists = true;
       }
       // Find Product Owner in Team
-      let productOwner = docs.find(doc => doc.role === 1);
-      if (productOwner) {
+      if (docs.some(doc => doc.role === 1)) {
         this.productOwnerExists = true;
       }
     });
@@ -49,8 +48,9 @@ export class SignUpComponent implements OnInit {
       .signUp(this.user)
       .subscribe((resp: User) => {
         // Add User to project
-        //TODO : The navigation doesn't wait for project members to be added! Chain promises?
+        //TODO : The navigation doesn't wait for project members to be added! Chain observables?
         this.projectService.addProjectMember(resp._id);
+        // ? Navigate to project selection?
         this.router.navigate(['/']);
       });
   }

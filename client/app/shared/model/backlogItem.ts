@@ -14,4 +14,5 @@ export class BacklogItem extends BaseModel {
   status: 'EPIC' | 'RFE' | 'REEST' | 'RFS' | 'SPRINT' | 'DONE';
   tasks: string[];
   voted: Vote[];
+  project: string;
 }

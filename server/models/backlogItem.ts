@@ -20,14 +20,22 @@ export const backlogItemSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['EPIC','RFE', 'RFS','SPRINT','DONE'],
+    enum: ['EPIC', 'RFE', 'RFS', 'SPRINT', 'DONE'],
     default: 'RFE'
   },
   task: {
     type: [mongoose.Schema.Types.ObjectId]
   },
-  voted: {type: [mongoose.Schema.Types.Mixed]
+  voted: {
+    type: [mongoose.Schema.Types.Mixed]
+  },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   }
 });
 
-export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
+export const backlogItemModel = mongoose.model(
+  'BacklogItem',
+  backlogItemSchema
+);

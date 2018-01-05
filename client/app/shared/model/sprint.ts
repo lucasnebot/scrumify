@@ -2,7 +2,8 @@ import { BaseModel } from './baseModel';
 
 export class Sprint extends BaseModel {
   sprintNo: number;
-  start: string;
-  end: string;
-  backlogItems: string[];
+  start: Date;
+  end: Date;
+  backlogItem: string[];
+  project: string;
 }

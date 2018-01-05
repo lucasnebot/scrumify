@@ -5,4 +5,5 @@ export class Milestone extends BaseModel{
     // Changed from date to string for easier two-way-databinding
     date: string;
     achieved?: Boolean;
+    project: string;
 } 

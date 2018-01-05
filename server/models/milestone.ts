@@ -16,6 +16,10 @@ export const milestoneSchema = new mongoose.Schema({
   achieved: {
     type: Boolean,
     default: false
+  },
+  project: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
   }
 });
 
