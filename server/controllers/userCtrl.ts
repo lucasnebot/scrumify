@@ -11,27 +11,27 @@ export default class UserCtrl extends baseDAO {
       req.body.password = hash;
       this.create(req, res);
     });
-  };
+  }
 
   signIn = async (req, res: Response) => {
     try {
       // Find User by email
-      const user = await this.model.findOne({
-        email: req.body.email
-      }) as User;
-      if (!user) throw new Error('Invalid Email');
+      const user = await this.model.findOne({'email' : req.body.email});
+
+      if (!user) {
+        throw new Error('Invalid Email');
+      }
+
       // Validate password
-      const validPassword = await authService.validatePassword(
-        req.body.password,
-        user.password
-      );
-      if (!validPassword) throw new Error('Invalid Password');
-      // Create token and send back in header
+      if (await authService.validatePassword(req.body.password, user.password)) {
+        throw new Error('Invalid Password');
+      }
+
       const token = await authService.encodeJWTToken(user);
       res.set('X-JWT', token).send({});
 
     } catch (error) {
       res.status(401).send(error);
     }
-  };
+  }
 }

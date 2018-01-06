@@ -35,7 +35,4 @@ export const backlogItemSchema = new mongoose.Schema({
   }
 });
 
-export const backlogItemModel = mongoose.model(
-  'BacklogItem',
-  backlogItemSchema
-);
+export const backlogItemModel = mongoose.model('BacklogItem', backlogItemSchema);
