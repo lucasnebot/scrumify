@@ -46,7 +46,7 @@ export default class Server {
     mongoose
       .connect(MONGO_URI, { useMongoClient: true })
       .then(() => {
-        console.log('Successful connection to' + MONGO_URI);
+        console.log('Successful connection to ' + MONGO_URI);
       })
       .catch(err => {
         console.log('Connection to MongoDB refused: ' + err);
@@ -55,7 +55,7 @@ export default class Server {
     // Express middleware
     this.app.use('/', express.static(path.join(__dirname, '../public')));
     this.app.use(bodyParser.json());
-    this.app.use(express.urlencoded({ extended: false }));    
+    this.app.use(express.urlencoded({ extended: false }));
     this.app.use(helmet());
     this.app.use(cookieParser());
     this.app.use(jwtClaimSetMiddleware);
