@@ -9,6 +9,7 @@ import { DndModule } from 'ng2-dnd';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TruncateModule } from 'ng2-truncate';
 import {MomentModule} from 'angular2-moment';
+import { LoadingModule } from 'ngx-loading';
 
 // Services
 import {
@@ -59,7 +60,8 @@ import { CanbanRowComponent } from './shared/component/canban-row/canban-row.com
     DndModule.forRoot(),
     NgbModule.forRoot(),
     TruncateModule,
-    MomentModule
+    MomentModule,
+    LoadingModule
   ],
   providers: [
     BacklogService,

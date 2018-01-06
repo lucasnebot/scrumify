@@ -1,5 +1,6 @@
 <app-navbar></app-navbar>
 <div class="container">
+  <ngx-loading [show]="showLoading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
   <router-outlet></router-outlet>
 </div>
 
