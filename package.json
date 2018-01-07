@@ -5,12 +5,12 @@
   "author": "Lucas Nebot, Christian Pleister, Dennis Enselmann",
   "scripts": {
     "ng": "ng",
-    "heroku-postbuild": "ng build -aot -prod && tsc -p server",
+    "heroku-postbuild": "ng build -aot -prod && tsc -p server && node dist/server/seeds/oneProject.js",
     "build": "ng build",
     "start": "node dist/server/app.js",
     "predev": "tsc -p server",
     "dev": "concurrently \"mongod\" \"ng serve -pc proxy.conf.json --open\" \"tsc -w -p server\" \"nodemon dist/server/app.js\"",
-    "prod": "concurrently \"ng build -aot -prod && tsc -p server && node dist/server/app.js\"",
+    "prod": "concurrently \"ng build -aot -prod && tsc -p server && node dist/server/app.js &&\"",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
