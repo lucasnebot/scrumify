@@ -1,14 +1,9 @@
 /**
  * Script to seed the Scrumify project with some example data
  */
-import { async } from 'rxjs/scheduler/async';
 
- // Import required libraries
- import * as bcrypt from 'bcryptjs';
- import * as mongoose from 'mongoose';
- import * as mongodb from 'mongodb';
  import * as faker from 'faker';
- import * as dotenv from 'dotenv';
+ import * as conf from './index';
 
  // Import mongoose models
  import { userModel } from '../models/user';
@@ -18,45 +13,6 @@ import { async } from 'rxjs/scheduler/async';
  import { milestoneModel } from '../models/milestone';
  import { backlogItemModel } from '../models/backlogItem';
 
-
- const TEST_MONGODB = 'mongodb://localhost:27017/scrumify';
-
-// Connect to MongoDB
-async function connectDatabase() {
-    mongoose
-    .connect(TEST_MONGODB, { useMongoClient: true })
-    .then(() => {
-      console.log('Successful connection to ' + TEST_MONGODB);
-    })
-    .catch(err => {
-      console.log('Connection to MongoDB refused: ' + err);
-    });
-}
-
-// Drop scrumify database
-async function dropDatabase() {
-    console.log('Drop database scrumify...');
-    try {
-        await connectDatabase();
-        await mongoose.connection.dropDatabase();
-        console.log('Database dropped!');
-        await mongoose.disconnect();
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-
-// Hashes a string with BCrypt
-async function hashPassword(password: string) {
-    return new Promise<string>((resolve, reject) => {
-        bcrypt.hash(password, 10, (err, hash) => {
-            err ? reject(err) : resolve(hash);
-        });
-    });
-}
-
-
 async function seedDatabase() {
         // Create users
         const users = [];
@@ -65,7 +21,7 @@ async function seedDatabase() {
                 email: faker.internet.email(),
                 name: faker.name.firstName(),
                 surname: faker.name.lastName(),
-                password: await hashPassword('123'),
+                password: await conf.hashPassword('123'),
                 role: faker.random.number({min: 0, max: 2})
             });
             await user.save();
@@ -107,8 +63,8 @@ async function seedDatabase() {
 }
 
 async function blubbel() {
-    await dropDatabase();
-    await connectDatabase();
+    await conf.dropDatabase();
+    await conf.connectDatabase();
     await seedDatabase();
     process.exit(0);
 }
