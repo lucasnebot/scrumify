@@ -26,8 +26,7 @@ export async function connectDatabase() {
 export async function dropDatabase() {
     console.log('Drop database scrumify...');
     try {
-        await connectDatabase();
-        await mongoose.connection.dropDatabase();
+        await mongoose.connection.useDb('scrumify')
         console.log('Database dropped!');
         await mongoose.disconnect();
     } catch (err) {
