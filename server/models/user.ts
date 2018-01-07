@@ -33,8 +33,7 @@ export const userSchema = new mongoose.Schema({
     max: 2
   },
   project: {
-    type: [mongoose.Schema.Types.ObjectId],
-    required: true
+    type: [mongoose.Schema.Types.ObjectId]
   }
 });
 
