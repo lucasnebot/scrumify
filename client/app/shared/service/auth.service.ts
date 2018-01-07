@@ -5,8 +5,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { environment } from '../../../environments/environment';
 import { User } from '../model';
+import  { UserService } from './user.service';
 
 export const LS_TOKEN_KEY = 'scrumifyToken';
+
+interface JWTClaimSet {
+  name: string;
+  email: string;
+  role: number;
+}
 
 @Injectable()
 export class AuthService {
@@ -14,7 +21,7 @@ export class AuthService {
   //! Contains properties: name, email and role
   activeUser: User;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, protected userService: UserService) {
     this.checkForSessionToken();
   }
 
@@ -29,10 +36,13 @@ export class AuthService {
       .catch(err => {
         return Observable.of(null);
       })
+      // ? Add subscribe here? Or add body directly
       .do(resp => {
         if (resp) {
+          this.activeUser = resp.body;
+          console.log(this.activeUser);
           localStorage.setItem(LS_TOKEN_KEY, resp.headers.get('X-JWT'));
-          this.checkForSessionToken();
+          this.authenticated = true;
         }
       });
   }
@@ -45,13 +55,21 @@ export class AuthService {
     localStorage.removeItem(LS_TOKEN_KEY);
   }
   /**
-   * Check for token and get user information
+   * Check for token and get user information from db
    */
   checkForSessionToken() {
-    // TODO get project info! 
-    this.activeUser = this.getJWTPayload(localStorage.getItem(LS_TOKEN_KEY));
-    if (this.activeUser) {
+    const claimSet: JWTClaimSet = this.getJWTPayload(localStorage.getItem(LS_TOKEN_KEY));
+    if (claimSet) {
+      // Sets some properties before querying the db to avoid angular load errors
       this.authenticated = true;
+      this.activeUser = claimSet as User;
+
+      this.userService.getAll({email: claimSet.email}).subscribe((resp) => {
+        if(resp.length === 1){
+          this.activeUser = resp[0];
+        }
+      })
+      
     }
   }
   /**
