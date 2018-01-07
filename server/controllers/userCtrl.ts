@@ -16,19 +16,22 @@ export default class UserCtrl extends baseDAO {
   signIn = async (req, res: Response) => {
     try {
       // Find User by email
-      const user = await this.model.findOne({'email' : req.body.email});
+      const user = await this.model.findOne({email : req.body.email});
 
       if (!user) {
         throw new Error('Invalid Email');
       }
 
       // Validate password
-      if (await authService.validatePassword(req.body.password, user.password)) {
+      const validatePassword = await authService.validatePassword(req.body.password, user.password);
+      
+      if (!validatePassword) {
         throw new Error('Invalid Password');
       }
 
       const token = await authService.encodeJWTToken(user);
-      res.set('X-JWT', token).send({});
+      // Send User Data with response
+      res.set('X-JWT', token).send(user);
 
     } catch (error) {
       res.status(401).send(error);
