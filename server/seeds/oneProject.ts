@@ -73,6 +73,7 @@ async function createTestData() {
 }
 
 async function seed() {
+    await conf.dropDatabase();
     await conf.connectDatabase();
     await createTestData();
     process.exit(0);
