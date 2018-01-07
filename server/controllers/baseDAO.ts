@@ -1,6 +1,7 @@
 import { async } from '@angular/core/testing';
 import { HttpHeaders } from '@angular/common/http';
 import { Model  } from 'mongoose';
+import {Request, Response} from 'express';
 
 
 export default abstract class BaseDAO {
@@ -57,10 +58,13 @@ export default abstract class BaseDAO {
   /**
    * Finds a document by ID and updates the given properties
    */
-  update = (req, res): void => {
-
+  update = (req: Request, res: Response): void => {
+    let queryObj: any = { $set: req.body };
+    if (req.query.advancedQuery){
+      queryObj = req.body
+    }
       this.model
-      .findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true })
+      .findByIdAndUpdate(req.params.id, queryObj, { new: true })
       .then(doc => {
         res.send(doc);
       })
