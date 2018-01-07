@@ -1,5 +1,5 @@
 import { BacklogItem } from './../shared/model/backlogItem';
-import { BacklogService } from './../shared/service/backlog.service';
+import { BacklogService, ProjectService} from './../shared/service/.';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TruncateModule } from 'ng2-truncate';
@@ -18,6 +18,7 @@ export class BacklogComponent implements OnInit {
 
   constructor(
     private backlogService: BacklogService,
+    private projectService : ProjectService,
     private modalService: NgbModal
   ) {}
 
@@ -93,7 +94,7 @@ export class BacklogComponent implements OnInit {
       status: 'EPIC',
       tasks: [],
       voted: [],
-      project: ''
+      project: this.projectService.project._id
     };
   }
 }

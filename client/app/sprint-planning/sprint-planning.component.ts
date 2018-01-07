@@ -19,29 +19,30 @@ export class SprintPlanningComponent implements OnInit {
   sprintMinDate: string;
   backlogItems: BacklogItem[] = [];
   backlogItemsForSprint: BacklogItem[] = [];
-  backlogItemsForSprintLoading: boolean = true;
   sprints: Sprint[] = [];
   selectedSprint: Sprint = {
     start: '',
     end: '',
     sprintNo: 0,
     backlogItems: [],
-    project: ''
+    project: null
   };
 
-  newSprint: Sprint = {
-    start: '',
-    end: '',
-    sprintNo: 0,
-    backlogItems: [],
-    project: ''
-  };
+  newSprint: Sprint;
   constructor(
     public projectService: ProjectService,
     public backlogService: BacklogService,
     public sprintService: SprintService,
     private modalService: NgbModal
-  ) {}
+  ) {
+    this.newSprint =  {
+      start: '',
+      end: '',
+      sprintNo: 0,
+      backlogItems: [],
+      project: this.projectService.project._id
+    };
+  }
 
   ngOnInit() {
     this.getBacklogItems();
@@ -49,16 +50,16 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   getBacklogItems() {
-    this.backlogService.getAll({ status: 'RFS' }).subscribe(result => {
+    this.backlogService.getAll({ status: 'RFE' }).subscribe(result => {
       this.backlogItems = result;
     });
   }
 
   getSprints() {
+    console.log('get sprints called !')
     this.sprintService.getAll().subscribe(result => {
       if (result.length > 0) {
         this.sprints = result;
-        this.selectedSprint = result[0];
         this.getSprintItems();
       }
     });
@@ -66,16 +67,23 @@ export class SprintPlanningComponent implements OnInit {
 
   getSprintItems() {
     this.enableEditing = true;
-    this.backlogItemsForSprintLoading = true;
-    this.backlogService
-      .getAll({ _id: { $in: this.selectedSprint.backlogItems } })
-      .subscribe(result => {
-        if (result.length > 0) {
-          this.enableEditing = false;
-        }
-        this.backlogItemsForSprint = result;
-        this.backlogItemsForSprintLoading = false;
-      });
+    console.log(this.selectedSprint);
+    //if bli are present
+    if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
+      //sprint has already been planned
+      this.enableEditing = false;
+      //get bli's for current selected sprint
+      this.backlogService
+        .getAll({ _id: { $in: this.selectedSprint.backlogItems } })
+        .subscribe(result => {
+          if (result.length > 0) {
+            this.enableEditing = false;
+          }
+          this.backlogItemsForSprint = result;
+        });
+    } else {
+      this.backlogItemsForSprint = [];
+    }
   }
 
   getTotalStoryPointUsage(): number {
@@ -100,11 +108,7 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   disableInteraction(): boolean {
-    if (this.backlogItemsForSprint.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return this.backlogItemsForSprint.length > 0;
   }
 
   /**
@@ -124,6 +128,7 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   saveSprint() {
+    console.log(this.newSprint.project);
     if (this.getLatestSprint()) {
       this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
     }
