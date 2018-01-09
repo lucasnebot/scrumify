@@ -23,7 +23,7 @@ export const backlogItemSchema = new mongoose.Schema({
     enum: ['EPIC', 'RFE', 'RFS', 'SPRINT', 'DONE'],
     default: 'RFE'
   },
-  task: {
+  tasks: {
     type: [mongoose.Schema.Types.ObjectId]
   },
   voted: {

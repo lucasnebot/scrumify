@@ -1,3 +1,4 @@
+import { BacklogService } from './../../service/backlog.service';
 import { forEach } from '@angular/router/src/utils/collection';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaskService } from './../../service/task.service';
@@ -13,25 +14,27 @@ export class KanbanRowComponent implements OnInit {
   @Input() backlogItem: BacklogItem;
   @Input() taskStates: string[];
   modal;
-  tasks: Task[];
+  tasks: Task[] = [];
   newTask: Task = {
     title: '',
     description: '',
     user: null,
     status: 'TODO',
-    estiamtion: 0
+    estimation: 0,
+    backlogItem: ''
   };
-  taskContainer = [];
+  taskContainer: Task[][] = [];
   constructor(
     private taskService: TaskService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private backlogService: BacklogService
   ) {}
 
   ngOnInit() {
     if (this.backlogItem.tasks) {
-      console.log('WHoop!')
+      console.log('WHoop!');
       this.taskService
-        .getAll({ _id: { $in: this.backlogItem.tasks } })
+        .getAll({ backlogItem: this.backlogItem._id })
         .subscribe(result => {
           this.tasks = result;
           this.sortTasks();
@@ -40,33 +43,44 @@ export class KanbanRowComponent implements OnInit {
   }
 
   saveNewTask() {
-    this.taskService.add(this.newTask).subscribe(() => {
+    this.newTask.backlogItem = this.backlogItem._id;
+    this.taskService.add(this.newTask).subscribe((newTask: Task) => {
+      this.tasks.push(newTask);
+      this.sortTasks();
       this.modal.close();
       //reset form
       this.newTask = {
         title: '',
         description: '',
         user: null,
-        status: 'TODO'
+        status: 'TODO',
+        estimation: 0,
+        backlogItem: ''
       };
     });
   }
 
-  sortTasks(){
-    this.tasks.forEach((task)=>{
-  
-      this.taskStates.forEach((state,index)=>{
-        //initialize array
-        if(!this.taskContainer[index]){
-          this.taskContainer[index] = [];
-        }
-        if(task.status.toLowerCase() == state.toLowerCase()){          
+  sortTasks() {
+    this.taskStates.forEach((state, index) => {
+      this.taskContainer[index] = [];
+      this.tasks.forEach(task => {
+        if (task.status.toLowerCase() == state.toLowerCase()) {
           this.taskContainer[index].push(task);
         }
-      })
-    })
+      });
+    });
+  }
 
-    console.log(this.taskContainer);
+  getUsedStoryPoints() {
+    let storyPoints: number = 0;
+    this.tasks.forEach((task: Task) => {
+      storyPoints += task.estimation;
+    });
+    return storyPoints;
+  }
+
+  getAvailableStoryPoints() {
+    return this.backlogItem.estimation - this.getUsedStoryPoints();
   }
 
   open(content) {
