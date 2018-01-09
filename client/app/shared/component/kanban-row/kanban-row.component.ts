@@ -5,11 +5,11 @@ import { BacklogItem, Task } from './../../model';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-canban-row',
-  templateUrl: './canban-row.component.html',
-  styleUrls: ['./canban-row.component.css']
+  selector: 'app-kanban-row',
+  templateUrl: './kanban-row.component.html',
+  styleUrls: ['./kanban-row.component.css']
 })
-export class CanbanRowComponent implements OnInit {
+export class KanbanRowComponent implements OnInit {
   @Input() backlogItem: BacklogItem;
   @Input() taskStates: string[];
   modal;
@@ -18,7 +18,8 @@ export class CanbanRowComponent implements OnInit {
     title: '',
     description: '',
     user: null,
-    status: 'TODO'
+    status: 'TODO',
+    estiamtion: 0
   };
   taskContainer = [];
   constructor(
