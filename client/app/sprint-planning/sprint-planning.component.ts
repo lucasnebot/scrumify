@@ -55,11 +55,16 @@ export class SprintPlanningComponent implements OnInit {
     });
   }
 
-  getSprints() {
+  getSprints(setSelectedIndex?:number) {
     console.log('get sprints called !')
     this.sprintService.getAll().subscribe(result => {
       if (result.length > 0) {
         this.sprints = result;
+        if(setSelectedIndex){
+          this.selectedSprint = this.sprints[setSelectedIndex];
+        }else{
+          this.selectedSprint = this.sprints[0];
+        }
         this.getSprintItems();
       }
     });
@@ -67,9 +72,9 @@ export class SprintPlanningComponent implements OnInit {
 
   getSprintItems() {
     this.enableEditing = true;
-    console.log(this.selectedSprint);
     //if bli are present
     if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
+      console.log('disable edit')
       //sprint has already been planned
       this.enableEditing = false;
       //get bli's for current selected sprint
@@ -128,14 +133,12 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   saveSprint() {
-    console.log(this.newSprint.project);
     if (this.getLatestSprint()) {
       this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
     }
     this.sprintService.add(this.newSprint).subscribe(() => {
-      this.getSprints();
+      this.getSprints(this.newSprint.sprintNo);
       this.modal.close();
-      this.setSelectedSprint(this.getLatestSprint());
     });
   }
 
