@@ -16,6 +16,10 @@ export const taskSchema = new mongoose.Schema({
         default: 'TODO',
         required: false
       },
+      estimation: {
+          type: Number,
+          required: false
+      },
     User: {
         type: [mongoose.Schema.Types.ObjectId]
     }

@@ -4,5 +4,6 @@ export class Task extends BaseModel {
     title: string;
     description: string;
     status: string;
+    estiamtion: number;
     user: User;
 }
