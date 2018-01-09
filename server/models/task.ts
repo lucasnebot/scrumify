@@ -20,6 +20,9 @@ export const taskSchema = new mongoose.Schema({
           type: Number,
           required: false
       },
+      backlogItem:{
+        type: [mongoose.Schema.Types.ObjectId]
+      },
     User: {
         type: [mongoose.Schema.Types.ObjectId]
     }
