@@ -30,8 +30,7 @@ export const backlogItemSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.Mixed]
   },
   project: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
+    type: mongoose.Schema.Types.ObjectId
   }
 });
 

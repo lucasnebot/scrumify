@@ -32,7 +32,7 @@ export const userSchema = new mongoose.Schema({
     min: 0,
     max: 2
   },
-  project: {
+  projects: {
     type: [mongoose.Schema.Types.ObjectId]
   }
 });
