@@ -1,0 +1,95 @@
+<div class="mainContainer">
+  <h2>Project Explorer</h2>
+  <p>
+    Select the project you want to work on!
+  </p>
+  <hr>
+  <!-- Warnings and Errors -->
+  <div *ngIf='!userDataAlreadyLoaded; else noProjectBlock'>
+    <p>
+      <strong>Oh no!</strong> An error has occured. Please hit the button below</p>
+    <button type="button" class="btn btn-warning" (click)="displayUserProjects()">
+      <i class="fa fa-refresh" aria-hidden="true"></i>
+    </button>
+  </div>
+  <ng-template #noProjectBlock>
+    <div class="alert alert-warning" role="alert" *ngIf="projects.length === 0 && !authService.allowedFor(['Product Owner'])">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You haven't been added to a project by a
+      <strong>Product Owner</strong> yet. Talk to one of them and get started!
+    </div>
+  </ng-template>
+
+  <!-- List of Projects -->
+  <ul class="list-group">
+    <li *ngFor="let p of projects " class="list-group-item list-group-item-action" (click)="selectProject(p)" [class.active]="isProjectSelected(p)">
+      <strong>{{p.name}}</strong> | {{p.vision}}
+    </li>
+  </ul>
+
+  <!-- Product Owner: Create Project -->
+  <form *ngIf="authService.allowedFor(['Product Owner'])">
+    <hr *ngIf="projects.length>0">
+    <h4>
+      <i class="fa fa-plus-circle" aria-hidden="true"></i> Create a project</h4>
+    <div class="form-group">
+      <label for="projectName">Project name</label>
+      <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
+    </div>
+    <div class="form-group">
+      <label for="projectVision">Project vision</label>
+      <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
+        rows="3"></textarea>
+    </div>
+    <label for="addUsers">Add team member</label>
+    <div class="row">
+      <div class="col-8">
+        <div class="form-group">
+          <input class="form-control" [(ngModel)]="projectForm.userNames" type="text" name="addUsers" id="addUser" placeholder="Enter names one at a time or seperated by comma without whitespace">
+        </div>
+      </div>
+      <div class="col-4">
+        <button class="btn" (click)="findUsers()">Search</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <ul class="x-inline-list">
+          <li *ngFor="let user of projectForm.usersToBeAdded">
+            <div class="card card-outline-info" style="display: inline-block;">
+              <div class="card-block">
+                <i (click)="removeFromToBeAdded(user)" class="fa fa-times" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <hr *ngIf="projectForm.usersToBeAdded.length > 0">
+
+    <div class="row">
+      <div class="col-4">
+        <div class="form-group">
+          <label for="sprintDuration">Sprint Duration in Days</label>
+          <input type="number" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration"
+            placeholder="Enter Duration of a Sprint">
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-group">
+          <label for="availableStoryPoints">Story Points available per Sprint</label>
+          <input type="number" min="1" [(ngModel)]="newProject.storyPointsPerSprint" class="form-control" id="availableStoryPoints"
+            name="availableStoryPoints" placeholder="Enter available Story Points">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
+      </div>
+      <div class="col-10">
+        <p *ngIf="!projectForm.teamValid" class="text-danger">
+          <strong>Wait a minute!</strong> You need at least 3 Developers and only one Scrum Master for a successfull team!</p>
+      </div>
+    </div>
+  </form>
+</div>

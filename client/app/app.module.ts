@@ -21,7 +21,8 @@ import {
   ProjectService,
   SprintService,
   EstimationHelperService,
-  TaskService
+  TaskService,
+  ProjectGuardService
 } from './shared/service';
 
 // Components
@@ -37,6 +38,7 @@ import { ScrumboardComponent } from './scrumboard/scrumboard.component';
 import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
 import { CanbanRowComponent } from './shared/component/canban-row/canban-row.component';
+import { ProjectExplorerComponent } from './project-explorer/project-explorer.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import { CanbanRowComponent } from './shared/component/canban-row/canban-row.com
     ScrumboardComponent,
     EffortEstimationComponent,
     BliCardComponent,
-    CanbanRowComponent
+    CanbanRowComponent,
+    ProjectExplorerComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +80,8 @@ import { CanbanRowComponent } from './shared/component/canban-row/canban-row.com
       multi: true
     },
     SprintService,
-    EstimationHelperService
+    EstimationHelperService,
+    ProjectGuardService
   ],
   bootstrap: [AppComponent]
 })

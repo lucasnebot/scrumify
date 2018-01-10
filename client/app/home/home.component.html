@@ -38,38 +38,10 @@
 </p>
 <!-- Logged-In-Content -->
 <ng-template #LoggedInContent>
-  <!-- Product Owner: Create Project -->
-  <div *ngIf="!projectService.project; else ProjectDashboard">
-    <form *ngIf="authService.allowedFor(['Product Owner']); else NoProjectWarning">
-      <h4>
-        <i class="fa fa-plus-circle" aria-hidden="true"></i> Create a project</h4>
-      <div class="form-group">
-        <label for="projectName">Project name</label>
-        <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
-      </div>
-      <div class="form-group">
-        <label for="projectVision">Project vision</label>
-        <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
-          rows="3"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="sprintDuration">Sprint Duration in Days</label>
-        <input type="number" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration" placeholder="Enter Duration of a Sprint">
-      </div>
-      <div class="form-group">
-        <label for="availableStoryPoints">Story Points available per Sprint</label>
-        <input type="number" min="1" [(ngModel)]="newProject.storyPointsPerSprint" class="form-control" id="availableStoryPoints" name="availableStoryPoints" placeholder="Enter available Story Points">
-      </div>
-      <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
-    </form>
-  </div>
-  <!-- Not Product Owner: No Project created yet -->
-  <ng-template #NoProjectWarning>
-    <div class="alert alert-warning" role="alert">
-      The
-      <strong>Product Owner</strong> hasn't created a project yet!
+  <!-- No Project created yet -->
+    <div *ngIf="!projectService.project; else ProjectDashboard" class="alert alert-warning" role="alert">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> You're not a member of a project team yet.
     </div>
-  </ng-template>
   <!-- Dashboard -->
   <ng-template #ProjectDashboard>
     <div class="row">

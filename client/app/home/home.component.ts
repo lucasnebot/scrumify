@@ -13,12 +13,6 @@ export class HomeComponent implements OnInit {
     email: '',
     password: ''
   };
-  newProject: Project = {
-    name: '',
-    vision: '',
-    sprintDuration: null,
-    storyPointsPerSprint:null
-  }
   loginFailed = false;
   users: User[];
 
@@ -30,8 +24,9 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if(this.authService.authenticated){
-      this.userService.getAll().subscribe((docs) => {
+    if(this.authService.authenticated && this.projectService.project){
+      //! Only Users from this project are displayed
+      this.userService.getAll({projects: this.projectService.project._id}).subscribe((docs) => {
         this.users = docs;
       })
     }
@@ -39,15 +34,9 @@ export class HomeComponent implements OnInit {
   signIn() {
     this.authService.signIn(this.signInData).subscribe(() => {
       this.loginFailed = !this.authService.authenticated;
-      // Can be switched to every other route
-      this.router.navigate(['/']);
-      this.ngOnInit();
+      this.router.navigate(['/projects']);
     });
   }
-  createProject(){
-    this.projectService.add(this.newProject).subscribe((resp) => {
-      this.projectService.fetchProject();
-    });
-  }
+
 
 }

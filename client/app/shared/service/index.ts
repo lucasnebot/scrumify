@@ -7,3 +7,4 @@ export * from './auth.service';
 export { AuthGuardService } from './routeGuards/auth-guard.service';
 export { ProjectService } from './project.service';
 export { EstimationHelperService } from './estimation-helper.service';
+export { ProjectGuardService } from './routeGuards/project-guard.service';

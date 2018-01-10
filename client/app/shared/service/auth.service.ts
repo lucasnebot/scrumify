@@ -36,11 +36,9 @@ export class AuthService {
       .catch(err => {
         return Observable.of(null);
       })
-      // ? Add subscribe here? Or add body directly
       .do(resp => {
         if (resp) {
           this.activeUser = resp.body;
-          console.log(this.activeUser);
           localStorage.setItem(LS_TOKEN_KEY, resp.headers.get('X-JWT'));
           this.authenticated = true;
         }
