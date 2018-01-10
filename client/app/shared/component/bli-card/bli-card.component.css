@@ -1,9 +1,0 @@
-ul.x-inline-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-.x-inline-list li {
-    display: inline;
-}

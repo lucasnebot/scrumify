@@ -21,8 +21,8 @@
         <label for="role">Role</label>
         <select class="form-control"  id="power"
                 [(ngModel)]="user.role" name="role">
-          <option *ngIf="!scrumMasterExists" value="0">Scrum Master</option>
-          <option *ngIf="!productOwnerExists" value="1">Product Owner</option>
+          <option value="0">Scrum Master</option>
+          <option value="1">Product Owner</option>
           <option value="2">Developer</option>
         </select>
       </div>

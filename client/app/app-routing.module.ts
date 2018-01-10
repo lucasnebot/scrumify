@@ -6,19 +6,21 @@ import {BacklogComponent} from './backlog/backlog.component';
 import {HomeComponent} from './home/home.component';
 import { RoadmapComponent } from './roadmap/roadmap.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
-import { AuthGuardService } from './shared/service';
-import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component'
+import { AuthGuardService, ProjectGuardService } from './shared/service';
+import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
+import {ProjectExplorerComponent } from './project-explorer/project-explorer.component';
 
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'backlog', component: BacklogComponent, canActivate: [AuthGuardService]},
-  {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService]},
+  {path: 'backlog', component: BacklogComponent, canActivate: [AuthGuardService, ProjectGuardService]},
+  {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: '*', component: HomeComponent},
   {path: 'signUp', component: SignUpComponent},
-  {path: 'sprint-planning', component: SprintPlanningComponent},
-  {path: 'scrumboard', component: ScrumboardComponent},
-  {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService]},
+  {path: 'sprint-planning', component: SprintPlanningComponent, canActivate: [AuthGuardService, ProjectGuardService]},
+  {path: 'scrumboard', component: ScrumboardComponent, canActivate: [AuthGuardService, ProjectGuardService]},
+  {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService, ProjectGuardService]},
+  {path: 'projects', component: ProjectExplorerComponent, canActivate: [AuthGuardService] },
   {path: '**', component: HomeComponent} // wildcard route! Has to be the LAST route!
 ];
 
