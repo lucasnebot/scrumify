@@ -23,7 +23,7 @@ export class ProjectExplorerComponent implements OnInit {
 
   constructor(
     protected projectService: ProjectService,
-    protected authService: AuthService,
+    public authService: AuthService,
     protected router: Router,
     protected userService: UserService
   ) {}
