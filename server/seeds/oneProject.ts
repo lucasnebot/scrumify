@@ -60,7 +60,7 @@ async function createTestData() {
     const stati =  ['EPIC', 'RFE', 'RFS', 'SPRINT', 'DONE'];
     for (let i = 0; i < faker.random.number({min: 5, max: 20}); i++) {
         const backlogItem = new backlogItemModel({
-            title: faker.lorem.word,
+            title: faker.lorem.sentence(5),
             description: faker.lorem.sentences(faker.random.number({min: 1, max: 2})),
             order: i,
             estimation: 0,
