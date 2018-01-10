@@ -1,21 +1,11 @@
 <div class="row">
 
     <div class="col-2">
-        <!-- <div class="card">
-            <div class="card-block">
-                <h4 class="card-title">{{backlogItem.title}}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Estimation: {{backlogItem.estimation}}</h6>
-                <p class="card-text">{{backlogItem.description | truncate: 15}}</p>
-                <button type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
-                <button type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
-            </div>
-        </div> -->
-
-
         <div class="card text-center">
             <div class="card-block">
                 <h4 class="card-title">{{backlogItem.title}}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">StoryPoints:<br>{{getUsedStoryPoints()}} / {{backlogItem.estimation}}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
+                    <br>{{getUsedStoryPoints()}} / {{backlogItem.estimation}}</h6>
                 <p class="card-text">{{backlogItem.description | truncate: 15}}</p>
             </div>
             <div class="card-header">
@@ -33,10 +23,13 @@
     <div *ngFor="let state of taskStates;let i = index" class="col">
         <div class="panel-body" dnd-sortable-container [dropZones]="[backlogItem._id]" [sortableData]="taskContainer[i]">
             <ul class="list-group">
-                <li *ngIf="taskContainer[i] == 0" class="list-group-item list-group-item-action list-group-item-info">&#160;</li>
-                <li *ngFor="let task of taskContainer[i]; let j = index" class="list-group-item justify-content-between" dnd-sortable [sortableIndex]="j">
-                    {{task.title}}
-                    <button type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
+                <li [id]="i" *ngIf="taskContainer[i] == 0" class="list-group-item list-group-item-action list-group-item-info">&#160;</li>
+                <li [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="list-group-item justify-content-between" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)">
+                    {{task.title | truncate: 10}}
+                    <span>
+                        <button type="button" class="btn btn-sm fa fa-search" (click)="open(editTaskModal,j)"></button>
+                        <button type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(j)"></button>
+                    </span>
                 </li>
             </ul>
         </div>
@@ -66,8 +59,8 @@
         </div>
         <div class="form-group">
             <label for="estimation">Estimation</label>
-            <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation" min="1" 
-            [max]="getAvailableStoryPoints()" required>
+            <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
+                min="1" [max]="getAvailableStoryPoints()" required>
         </div>
     </div>
 
@@ -77,3 +70,34 @@
         <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
 </ng-template>
+<!--MODAL NEW END -->
+
+<!-- MODAL TASK DETAILS BEGIN -->
+<ng-template #editTaskModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Task Details</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="bli-titel">Title</label>
+            <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description" name="description"
+                required minlength="5"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="estimation">Estimation</label>
+            <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
+                min="1" [max]="getAvailableStoryPoints()" required>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="editTask()">Edit</button>
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+    </div>
+</ng-template>
+<!--MODAL TASK DETAILS END -->

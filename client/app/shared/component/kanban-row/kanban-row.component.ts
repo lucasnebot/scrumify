@@ -15,15 +15,9 @@ export class KanbanRowComponent implements OnInit {
   @Input() taskStates: string[];
   modal;
   tasks: Task[] = [];
-  newTask: Task = {
-    title: '',
-    description: '',
-    user: null,
-    status: 'TODO',
-    estimation: 0,
-    backlogItem: ''
-  };
+  newTask: Task = this.getEmptyTask();
   taskContainer: Task[][] = [];
+  selectedTask: Task = this.getEmptyTask();
   constructor(
     private taskService: TaskService,
     private modalService: NgbModal,
@@ -31,8 +25,11 @@ export class KanbanRowComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getTasks();
+  }
+
+  getTasks() {
     if (this.backlogItem.tasks) {
-      console.log('WHoop!');
       this.taskService
         .getAll({ backlogItem: this.backlogItem._id })
         .subscribe(result => {
@@ -83,8 +80,54 @@ export class KanbanRowComponent implements OnInit {
     return this.backlogItem.estimation - this.getUsedStoryPoints();
   }
 
-  open(content) {
+  open(content, index?: number) {
+    console.log('selected' + index);
+    console.log(this.tasks[index]);
+    if (index >= 0) {
+      this.selectedTask = this.tasks[index];
+    }
     this.modal = this.modalService.open(content);
     this.modal.result.then(result => {}, reason => {});
+  }
+
+  editTask() {
+    this.taskService
+      .edit(this.selectedTask._id, this.selectedTask)
+      .subscribe(result => {
+        this.getTasks();
+        this.modal.close();
+      });
+  }
+
+  removeTask(index: number) {
+    this.taskService.delete(this.tasks[index]._id).subscribe(result => {
+      this.tasks.splice(index,1);
+      this.sortTasks();
+    });
+  }
+
+  getEmptyTask() {
+    return {
+      title: '',
+      description: '',
+      user: null,
+      status: 'TODO',
+      estimation: 0,
+      backlogItem: ''
+    };
+  }
+  updateStatus(task : Task, $event : any){
+    //TODO Challenge: If you manage to 
+    //read id property of $event without this
+    //stupid workarround you get a beer from me
+    let myArray = [];
+    myArray.push(event.target);
+    let stateIndex =myArray[0].id;
+    //
+    task.status = this.taskStates[stateIndex].toUpperCase();
+    console.log(task.status);
+    this.taskService.edit(task._id,task).subscribe((result)=>{
+      console.log('Updated !');
+    })
   }
 }
