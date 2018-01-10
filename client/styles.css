@@ -33,6 +33,19 @@ border: 1px dashed #000;
   color: darkgreen;
 }
 
+ul.x-inline-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.x-inline-list li {
+  display: inline;
+}
+
+div.x-mini-card {
+  padding: 8px
+}
 
 /** Disabled list items **/
 

@@ -2,16 +2,20 @@
  import * as bcrypt from 'bcryptjs';
  import * as mongoose from 'mongoose';
  import * as dotenv from 'dotenv';
+ import * as mongodb from 'mongodb';
+
+// Fix mongoose promise library
+(<any>mongoose).Promise = global.Promise;
+
+// Load .env in process variable
+dotenv.config({ path: '.env' });
+
+// MongoDB Connection
+const MONGO_URI: string =
+    process.env.PROD_MONGODB || process.env.TEST_MONGODB;
 
 // Connect to MongoDB
 export async function connectDatabase() {
-
-    dotenv.config({ path: '.env' });
-
-    // MongoDB Connection
-    const MONGO_URI: string =
-      process.env.PROD_MONGODB || process.env.TEST_MONGODB;
-
     mongoose
     .connect(MONGO_URI, { useMongoClient: true })
     .then(() => {
@@ -26,9 +30,14 @@ export async function connectDatabase() {
 export async function dropDatabase() {
     console.log('Drop database scrumify...');
     try {
-        await mongoose.connection.useDb('scrumify')
-        console.log('Database dropped!');
-        await mongoose.disconnect();
+        const db = await mongodb.connect(MONGO_URI);
+        await db.listCollections().toArray((error, collection) => {
+            collection.forEach(col => {
+                console.log('Drop collection: ' + col['name']);
+                db.collection(col['name']).drop();
+            });
+            console.log('Database dropped!');
+        });
     } catch (err) {
         console.error(err);
     }
