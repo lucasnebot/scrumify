@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CanbanRowComponent } from './canban-row.component';
+import { CanbanRowComponent } from './kanban-row.component';
 
 describe('CanbanRowComponent', () => {
   let component: CanbanRowComponent;

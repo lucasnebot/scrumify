@@ -37,8 +37,8 @@ import { SprintPlanningComponent } from './sprint-planning/sprint-planning.compo
 import { ScrumboardComponent } from './scrumboard/scrumboard.component';
 import { EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
-import { CanbanRowComponent } from './shared/component/canban-row/canban-row.component';
 import { ProjectExplorerComponent } from './project-explorer/project-explorer.component';
+import { KanbanRowComponent } from './shared/component/kanban-row/kanban-row.component';
 
 @NgModule({
   declarations: [
@@ -52,8 +52,8 @@ import { ProjectExplorerComponent } from './project-explorer/project-explorer.co
     ScrumboardComponent,
     EffortEstimationComponent,
     BliCardComponent,
-    CanbanRowComponent,
-    ProjectExplorerComponent
+    ProjectExplorerComponent,
+    KanbanRowComponent
   ],
   imports: [
     BrowserModule,

@@ -24,7 +24,7 @@
       <!-- Ready for Sprint -->
       <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
         <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
-        <li *ngFor="let item of backlogItems; let i = index" dnd-sortable  [dragEnabled]="enableEditing" [sortableIndex]="i" draggable="true" class="list-group-item "
+        <li *ngFor="let item of backlogItems; let i = index" dnd-sortable  [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing" [sortableIndex]="i" draggable="true" class="list-group-item "
           [dragData]="i">{{item.title}}</li>
       </ul>
     </div>
@@ -42,23 +42,11 @@
       <!-- Sprint View -->
       <ng-template #sprintView>
         <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
-          <li *ngIf="backlogItemsForSprint.length == 0 && !backlogItemsForSprintLoading" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
-          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
+          <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
+          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
         </ul>
-
-        <div *ngIf="backlogItemsForSprintLoading" class="sk-cube-grid">
-          <div class="sk-cube sk-cube1"></div>
-          <div class="sk-cube sk-cube2"></div>
-          <div class="sk-cube sk-cube3"></div>
-          <div class="sk-cube sk-cube4"></div>
-          <div class="sk-cube sk-cube5"></div>
-          <div class="sk-cube sk-cube6"></div>
-          <div class="sk-cube sk-cube7"></div>
-          <div class="sk-cube sk-cube8"></div>
-          <div class="sk-cube sk-cube9"></div>
-        </div>
         <br>
-        <button class="btn btn-primary" [disabled]="sprintTooFull() || !enableEditing" (click)="saveBliToSprint()">Save</button>
+        <button class="btn btn-primary" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
         <!-- TODO if 3 days before sprint -->
         <button *ngIf="true" class="btn" (click)="open(newModal)">New Sprint</button>
         <br>
