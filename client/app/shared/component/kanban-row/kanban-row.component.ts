@@ -79,14 +79,18 @@ export class KanbanRowComponent implements OnInit {
     return this.backlogItem.estimation - this.getUsedStoryPoints();
   }
 
-  open(content, index?: number) {
+  open(content, task?: Task) {
+
     //reset stuff
     this.errorNotFound = false
     this.userFound = null;
     this.userSearchString = "";
     //
-    if (index >= 0) {
-      this.selectedTask = this.tasks[index];
+    if (task != null) {
+      this.selectedTask = task;
+    }
+    else{
+      this.selectedTask = this.getEmptyTask();
     }
     this.modal = this.modalService.open(content);
     this.modal.result.then(result => {}, reason => {});
@@ -120,6 +124,7 @@ export class KanbanRowComponent implements OnInit {
     };
   }
   updateStatus(task: Task, $event: any) {
+    console.log(event.target);
     //TODO Challenge: If you manage to
     //read id property of $event without this
     //stupid workarround you get a beer from me
@@ -128,6 +133,9 @@ export class KanbanRowComponent implements OnInit {
     let stateIndex = myArray[0].id;
     //
     let newState = this.taskStates[stateIndex].toUpperCase();
+    console.log(event.target);
+    
+    
     //if state has changed
     if (task.status != newState) {
       task.status = newState;

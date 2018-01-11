@@ -3,12 +3,12 @@
     <div class="col-2">
         <div class="card text-center">
             <div class="card-block">
-                <h4 class="card-title">{{backlogItem.title}}</h4>
+                <h4 class="card-title">{{backlogItem.title | truncate: 15}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
                     <br>{{getUsedStoryPoints()}} / {{backlogItem.estimation}}</h6>
                 <p class="card-text">{{backlogItem.description | truncate: 15}}</p>
             </div>
-            <div class="card-header">
+            <div class="card-footer">
                 <ul class="nav">
                     <li class="nav-item">
                         <button type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
@@ -21,22 +21,39 @@
     </div>
 
     <div *ngFor="let state of taskStates;let i = index" class="col">
-        <div class="panel-body" dnd-sortable-container [dropZones]="[backlogItem._id]" [sortableData]="taskContainer[i]">
-            <ul class="list-group">
-                <li [id]="i" *ngIf="taskContainer[i] == 0" class="list-group-item list-group-item-action list-group-item-info">&#160;</li>
-                <li [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="list-group-item justify-content-between" dnd-sortable
-                    [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)" [attr.disabled]="state.toUpperCase() == 'DONE'"
-                    [dragEnabled]="state.toUpperCase() != 'DONE'">
-                    {{task.title | truncate: 10}}
+        <div class="card-colums" dnd-sortable-container [dropZones]="[backlogItem._id]" [sortableData]="taskContainer[i]">
+            <div [id]="i" *ngIf="taskContainer[i] == 0" class="card card-outline-info mb-3">
+                <div [id]="i" class="card-block">
+                </div>
+            </div>
+            <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
+                [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
+                <div [id]="i" class="card-block">
+                        <h5 class="card-title">{{task.title | truncate: 15}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                        <span *ngIf="task.user">Assigned</span>
+                        <span *ngIf="!task.user">Not Assigned</span>
+                    </h6>
+                    <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
+                </div>
+                <div [id]="i" class="card-footer">
                     <span>
-                        <button type="button" class="btn btn-sm fa fa-search" (click)="open(editTaskModal,j)"></button>
+                        <button type="button" class="btn btn-sm fa fa-search" (click)="open(editTaskModal,task)"></button>
                         <button *ngIf="state.toUpperCase() != 'DONE'" type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(j)"></button>
                     </span>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
+
+
+
+
+
+
+
 <!-- Spacer between rows -->
 <hr>
 
@@ -76,11 +93,10 @@
                     </button>
                 </div>
             </div>
-            <br>
-            Currently Assigned:
+            <br> Currently Assigned:
             <div *ngIf="userFound" class="list-group">
                 <li class="list-group-item justify-content-between"> {{userFound.name}}, {{userFound.surname}}
-                        <button type="button" class="btn btn-sm fa fa-trash-o" (click)="userFound = null"></button>
+                    <button type="button" class="btn btn-sm fa fa-trash-o" (click)="userFound = null"></button>
 
                 </li>
             </div>
