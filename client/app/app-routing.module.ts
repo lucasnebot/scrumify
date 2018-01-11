@@ -9,6 +9,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { AuthGuardService, ProjectGuardService } from './shared/service';
 import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import {ProjectExplorerComponent } from './project-explorer/project-explorer.component';
+import { BurndownChartComponent } from './burndown-chart/burndown-chart.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'scrumboard', component: ScrumboardComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'projects', component: ProjectExplorerComponent, canActivate: [AuthGuardService] },
+  {path: 'burndown-chart', component: BurndownChartComponent, canActivate: [AuthGuardService ]},
   {path: '**', component: HomeComponent} // wildcard route! Has to be the LAST route!
 ];
 

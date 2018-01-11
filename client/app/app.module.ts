@@ -10,6 +10,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TruncateModule } from 'ng2-truncate';
 import {MomentModule} from 'angular2-moment';
 import { LoadingModule } from 'ngx-loading';
+import { ChartsModule } from 'ng2-charts';
 
 // Services
 import {
@@ -39,6 +40,7 @@ import { EffortEstimationComponent } from './effort-estimation/effort-estimation
 import { BliCardComponent } from './shared/component/bli-card/bli-card.component';
 import { ProjectExplorerComponent } from './project-explorer/project-explorer.component';
 import { KanbanRowComponent } from './shared/component/kanban-row/kanban-row.component';
+import { BurndownChartComponent } from './burndown-chart/burndown-chart.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { KanbanRowComponent } from './shared/component/kanban-row/kanban-row.com
     EffortEstimationComponent,
     BliCardComponent,
     ProjectExplorerComponent,
-    KanbanRowComponent
+    KanbanRowComponent,
+    BurndownChartComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { KanbanRowComponent } from './shared/component/kanban-row/kanban-row.com
     NgbModule.forRoot(),
     TruncateModule,
     MomentModule,
-    LoadingModule
+    LoadingModule,
+    ChartsModule
   ],
   providers: [
     BacklogService,
