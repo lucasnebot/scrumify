@@ -1,10 +1,11 @@
+import { UserService } from './../../service/user.service';
 import { BacklogService } from './../../service/backlog.service';
 import { forEach } from '@angular/router/src/utils/collection';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TaskService } from './../../service/task.service';
-import { BacklogItem, Task } from './../../model';
+import { BacklogItem, Task, User } from './../../model';
 import { Component, OnInit, Input } from '@angular/core';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-kanban-row',
   templateUrl: './kanban-row.component.html',
@@ -13,15 +14,20 @@ import { Component, OnInit, Input } from '@angular/core';
 export class KanbanRowComponent implements OnInit {
   @Input() backlogItem: BacklogItem;
   @Input() taskStates: string[];
+  @Input() developers: User[];
   modal;
   tasks: Task[] = [];
   newTask: Task = this.getEmptyTask();
   taskContainer: Task[][] = [];
   selectedTask: Task = this.getEmptyTask();
+  userSearchString: string;
+  userFound: User;
+  errorNotFound: boolean;
   constructor(
     private taskService: TaskService,
     private modalService: NgbModal,
-    private backlogService: BacklogService
+    private backlogService: BacklogService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -46,14 +52,7 @@ export class KanbanRowComponent implements OnInit {
       this.sortTasks();
       this.modal.close();
       //reset form
-      this.newTask = {
-        title: '',
-        description: '',
-        user: null,
-        status: 'TODO',
-        estimation: 0,
-        backlogItem: ''
-      };
+      this.newTask = this.getEmptyTask();
     });
   }
 
@@ -81,8 +80,11 @@ export class KanbanRowComponent implements OnInit {
   }
 
   open(content, index?: number) {
-    console.log('selected' + index);
-    console.log(this.tasks[index]);
+    //reset stuff
+    this.errorNotFound = false
+    this.userFound = null;
+    this.userSearchString = "";
+    //
     if (index >= 0) {
       this.selectedTask = this.tasks[index];
     }
@@ -101,33 +103,71 @@ export class KanbanRowComponent implements OnInit {
 
   removeTask(index: number) {
     this.taskService.delete(this.tasks[index]._id).subscribe(result => {
-      this.tasks.splice(index,1);
+      this.tasks.splice(index, 1);
       this.sortTasks();
     });
   }
 
-  getEmptyTask() {
+  getEmptyTask(): Task {
     return {
       title: '',
       description: '',
       user: null,
       status: 'TODO',
       estimation: 0,
-      backlogItem: ''
+      backlogItem: '',
+      doneTimestamp: ''
     };
   }
-  updateStatus(task : Task, $event : any){
-    //TODO Challenge: If you manage to 
+  updateStatus(task: Task, $event: any) {
+    //TODO Challenge: If you manage to
     //read id property of $event without this
     //stupid workarround you get a beer from me
     let myArray = [];
     myArray.push(event.target);
-    let stateIndex =myArray[0].id;
+    let stateIndex = myArray[0].id;
     //
-    task.status = this.taskStates[stateIndex].toUpperCase();
-    console.log(task.status);
-    this.taskService.edit(task._id,task).subscribe((result)=>{
-      console.log('Updated !');
-    })
+    let newState = this.taskStates[stateIndex].toUpperCase();
+    //if state has changed
+    if (task.status != newState) {
+      task.status = newState;
+      if (task.status.toUpperCase() == 'DONE') {
+        task.doneTimestamp = moment().format();
+      }
+
+      this.taskService.edit(task._id, task).subscribe(result => {
+        console.log('Updated !');
+      });
+    }
   }
+
+  searchForUser(mode: String){
+    if(mode == 'new'){
+      this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
+        if(result.length > 0){
+          this.errorNotFound = false;
+          this.newTask.user = result[0]._id;
+          this.userFound = result[0];
+        }
+        else{
+          this.errorNotFound = true;
+          this.userFound = null;
+        }
+      }))
+
+      if(mode == 'edit'){
+        this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
+          if(result.length > 0){
+            this.errorNotFound = false;
+            this.selectedTask.user = result[0]._id;
+          }
+          else{
+            this.errorNotFound = true;
+            this.userFound = null;
+          }
+        }))
+      }
+    }
+    }
+
 }

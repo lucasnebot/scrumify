@@ -24,11 +24,13 @@
         <div class="panel-body" dnd-sortable-container [dropZones]="[backlogItem._id]" [sortableData]="taskContainer[i]">
             <ul class="list-group">
                 <li [id]="i" *ngIf="taskContainer[i] == 0" class="list-group-item list-group-item-action list-group-item-info">&#160;</li>
-                <li [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="list-group-item justify-content-between" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)">
+                <li [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="list-group-item justify-content-between" dnd-sortable
+                    [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)" [attr.disabled]="state.toUpperCase() == 'DONE'"
+                    [dragEnabled]="state.toUpperCase() != 'DONE'">
                     {{task.title | truncate: 10}}
                     <span>
                         <button type="button" class="btn btn-sm fa fa-search" (click)="open(editTaskModal,j)"></button>
-                        <button type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(j)"></button>
+                        <button *ngIf="state.toUpperCase() != 'DONE'" type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(j)"></button>
                     </span>
                 </li>
             </ul>
@@ -62,6 +64,31 @@
             <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
                 min="1" [max]="getAvailableStoryPoints()" required>
         </div>
+
+        <div class="form-group">
+            <label for="newTaskuserAssignment">Assign to User</label>
+            <div class="input-group">
+                <input [(ngModel)]="userSearchString" id="newTaskuserAssignment" type="text" class="form-control" placeholder="Search for User by Lastname"
+                    name="newTaskuserAssignment" required>
+                <div class="input-group-btn">
+                    <button class="btn btn-default" (click)="searchForUser('new')" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <br>
+            Currently Assigned:
+            <div *ngIf="userFound" class="list-group">
+                <li class="list-group-item justify-content-between"> {{userFound.name}}, {{userFound.surname}}
+                        <button type="button" class="btn btn-sm fa fa-trash-o" (click)="userFound = null"></button>
+
+                </li>
+            </div>
+            <br>
+            <div *ngIf="errorNotFound" class="alert alert-warning" role="alert">
+                <strong>We are sorry.</strong> We could not find anybody by that name !
+            </div>
+        </div>
     </div>
 
 
@@ -86,13 +113,13 @@
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description" name="description"
-                required minlength="5"></textarea>
+            <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
+                name="description" required minlength="5"></textarea>
         </div>
         <div class="form-group">
             <label for="estimation">Estimation</label>
-            <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
-                min="1" [max]="getAvailableStoryPoints()" required>
+            <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
+                name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
         </div>
     </div>
     <div class="modal-footer">
