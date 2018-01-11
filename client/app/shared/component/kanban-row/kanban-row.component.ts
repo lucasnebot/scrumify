@@ -124,7 +124,6 @@ export class KanbanRowComponent implements OnInit {
     };
   }
   updateStatus(task: Task, $event: any) {
-    console.log(event.target);
     //TODO Challenge: If you manage to
     //read id property of $event without this
     //stupid workarround you get a beer from me
@@ -144,7 +143,6 @@ export class KanbanRowComponent implements OnInit {
       }
 
       this.taskService.edit(task._id, task).subscribe(result => {
-        console.log('Updated !');
       });
     }
   }

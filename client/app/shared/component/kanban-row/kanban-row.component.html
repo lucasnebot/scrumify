@@ -29,10 +29,10 @@
             <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
                 [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
                 <div [id]="i" class="card-block">
-                        <h5 class="card-title">{{task.title | truncate: 15}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                        <span *ngIf="task.user">Assigned</span>
-                        <span *ngIf="!task.user">Not Assigned</span>
+                        <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
+                        <h6 [id]="i" class="card-subtitle mb-2 text-muted">
+                        <span [id]="i" *ngIf="task.user">Assigned</span>
+                        <span [id]="i" *ngIf="!task.user">Not Assigned</span>
                     </h6>
                     <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
                 </div>
