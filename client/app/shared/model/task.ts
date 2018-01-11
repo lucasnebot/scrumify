@@ -5,6 +5,7 @@ export class Task extends BaseModel {
     description: string;
     status: string;
     estimation: number;
-    user: User;
+    user: string;
     backlogItem: string;
+    doneTimestamp: string;
 }

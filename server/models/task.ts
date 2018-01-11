@@ -25,6 +25,10 @@ export const taskSchema = new mongoose.Schema({
       },
     User: {
         type: [mongoose.Schema.Types.ObjectId]
+    },
+    doneTimestamp: {
+        type: Date,
+        required: false
     }
 });
 

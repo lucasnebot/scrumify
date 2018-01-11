@@ -2,5 +2,5 @@
     <div class="col-2 "></div>
     <div *ngFor="let state of taskStates" class="col text-center h5">{{state}}</div>
 </div>
-<app-kanban-row *ngFor="let item of backlogItems; let i = index" [backlogItem]="item" [taskStates]="taskStates"></app-kanban-row>
+<app-kanban-row *ngFor="let item of backlogItems; let i = index" [backlogItem]="item" [taskStates]="taskStates" [developers]="developers"></app-kanban-row>
       
