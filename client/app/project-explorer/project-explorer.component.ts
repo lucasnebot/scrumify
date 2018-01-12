@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectService, AuthService, UserService } from '../shared/service';
+import { ProjectService, AuthService, UserService, LS_PROJECT } from '../shared/service';
 import { Project, User } from '../shared/model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -39,6 +39,8 @@ export class ProjectExplorerComponent implements OnInit {
 
   selectProject(project: Project) {
     this.projectService.project = project;
+    // Add project to localstorage
+    localStorage.setItem(LS_PROJECT,JSON.stringify(project));
     //! Used for effort estimation | TODO: change location?
     this.projectService.getNumberOfDevelopers();
     this.router.navigate(['/']);
@@ -89,7 +91,7 @@ export class ProjectExplorerComponent implements OnInit {
     }
     return false;
   }
-  // TODO only one Scrum Master per Team
+
   findUsers(){
     let namesArray: string[] = this.projectForm.userNames.trim().split(',');
     this.userService.getAll({name: {$in: namesArray}, role: {$ne: 1}}).subscribe((resp) => {
@@ -122,7 +124,6 @@ export class ProjectExplorerComponent implements OnInit {
         developers++
       }
     })
-    console.log(developers,scrumMaster);
     if(developers >= 3 && scrumMaster === 1){
       return true;
     }

@@ -6,6 +6,7 @@ import 'rxjs/add/observable/of';
 import { environment } from '../../../environments/environment';
 import { User } from '../model';
 import  { UserService } from './user.service';
+import {LS_PROJECT} from './project.service';
 
 export const LS_TOKEN_KEY = 'scrumifyToken';
 
@@ -47,15 +48,19 @@ export class AuthService {
   /**
    * Sign out the active User and remove all connected artifacts
    */
+  // TODO : remove project LS
   signOut() {
     this.authenticated = false;
     this.activeUser = null;
     localStorage.removeItem(LS_TOKEN_KEY);
+    //! remove project from local storage when logging out
+    localStorage.removeItem(LS_PROJECT);
   }
   /**
    * Check for token and get user information from db
    */
   checkForSessionToken() {
+    // TODO write complete User into LS
     const claimSet: JWTClaimSet = this.getJWTPayload(localStorage.getItem(LS_TOKEN_KEY));
     if (claimSet) {
       // Sets some properties before querying the db to avoid angular load errors

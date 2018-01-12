@@ -3,6 +3,8 @@ import { Project } from '../model';
 import { GenericService, HttpClient } from './generic.service';
 import { UserService } from './user.service';
 
+export const LS_PROJECT = 'scrumifyProject';
+
 @Injectable()
 export class ProjectService extends GenericService<Project> {
   project: Project;
@@ -14,6 +16,11 @@ export class ProjectService extends GenericService<Project> {
     private userService: UserService
   ) {
     super(http, '/project');
+    //! If project in local storage, then load it
+    let jsonProject = localStorage.getItem(LS_PROJECT);
+    if(jsonProject){
+      this.project = JSON.parse(jsonProject);
+    }
   }
 
   /**
