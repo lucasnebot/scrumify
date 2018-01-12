@@ -55,3 +55,10 @@ text-decoration: none;
 background-color: transparent;
 cursor: not-allowed !important;
 }
+
+.card[disabled="true"]{
+  color: #999999;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: not-allowed !important;
+  }
