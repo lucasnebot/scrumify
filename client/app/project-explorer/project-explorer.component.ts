@@ -20,7 +20,8 @@ export class ProjectExplorerComponent implements OnInit {
     users: [] as User[],
     usersToBeAdded: [] as User[],
     teamValid: true,
-    teamSelectionVisible: false
+    teamSelectionVisible: false,
+    activeTab: 'Info'
   };
 
   constructor(
@@ -95,15 +96,18 @@ export class ProjectExplorerComponent implements OnInit {
     return false;
   }
 
-  toggleTeamSelection(){
+  openTeamTab(){
+    
     if(!this.projectForm.teamSelectionVisible && this.projectForm.users.length === 0){
       this.userService.getAll({role: {$ne: 1}}).subscribe((resp) => {
         this.projectForm.users = resp;
-        this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
+        //this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
+        this.projectForm.activeTab="Team";
       })
 
     } else {
-      this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
+      this.projectForm.activeTab="Team";
+      //this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
     }
   }
   switchUser(user: User, from: User[], to: User[]){

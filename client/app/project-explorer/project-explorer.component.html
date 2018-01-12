@@ -1,8 +1,8 @@
 <div class="mainContainer">
   <h2>Project Explorer</h2>
   <p>
-    Select the project you want to work on! Only
-    <strong>Project Owner</strong> can create new projects.
+    Select the project you want to work on! Only a
+    <strong>Project Owner</strong> can create new projects and assign team members.
   </p>
   <hr>
   <!-- Warnings and Errors -->
@@ -34,104 +34,77 @@
     <hr *ngIf="projects.length>0">
     <h4>
       <i class="fa fa-plus-circle" aria-hidden="true"></i> Create a project</h4>
-      <!--
-      <ul class="nav nav-tabs">
+      <!-- Tab nav -->
+      <div class="form-group">
+        <ul class="nav nav-tabs">
           <li class="nav-item">
-            <a class="nav-link active">Project Info</a>
+            <a class="nav-link" (click)="projectForm.activeTab = 'Info'" [class.active]="projectForm.activeTab === 'Info'">Project Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" >Team</a>
+            <a class="nav-link" (click)="openTeamTab()" [class.active]="projectForm.activeTab === 'Team'">Team</a>
         </ul>
-      -->
-    <div class="form-group">
-      <label for="projectName">Project name</label>
-      <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
+      </div>
+
+    <!-- Project Info Tab-->
+    <div *ngIf="projectForm.activeTab === 'Info'; else TeamSelectionBlock">
+      <div class="form-group">
+        <label for="projectName">Project name</label>
+        <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
+      </div>
+      <div class="form-group">
+        <label for="projectVision">Project vision</label>
+        <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
+          rows="3"></textarea>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <div class="form-group">
+            <label for="sprintDuration">Sprint Duration in Days</label>
+            <input type="number" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration"
+              placeholder="Enter Duration of a Sprint">
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="form-group">
+            <label for="availableStoryPoints">Story Points available per Sprint</label>
+            <input type="number" min="1" [(ngModel)]="newProject.storyPointsPerSprint" class="form-control" id="availableStoryPoints"
+              name="availableStoryPoints" placeholder="Enter available Story Points">
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="projectVision">Project vision</label>
-      <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
-        rows="3"></textarea>
-    </div>
-    <!-- Add team members -->
-    <div class="form-group">
-      <button class="btn" (click)="toggleTeamSelection()">Organize team
-        <i class="fa" [class.fa-chevron-down]="!projectForm.teamSelectionVisible" [class.fa-chevron-up]="projectForm.teamSelectionVisible"
-          aria-hidden="true"></i>
-      </button>
-    </div>
-    <div *ngIf="projectForm.teamSelectionVisible">
-      <div *ngIf="projectForm.usersToBeAdded.length > 0">
-        <h6>Project team</h6>
-        <ul class="x-inline-list">
+    <!-- Team Tab -->
+    <ng-template #TeamSelectionBlock>
+        <div *ngIf="projectForm.usersToBeAdded.length > 0">
+          <h6>Project team</h6>
+          <ul class="x-inline-list">
             <li *ngFor="let user of projectForm.usersToBeAdded">
-              <div class="card card-outline-success x-mini-card" (click)="switchUser(user,projectForm.usersToBeAdded,projectForm.users)"style="display: inline-block;">
+              <div class="card card-outline-success x-mini-card" (click)="switchUser(user,projectForm.usersToBeAdded,projectForm.users)"
+                style="display: inline-block;">
                 <div class="card-block">
                   <i class="fa fa-times" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
               </div>
             </li>
           </ul>
-        <hr>
-      </div>
-      <h6>All Users</h6>
-      <p>Select the users you want to add to the project team.</p>
-      <ul class="x-inline-list">
-        <li *ngFor="let user of projectForm.users">
-          <div class="card card-outline-info x-mini-card" (click)="switchUser(user,projectForm.users,projectForm.usersToBeAdded)" style="display: inline-block;">
-            <div class="card-block">
-              <i class="fa fa-plus" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
-          </div>
-        </li>
-      </ul>
-      <hr>
-    </div>
-    <!--
-    <label for="addUsers">Add team member</label>
-    <div class="row">
-      <div class="col-8">
-        <div class="form-group">
-          <input class="form-control" [(ngModel)]="projectForm.userNames" type="text" name="addUsers" id="addUser" placeholder="Enter names one at a time or seperated by comma without whitespace">
+          <hr>
         </div>
-      </div>
-      <div class="col-4">
-        <button class="btn" (click)="findUsers()">Search</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-      
-  
+        <h6>All Users</h6>
+        <p>Select the users you want to add to the project team.</p>
         <ul class="x-inline-list">
-          <li *ngFor="let user of projectForm.usersToBeAdded">
-            <div class="card card-outline-info" style="display: inline-block;">
+          <li *ngFor="let user of projectForm.users">
+            <div class="card card-outline-info x-mini-card" (click)="switchUser(user,projectForm.users,projectForm.usersToBeAdded)" style="display: inline-block;">
               <div class="card-block">
-                <i (click)="removeFromToBeAdded(user)" class="fa fa-times" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
+                <i class="fa fa-plus" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
             </div>
           </li>
         </ul>
-      </div>
-    </div>
-  -->
-
-
-    <div class="row">
-      <div class="col-4">
-        <div class="form-group">
-          <label for="sprintDuration">Sprint Duration in Days</label>
-          <input type="number" [(ngModel)]="newProject.sprintDuration" class="form-control" id="sprintDuration" name="sprintDuration"
-            placeholder="Enter Duration of a Sprint">
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="form-group">
-          <label for="availableStoryPoints">Story Points available per Sprint</label>
-          <input type="number" min="1" [(ngModel)]="newProject.storyPointsPerSprint" class="form-control" id="availableStoryPoints"
-            name="availableStoryPoints" placeholder="Enter available Story Points">
-        </div>
-      </div>
-    </div>
+        <hr>
+      
+    </ng-template>
+    <!-- Create Button and warning-->
     <div class="row">
       <div class="col-2">
-        <button type="submit" class="btn btn-success" (click)="createProject()">Create Project</button>
+        <button type="submit" class="btn btn-success" style="margin-bottom: 10px" (click)="createProject()">Create Project</button>
       </div>
       <div class="col-10">
         <p *ngIf="!projectForm.teamValid" class="text-danger">
@@ -139,4 +112,5 @@
       </div>
     </div>
   </form>
+
 </div>
