@@ -1,7 +1,8 @@
 <div class="mainContainer">
   <h2>Project Explorer</h2>
   <p>
-    Select the project you want to work on!
+    Select the project you want to work on! Only
+    <strong>Project Owner</strong> can create new projects.
   </p>
   <hr>
   <!-- Warnings and Errors -->
@@ -22,7 +23,9 @@
   <!-- List of Projects -->
   <ul class="list-group">
     <li *ngFor="let p of projects " class="list-group-item list-group-item-action" (click)="selectProject(p)" [class.active]="isProjectSelected(p)">
-      <strong>{{p.name}}</strong> | {{p.vision}}
+      <span>
+        <i class="fa" [class.fa-folder]="!isProjectSelected(p)" [class.fa-folder-open]="isProjectSelected(p)" aria-hidden="true"></i>
+        <strong>{{p.name}} </strong> | {{p.vision}}</span>
     </li>
   </ul>
 
@@ -31,6 +34,15 @@
     <hr *ngIf="projects.length>0">
     <h4>
       <i class="fa fa-plus-circle" aria-hidden="true"></i> Create a project</h4>
+      <!--
+      <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active">Project Info</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" >Team</a>
+        </ul>
+      -->
     <div class="form-group">
       <label for="projectName">Project name</label>
       <input type="text" [(ngModel)]="newProject.name" class="form-control" id="projectName" name="projectName" placeholder="Enter project name">
@@ -40,6 +52,39 @@
       <textarea class="form-control" [(ngModel)]="newProject.vision" id="exampleTextarea" name="projectVision" placeholder="Enter project vision"
         rows="3"></textarea>
     </div>
+    <!-- Add team members -->
+    <div class="form-group">
+      <button class="btn" (click)="toggleTeamSelection()">Organize team
+        <i class="fa" [class.fa-chevron-down]="!projectForm.teamSelectionVisible" [class.fa-chevron-up]="projectForm.teamSelectionVisible"
+          aria-hidden="true"></i>
+      </button>
+    </div>
+    <div *ngIf="projectForm.teamSelectionVisible">
+      <div *ngIf="projectForm.usersToBeAdded.length > 0">
+        <h6>Project team</h6>
+        <ul class="x-inline-list">
+            <li *ngFor="let user of projectForm.usersToBeAdded">
+              <div class="card card-outline-success x-mini-card" (click)="switchUser(user,projectForm.usersToBeAdded,projectForm.users)"style="display: inline-block;">
+                <div class="card-block">
+                  <i class="fa fa-times" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
+              </div>
+            </li>
+          </ul>
+        <hr>
+      </div>
+      <h6>All Users</h6>
+      <p>Select the users you want to add to the project team.</p>
+      <ul class="x-inline-list">
+        <li *ngFor="let user of projectForm.users">
+          <div class="card card-outline-info x-mini-card" (click)="switchUser(user,projectForm.users,projectForm.usersToBeAdded)" style="display: inline-block;">
+            <div class="card-block">
+              <i class="fa fa-plus" aria-hidden="true"></i> {{user.name}} {{user.surname}} | {{authService.determinRole(user.role)}}</div>
+          </div>
+        </li>
+      </ul>
+      <hr>
+    </div>
+    <!--
     <label for="addUsers">Add team member</label>
     <div class="row">
       <div class="col-8">
@@ -53,6 +98,8 @@
     </div>
     <div class="row">
       <div class="col">
+      
+  
         <ul class="x-inline-list">
           <li *ngFor="let user of projectForm.usersToBeAdded">
             <div class="card card-outline-info" style="display: inline-block;">
@@ -63,8 +110,8 @@
         </ul>
       </div>
     </div>
+  -->
 
-    <hr *ngIf="projectForm.usersToBeAdded.length > 0">
 
     <div class="row">
       <div class="col-4">

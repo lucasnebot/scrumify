@@ -44,7 +44,11 @@ ul.x-inline-list {
 }
 
 div.x-mini-card {
-  padding: 8px
+  cursor: pointer;
+}
+
+div.x-mini-card>div.card-block {
+  padding: 10px;
 }
 
 /** Disabled list items **/

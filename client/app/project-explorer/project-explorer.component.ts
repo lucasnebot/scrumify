@@ -17,8 +17,10 @@ export class ProjectExplorerComponent implements OnInit {
   userDataAlreadyLoaded: boolean;
   projectForm = {
     userNames: '',
-    usersToBeAdded: [],
-    teamValid: true
+    users: [] as User[],
+    usersToBeAdded: [] as User[],
+    teamValid: true,
+    teamSelectionVisible: false
   };
 
   constructor(
@@ -35,6 +37,7 @@ export class ProjectExplorerComponent implements OnInit {
     } else {
       this.userDataAlreadyLoaded = false;
     }
+
   }
 
   selectProject(project: Project) {
@@ -59,7 +62,6 @@ export class ProjectExplorerComponent implements OnInit {
     }
     this.projectService
       .add(this.newProject)
-      // TODO edit projectId on all Users
       .mergeMap(projectResp => {
         // Display project
         this.projects.push(projectResp);
@@ -81,6 +83,7 @@ export class ProjectExplorerComponent implements OnInit {
         // Clear form
         this.newProject = new Project();
         this.projectForm.usersToBeAdded = [];
+        this.projectForm.users = [];
         this.projectForm.teamValid = true;
       });
   }
@@ -92,27 +95,20 @@ export class ProjectExplorerComponent implements OnInit {
     return false;
   }
 
-  findUsers(){
-    let namesArray: string[] = this.projectForm.userNames.trim().split(',');
-    this.userService.getAll({name: {$in: namesArray}, role: {$ne: 1}}).subscribe((resp) => {
+  toggleTeamSelection(){
+    if(!this.projectForm.teamSelectionVisible && this.projectForm.users.length === 0){
+      this.userService.getAll({role: {$ne: 1}}).subscribe((resp) => {
+        this.projectForm.users = resp;
+        this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
+      })
 
-    resp.forEach((respElem) => {
-      // TODO : extract?
-      let userInluded = this.projectForm.usersToBeAdded.find((e) => {
-        return e.email === respElem.email
-      }); 
-      if(!userInluded){
-        this.projectForm.usersToBeAdded.push(respElem);
-      }
-    })
-     this.projectForm.userNames = '';
-    })
+    } else {
+      this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
+    }
   }
-
-  removeFromToBeAdded(user: User){
-    this.projectForm.usersToBeAdded =  this.projectForm.usersToBeAdded.filter((e) => {
-      return e.email !== user.email
-    });
+  switchUser(user: User, from: User[], to: User[]){
+    to.push(user);
+    from.splice(from.indexOf(user),1);
   }
   validateTeam(): boolean{
     let developers = 0;
