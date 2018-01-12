@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BacklogItem, Vote } from '../shared/model/backlogItem';
-import { BacklogService, EstimationHelperService } from '../shared/service';
+import { BacklogService, EstimationHelperService, ProjectService } from '../shared/service';
 import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
@@ -10,12 +10,12 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class EffortEstimationComponent implements OnInit {
   blisToEstimate: BacklogItem[];
-  constructor(public backlogService: BacklogService, public estHelper: EstimationHelperService) {}
+  constructor(public backlogService: BacklogService, public estHelper: EstimationHelperService, public projectService: ProjectService) {}
 
   ngOnInit() {
-    // Gets
+    // Gets all BLIs
     this.backlogService
-      .getAll({ status: { $in: ['RFE', 'REEST'] } })
+      .getAll({ status: { $in: ['RFE', 'REEST']}, project: this.projectService.project._id })
       .subscribe(docs => {
         this.blisToEstimate = docs;
         this.estHelper.reestimationNeeded = docs.some(

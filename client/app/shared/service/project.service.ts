@@ -20,6 +20,7 @@ export class ProjectService extends GenericService<Project> {
     let jsonProject = localStorage.getItem(LS_PROJECT);
     if(jsonProject){
       this.project = JSON.parse(jsonProject);
+      this.getNumberOfDevelopers();
     }
   }
 
