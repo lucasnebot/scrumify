@@ -50,13 +50,12 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   getBacklogItems() {
-    this.backlogService.getAll({ status: 'RFE' }).subscribe(result => {
+    this.backlogService.getAll({ status: 'RFS' , project: this.projectService.project._id}).subscribe(result => {
       this.backlogItems = result;
     });
   }
 
   getSprints(setSelectedIndex?:number) {
-    console.log('get sprints called !')
     this.sprintService.getAll().subscribe(result => {
       if (result.length > 0) {
         this.sprints = result;
@@ -74,7 +73,6 @@ export class SprintPlanningComponent implements OnInit {
     this.enableEditing = true;
     //if bli are present
     if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
-      console.log('disable edit')
       //sprint has already been planned
       this.enableEditing = false;
       //get bli's for current selected sprint
