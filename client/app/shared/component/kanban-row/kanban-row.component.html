@@ -29,9 +29,9 @@
             <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
                 [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
                 <div [id]="i" class="card-block">
-                        <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
-                        <h6 [id]="i" class="card-subtitle mb-2 text-muted">
-                        <span [id]="i" *ngIf="task.user">Assigned</span>
+                    <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
+                    <h6 [id]="i" class="card-subtitle mb-2 text-muted">
+                        <span [id]="i" *ngIf="task.user">Assigned to {{getDeveloperById(task.user).surname}}</span>
                         <span [id]="i" *ngIf="!task.user">Not Assigned</span>
                     </h6>
                     <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
@@ -81,30 +81,10 @@
             <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
                 min="1" [max]="getAvailableStoryPoints()" required>
         </div>
-
-        <div class="form-group">
-            <label for="newTaskuserAssignment">Assign to User</label>
-            <div class="input-group">
-                <input [(ngModel)]="userSearchString" id="newTaskuserAssignment" type="text" class="form-control" placeholder="Search for User by Lastname"
-                    name="newTaskuserAssignment" required>
-                <div class="input-group-btn">
-                    <button class="btn btn-default" (click)="searchForUser('new')" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-            </div>
-            <br> Currently Assigned:
-            <div *ngIf="userFound" class="list-group">
-                <li class="list-group-item justify-content-between"> {{userFound.name}}, {{userFound.surname}}
-                    <button type="button" class="btn btn-sm fa fa-trash-o" (click)="userFound = null"></button>
-
-                </li>
-            </div>
-            <br>
-            <div *ngIf="errorNotFound" class="alert alert-warning" role="alert">
-                <strong>We are sorry.</strong> We could not find anybody by that name !
-            </div>
-        </div>
+        <label for="assignedDeveloper">Assign a Devloper</label>
+        <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="newTask.user" class="form-control">
+            <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
+        </select>
     </div>
 
 
@@ -136,6 +116,12 @@
             <label for="estimation">Estimation</label>
             <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
                 name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
+        </div>
+        <div class="form-group">
+            <label for="assignedDeveloper">Assigned Devloper</label>
+            <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control">
+                <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
+            </select>
         </div>
     </div>
     <div class="modal-footer">

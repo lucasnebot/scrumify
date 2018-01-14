@@ -46,6 +46,7 @@ export class KanbanRowComponent implements OnInit {
   }
 
   saveNewTask() {
+    console.log(this.newTask);
     this.newTask.backlogItem = this.backlogItem._id;
     this.taskService.add(this.newTask).subscribe((newTask: Task) => {
       this.tasks.push(newTask);
@@ -54,6 +55,12 @@ export class KanbanRowComponent implements OnInit {
       //reset form
       this.newTask = this.getEmptyTask();
     });
+  }
+
+  getDeveloperById(id:string) : User{
+    return this.developers.find((dev)=>{
+      if(dev._id == id) return true;
+    })
   }
 
   sortTasks() {
@@ -80,7 +87,7 @@ export class KanbanRowComponent implements OnInit {
   }
 
   open(content, task?: Task) {
-
+    console.log(this.developers)
     //reset stuff
     this.errorNotFound = false
     this.userFound = null;
@@ -146,34 +153,5 @@ export class KanbanRowComponent implements OnInit {
       });
     }
   }
-
-  searchForUser(mode: String){
-    if(mode == 'new'){
-      this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
-        if(result.length > 0){
-          this.errorNotFound = false;
-          this.newTask.user = result[0]._id;
-          this.userFound = result[0];
-        }
-        else{
-          this.errorNotFound = true;
-          this.userFound = null;
-        }
-      }))
-
-      if(mode == 'edit'){
-        this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
-          if(result.length > 0){
-            this.errorNotFound = false;
-            this.selectedTask.user = result[0]._id;
-          }
-          else{
-            this.errorNotFound = true;
-            this.userFound = null;
-          }
-        }))
-      }
-    }
-    }
 
 }

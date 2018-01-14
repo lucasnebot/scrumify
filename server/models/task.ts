@@ -21,10 +21,10 @@ export const taskSchema = new mongoose.Schema({
           required: false
       },
       backlogItem:{
-        type: [mongoose.Schema.Types.ObjectId]
+        type: mongoose.Schema.Types.ObjectId
       },
-    User: {
-        type: [mongoose.Schema.Types.ObjectId]
+    user: {
+        type: mongoose.Schema.Types.ObjectId
     },
     doneTimestamp: {
         type: Date,
