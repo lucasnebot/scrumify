@@ -92,16 +92,15 @@ export class KanbanRowComponent implements OnInit {
   }
 
   getBliStatus(): string {
-    let status;
-    if (this.tasks.length == 0) {
-      status = 'no_tasks';
-    }
-    status = 'done';
+    let status = 'done;'
     this.tasks.forEach(task => {
       if (task.status.toLowerCase() != 'done') {
         status = 'active';
       }
     });
+    if (this.tasks.length == 0) {
+      status = 'no_tasks';
+    }
     
     return status;
   }

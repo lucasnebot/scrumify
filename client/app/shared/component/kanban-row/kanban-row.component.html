@@ -31,7 +31,7 @@
                 <div [id]="i" class="card-block">
                     <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
                     <h6 [id]="i" class="card-subtitle mb-2 text-muted">
-                        <span [id]="i" *ngIf="task.user">Assigned to {{getDeveloperById(task.user).surname}}</span>
+                        <span [id]="i" *ngIf="task.user">Assigned to {{getDeveloperById(task.user).name}}</span>
                         <span [id]="i" *ngIf="!task.user">Not Assigned</span>
                     </h6>
                     <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
