@@ -57,10 +57,10 @@ export class KanbanRowComponent implements OnInit {
     });
   }
 
-  getDeveloperById(id:string) : User{
-    return this.developers.find((dev)=>{
-      if(dev._id == id) return true;
-    })
+  getDeveloperById(id: string): User {
+    return this.developers.find(dev => {
+      if (dev._id == id) return true;
+    });
   }
 
   sortTasks() {
@@ -72,6 +72,38 @@ export class KanbanRowComponent implements OnInit {
         }
       });
     });
+  }
+
+  getCardStatusClass(): string {
+    let active_status = 'card-outline-primary';
+    let no_tasks_status = 'card-outline-secondary';
+    let done_status = 'card-outline-success';
+
+    switch (this.getBliStatus()) {
+      case 'active':
+        return active_status;
+      case 'no_tasks':
+        return no_tasks_status;
+      case 'done':
+        return done_status;
+      default:
+        return no_tasks_status;
+    }
+  }
+
+  getBliStatus(): string {
+    let status;
+    if (this.tasks.length == 0) {
+      status = 'no_tasks';
+    }
+    status = 'done';
+    this.tasks.forEach(task => {
+      if (task.status.toLowerCase() != 'done') {
+        status = 'active';
+      }
+    });
+    
+    return status;
   }
 
   getUsedStoryPoints() {
@@ -87,16 +119,15 @@ export class KanbanRowComponent implements OnInit {
   }
 
   open(content, task?: Task) {
-    console.log(this.developers)
+    console.log(this.developers);
     //reset stuff
-    this.errorNotFound = false
+    this.errorNotFound = false;
     this.userFound = null;
-    this.userSearchString = "";
+    this.userSearchString = '';
     //
     if (task != null) {
       this.selectedTask = task;
-    }
-    else{
+    } else {
       this.selectedTask = this.getEmptyTask();
     }
     this.modal = this.modalService.open(content);
@@ -139,19 +170,17 @@ export class KanbanRowComponent implements OnInit {
     let stateIndex = myArray[0].id;
     //
     let newState = this.taskStates[stateIndex].toUpperCase();
-    console.log(event.target);
-    
-    
     //if state has changed
     if (task.status != newState) {
       task.status = newState;
       if (task.status.toUpperCase() == 'DONE') {
         task.doneTimestamp = moment().format();
+        //if task has been dropped to done, maybe its the last 
+        //one and the bli needs to be set to done as well.
       }
 
       this.taskService.edit(task._id, task).subscribe(result => {
       });
     }
   }
-
 }

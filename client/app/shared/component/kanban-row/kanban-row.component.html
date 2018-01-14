@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="col-2">
-        <div class="card text-center">
+        <div class="card text-center {{getCardStatusClass()}}">
             <div class="card-block">
                 <h4 class="card-title">{{backlogItem.title | truncate: 15}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
