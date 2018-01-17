@@ -46,11 +46,18 @@ export class KanbanRowComponent implements OnInit {
   }
 
   saveNewTask() {
-    console.log(this.newTask);
     this.newTask.backlogItem = this.backlogItem._id;
     this.taskService.add(this.newTask).subscribe((newTask: Task) => {
       this.tasks.push(newTask);
       this.sortTasks();
+
+      //if new status is not done
+      this.backlogService
+        .edit(this.backlogItem._id, { status: 'SPRINT' })
+        .subscribe(result => {
+          this.backlogItem = result;
+        });
+
       this.modal.close();
       //reset form
       this.newTask = this.getEmptyTask();
@@ -118,7 +125,6 @@ export class KanbanRowComponent implements OnInit {
   }
 
   open(content, task?: Task) {
-    console.log(this.developers);
     //reset stuff
     this.errorNotFound = false;
     this.userFound = null;
@@ -174,12 +180,21 @@ export class KanbanRowComponent implements OnInit {
       task.status = newState;
       if (task.status.toUpperCase() == 'DONE') {
         task.doneTimestamp = moment().format();
-        //if task has been dropped to done, maybe its the last 
+        //if task has been dropped to done, maybe its the last
         //one and the bli needs to be set to done as well.
+        if (
+          this.getBliStatus() == 'done' &&
+          this.backlogItem.status != 'DONE'
+        ) {
+          this.backlogService
+            .edit(this.backlogItem._id, { status: 'DONE' })
+            .subscribe(result => {
+              console.log('bli updated');
+            });
+        }
       }
-
-      this.taskService.edit(task._id, task).subscribe(result => {
-      });
     }
+
+    this.taskService.edit(task._id, task).subscribe(result => {});
   }
 }
