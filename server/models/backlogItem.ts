@@ -31,6 +31,10 @@ export const backlogItemSchema = new mongoose.Schema({
   },
   project: {
     type: mongoose.Schema.Types.ObjectId
+  },
+  sprint: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false
   }
 });
 
