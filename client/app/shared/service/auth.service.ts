@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { environment } from '../../../environments/environment';
 import { User } from '../model';
-import  { UserService } from './user.service';
+import { UserService } from './user.service';
 import {LS_PROJECT} from './project.service';
 
 export const LS_TOKEN_KEY = 'scrumifyToken';
@@ -19,7 +19,7 @@ interface JWTClaimSet {
 @Injectable()
 export class AuthService {
   authenticated = false;
-  //! Contains properties: name, email and role
+  // !Contains properties: name, email and role
   activeUser: User;
 
   constructor(private http: HttpClient, protected userService: UserService) {
@@ -45,6 +45,7 @@ export class AuthService {
         }
       });
   }
+
   /**
    * Sign out the active User and remove all connected artifacts
    */
@@ -53,9 +54,10 @@ export class AuthService {
     this.authenticated = false;
     this.activeUser = null;
     localStorage.removeItem(LS_TOKEN_KEY);
-    //! remove project from local storage when logging out
+    // !remove project from local storage when logging out
     localStorage.removeItem(LS_PROJECT);
   }
+
   /**
    * Check for token and get user information from db
    */
@@ -68,11 +70,10 @@ export class AuthService {
       this.activeUser = claimSet as User;
 
       this.userService.getAll({email: claimSet.email}).subscribe((resp) => {
-        if(resp.length === 1){
+        if (resp.length === 1) {
           this.activeUser = resp[0];
         }
-      })
-      
+      });
     }
   }
   /**

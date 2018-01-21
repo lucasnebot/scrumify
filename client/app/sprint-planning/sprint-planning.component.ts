@@ -138,6 +138,7 @@ export class SprintPlanningComponent implements OnInit {
       this.getSprints(this.newSprint.sprintNo);
       this.modal.close();
     });
+    this.projectService.setActiveSprint(this.newSprint);
   }
 
   getLatestSprint() {
