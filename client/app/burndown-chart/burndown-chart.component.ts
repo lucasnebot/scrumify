@@ -29,11 +29,30 @@ export class BurndownChartComponent implements OnInit {
   private lineChartType = 'line';
   private lineChartOptions = {
     responsive: true,
-    tooltip : {
-      valueSuffix: ' hrs',
-      crosshairs: true,
-      shared: true
-    }
+    title: {
+      display: true,
+      text: 'Burndown Chart'
+  },
+  legend: {
+    display: true,
+    layout: 'vertical',
+    align: 'right',
+    verticalAlign: 'middle',
+    borderWidth: 0
+  },
+  scales: {
+      yAxes: [{
+          ticks: {
+            max: this.totalStoryPoints,
+            min: 0,
+          },
+          display: true,
+          scaleLabel: {
+              display: true,
+              labelString: 'Story Points'
+          }
+      }],
+  },
   };
 
   public lineChartColors:Array<any> = [
@@ -60,8 +79,8 @@ export class BurndownChartComponent implements OnInit {
       this.backlogItemService.getAll({ _id: { $in: sprint.backlogItems } }).subscribe(items => {
         this.backlogItems = items;
         this.setLineChartLabels();
-        this.calculateIdealBurn();
-        this.calculateActualBurn();
+        this.calculateAverage();
+        this.calculateActual();
       });
     });
   }
@@ -72,13 +91,13 @@ export class BurndownChartComponent implements OnInit {
     const daysBetween: number = endMomet.diff(startMoment, 'days');
 
     // Set start date
-    this.lineChartLabels.push(startMoment.format('LL'));
+    this.lineChartLabels.push(startMoment.format('DD. MMM'));
     for (let i = 0; i < daysBetween; i++) {
-      this.lineChartLabels.push(startMoment.add(1, 'days').format('LL'));
+      this.lineChartLabels.push(startMoment.add(1, 'days').format('DD. MMM'));
     }
   }
 
-  private calculateActualBurn() {
+  private calculateActual() {
     const localDataArray: number[] = [];
     let localStoryPoints = this.totalStoryPoints;
 
@@ -89,7 +108,7 @@ export class BurndownChartComponent implements OnInit {
             const a = moment(day);
             let apply = false;
             tasks.forEach(task => {
-              const b = moment(task.doneTimestamp);
+              const b = moment(task.doneTimestamp).format('DD. MMM');
 
               if (a.diff(b, 'days') === 0) {
                 localStoryPoints = localStoryPoints - task.estimation;
@@ -101,7 +120,7 @@ export class BurndownChartComponent implements OnInit {
             }
           });
           this.actualBurnData = [
-            {data: localDataArray, label: 'Actual Burn', marker: { radius: 6 }}
+            {data: localDataArray, label: 'Actual', marker: { radius: 6 }, fill: false}
           ];
         }
         this.lineChartData = this.idealBurnData.concat(this.actualBurnData);
@@ -112,7 +131,7 @@ export class BurndownChartComponent implements OnInit {
   /**
    * Calculates the data for an ideal burndown
    */
-  private calculateIdealBurn() {
+  private calculateAverage() {
     const sprintDuration: number = this.projectService.project.sprintDuration;
     const pointsPerDay: number = this.totalStoryPoints / sprintDuration;
     const localDataArray: number[] = [];
@@ -125,7 +144,7 @@ export class BurndownChartComponent implements OnInit {
     }
     // Set data in object variable
     this.idealBurnData = [
-      { data: localDataArray, label: 'Ideal Burn', lineWidth: 2 }
+      { data: localDataArray, label: 'Average (Velocity)', lineWidth: 2, fill: false }
     ];
   }
 
