@@ -22,6 +22,8 @@ export class BurndownChartComponent implements OnInit {
   private backlogItems: BacklogItem[];
   private totalStoryPoints: number;
 
+  private isDataLoaded = false;
+
   private lineChartLabels: Array<any> = [];
   private idealBurnData: Array<any> = [];
   private actualBurnData: Array<any> = [];
@@ -64,12 +66,10 @@ export class BurndownChartComponent implements OnInit {
     }
   ];
 
-  private isDataLoaded: boolean;
 
   constructor(private projectService: ProjectService,
     private sprintService: SprintService, private taskService: TaskService,
     private backlogItemService: BacklogService) {
-      this.isDataLoaded = false;
   }
 
   ngOnInit() {
