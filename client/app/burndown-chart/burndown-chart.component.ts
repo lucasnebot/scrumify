@@ -21,15 +21,15 @@ export class BurndownChartComponent implements OnInit {
   private sprint: Sprint;
   private backlogItems: BacklogItem[];
   private totalStoryPoints: number;
-
-  private isDataLoaded = false;
-
-  private lineChartLabels: Array<any> = [];
   private idealBurnData: Array<any> = [];
   private actualBurnData: Array<any> = [];
-  private lineChartData: Array<any> = [];
-  private lineChartType = 'line';
-  private lineChartOptions = {
+
+  isDataLoaded = false;
+
+  lineChartLabels: Array<any> = [];
+  lineChartData: Array<any> = [];
+  lineChartType = 'line';
+  lineChartOptions = {
     responsive: true,
     title: {
       display: true,
@@ -57,7 +57,7 @@ export class BurndownChartComponent implements OnInit {
   },
   };
 
-  public lineChartColors:Array<any> = [
+  public lineChartColors: Array<any> = [
     { // red
       borderColor: 'rgba(255,0,0,0.25)',
     },
