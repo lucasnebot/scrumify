@@ -12,8 +12,8 @@ import * as moment from 'moment';
 })
 export class SprintPlanningComponent implements OnInit {
   modal;
-  enableEditing: boolean = true;
-  progressBarValue: number = 0;
+  enableEditing = true;
+  progressBarValue = 0;
   progressbarLabel: string;
   currentStoryPointUsage: number;
   sprintMinDate: string;
@@ -29,13 +29,9 @@ export class SprintPlanningComponent implements OnInit {
   };
 
   newSprint: Sprint;
-  constructor(
-    public projectService: ProjectService,
-    public backlogService: BacklogService,
-    public sprintService: SprintService,
-    private modalService: NgbModal
-  ) {
-    this.newSprint =  {
+  constructor(public projectService: ProjectService, public backlogService: BacklogService, public sprintService: SprintService,
+    private modalService: NgbModal) {
+    this.newSprint = {
       start: '',
       end: '',
       sprintNo: 0,
@@ -45,37 +41,41 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getBacklogItems();
     this.getSprints();
+    this.getBacklogItems();
   }
 
-  getBacklogItems() {
-    this.backlogService.getAll({ status: 'RFS' , project: this.projectService.project._id}).subscribe(result => {
-      this.backlogItems = result;
-    });
-  }
+  getSprints(setSelectedIndex?: number) {
+    const activeProject = this.projectService.project;
+    this.sprintService.getAll({ project: activeProject._id }).subscribe(result => {
+      this.sprints = result;
 
-  getSprints(setSelectedIndex?:number) {
-    this.sprintService.getAll().subscribe(result => {
-      if (result.length > 0) {
-        this.sprints = result;
-        if(setSelectedIndex){
-          this.selectedSprint = this.sprints[setSelectedIndex];
-        }else{
-          this.selectedSprint = this.sprints[0];
-        }
+      // Select active Sprint as default
+      if (activeProject.activeSprint) {
+        this.selectedSprint = this.sprints.filter(sprint => {
+          if (activeProject.activeSprint === sprint._id) {
+            return sprint;
+          }
+        })[0];
+
         this.getSprintItems();
       }
     });
   }
 
+  getBacklogItems() {
+    this.backlogService.getAll({ status: 'RFS', project: this.projectService.project._id }).subscribe(result => {
+      this.backlogItems = result;
+    });
+  }
+
   getSprintItems() {
     this.enableEditing = true;
-    //if bli are present
+    // if bli are present
     if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
-      //sprint has already been planned
+      // sprint has already been planned
       this.enableEditing = false;
-      //get bli's for current selected sprint
+      // get bli's for current selected sprint
       this.backlogService
         .getAll({ _id: { $in: this.selectedSprint.backlogItems } })
         .subscribe(result => {
@@ -119,7 +119,7 @@ export class SprintPlanningComponent implements OnInit {
    */
   open(content, initial?) {
     if (!initial) {
-      let minDate = moment(this.getLatestSprint().end).format('YYYY-MM-DD');
+      const minDate = moment(this.getLatestSprint().end).format('YYYY-MM-DD');
       this.sprintMinDate = minDate;
       this.newSprint.start = minDate;
       this.calcEndDate();
@@ -127,7 +127,7 @@ export class SprintPlanningComponent implements OnInit {
       this.sprintMinDate = moment().format('YYYY-MM-DD');
     }
     this.modal = this.modalService.open(content);
-    this.modal.result.then(result => {}, reason => {});
+    this.modal.result.then(result => { }, reason => { });
   }
 
   saveSprint() {
@@ -148,7 +148,7 @@ export class SprintPlanningComponent implements OnInit {
   saveBliToSprint() {
     this.enableEditing = false;
     this.backlogItemsForSprint.forEach(item => {
-      //no array entry yet
+      // no array entry yet
       if (!this.selectedSprint.backlogItems) {
         this.selectedSprint.backlogItems = new Array();
       }
@@ -156,16 +156,16 @@ export class SprintPlanningComponent implements OnInit {
     });
 
     this.sprintService
-      //Write Bli's to Sprint
+      // Write Bli's to Sprint
       .edit(this.selectedSprint._id, this.selectedSprint)
       .subscribe(() => {
-        //Change Status to SPRINT
+        // Change Status to SPRINT
         this.backlogService
           .editMany(
-            { _id: { $in: this.selectedSprint.backlogItems } },
-            { $set: { status: 'SPRINT' } }
+          { _id: { $in: this.selectedSprint.backlogItems } },
+          { $set: { status: 'SPRINT' } }
           )
-          .subscribe(result => {});
+          .subscribe(result => { });
       });
   }
 
@@ -181,10 +181,10 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   calcEndDate() {
-    let sprintDuration = this.projectService.project.sprintDuration;
+    const sprintDuration = this.projectService.project.sprintDuration;
     this.newSprint.end = moment(this.newSprint.start)
       .add(sprintDuration, 'days')
       .format('YYYY-MM-DD');
-    //this.projectService.project.sprintDuration
+    // this.projectService.project.sprintDuration
   }
 }

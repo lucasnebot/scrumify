@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Input } from '@angular/core/src/metadata/directives';
 import { Sprint } from '../shared/model/sprint';
 import * as moment from 'moment';
-import { Moment } from 'moment';
 import { ProjectService } from '../shared/service/project.service';
 import { SprintService } from '../shared/service/sprint.service';
 import { forEach } from '@angular/router/src/utils/collection';
@@ -86,8 +85,8 @@ export class BurndownChartComponent implements OnInit {
   }
 
   private setLineChartLabels() {
-    const startMoment: Moment = moment(this.sprint.start);
-    const endMomet: Moment = moment(this.sprint.end);
+    const startMoment: moment.Moment = moment(this.sprint.start);
+    const endMomet: moment.Moment = moment(this.sprint.end);
     const daysBetween: number = endMomet.diff(startMoment, 'days');
 
     // Set start date
