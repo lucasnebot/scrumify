@@ -58,6 +58,7 @@
         <div class="card-block">
           <div class="card-text">
             <!-- Implement burndown -->
+            <app-burndown-chart *ngIf="selectedSprint._id" [sprint]="selectedSprint"></app-burndown-chart>
           </div>
         </div>
       </div>

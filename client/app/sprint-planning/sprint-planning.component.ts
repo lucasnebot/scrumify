@@ -78,7 +78,7 @@ export class SprintPlanningComponent implements OnInit {
   getSprintItems() {
     this.enableEditing = true;
     // if bli are present
-    if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
+    if (this.selectedSprint && this.selectedSprint.backlogItems) {
       // sprint has already been planned
       this.enableEditing = false;
       // get bli's for current selected sprint
