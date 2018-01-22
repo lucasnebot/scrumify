@@ -22,7 +22,6 @@ const routes: Routes = [
   {path: 'scrumboard', component: ScrumboardComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'projects', component: ProjectExplorerComponent, canActivate: [AuthGuardService] },
-  {path: 'burndown-chart', component: BurndownChartComponent, canActivate: [AuthGuardService ]},
   {path: '**', component: HomeComponent} // wildcard route! Has to be the LAST route!
 ];
 
