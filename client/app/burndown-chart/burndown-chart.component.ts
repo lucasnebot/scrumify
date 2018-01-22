@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Input } from '@angular/core/src/metadata/directives';
+import { Component, OnInit, Input } from '@angular/core';
 import { Sprint } from '../shared/model/sprint';
 import * as moment from 'moment';
-import { Moment } from 'moment';
 import { ProjectService } from '../shared/service/project.service';
 import { SprintService } from '../shared/service/sprint.service';
 import { forEach } from '@angular/router/src/utils/collection';
@@ -10,15 +8,16 @@ import { TaskService } from '../shared/service/task.service';
 import { Task } from '../shared/model/task';
 import { BacklogItem } from '../shared/model/index';
 import { BacklogService } from '../shared/service/backlog.service';
+import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'app-burndown-chart',
   templateUrl: './burndown-chart.component.html',
   styleUrls: ['./burndown-chart.component.css'],
 })
-export class BurndownChartComponent implements OnInit {
+export class BurndownChartComponent implements OnInit, OnChanges {
 
-  private sprint: Sprint;
+  @Input() sprint: Sprint;
   private backlogItems: BacklogItem[];
   private totalStoryPoints: number;
   private idealBurnData: Array<any> = [];
@@ -34,27 +33,27 @@ export class BurndownChartComponent implements OnInit {
     title: {
       display: true,
       text: 'Burndown Chart'
-  },
-  legend: {
-    display: true,
-    layout: 'vertical',
-    align: 'right',
-    verticalAlign: 'middle',
-    borderWidth: 0
-  },
-  scales: {
+    },
+    legend: {
+      display: true,
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'middle',
+      borderWidth: 0
+    },
+    scales: {
       yAxes: [{
-          ticks: {
-            max: this.totalStoryPoints,
-            min: 0,
-          },
+        ticks: {
+          max: this.totalStoryPoints,
+          min: 0,
+        },
+        display: true,
+        scaleLabel: {
           display: true,
-          scaleLabel: {
-              display: true,
-              labelString: 'Story Points'
-          }
+          labelString: 'Story Points'
+        }
       }],
-  },
+    },
   };
 
   public lineChartColors: Array<any> = [
@@ -74,20 +73,22 @@ export class BurndownChartComponent implements OnInit {
 
   ngOnInit() {
     this.totalStoryPoints = this.projectService.project.storyPointsPerSprint;
-    this.sprintService.getOne(this.projectService.project.activeSprint).subscribe(sprint => {
-      this.sprint = sprint;
-      this.backlogItemService.getAll({ _id: { $in: sprint.backlogItems } }).subscribe(items => {
-        this.backlogItems = items;
-        this.setLineChartLabels();
-        this.calculateAverage();
-        this.calculateActual();
-      });
+    this.setLineChartLabels();
+  }
+
+  ngOnChanges(changes) {
+    this.isDataLoaded = false;
+    this.lineChartData = [];
+    this.backlogItemService.getAll({ _id: { $in: this.sprint.backlogItems } }).subscribe(items => {
+      this.backlogItems = items;
+      this.calculateAverage();
+      this.calculateActual();
     });
   }
 
   private setLineChartLabels() {
-    const startMoment: Moment = moment(this.sprint.start);
-    const endMomet: Moment = moment(this.sprint.end);
+    const startMoment: moment.Moment = moment(this.sprint.start);
+    const endMomet: moment.Moment = moment(this.sprint.end);
     const daysBetween: number = endMomet.diff(startMoment, 'days');
 
     // Set start date
@@ -120,7 +121,7 @@ export class BurndownChartComponent implements OnInit {
             }
           });
           this.actualBurnData = [
-            {data: localDataArray, label: 'Actual', marker: { radius: 6 }, fill: false}
+            { data: localDataArray, label: 'Actual', marker: { radius: 6 }, fill: false }
           ];
         }
         this.lineChartData = this.idealBurnData.concat(this.actualBurnData);
