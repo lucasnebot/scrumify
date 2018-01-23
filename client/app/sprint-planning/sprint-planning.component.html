@@ -9,7 +9,7 @@
         <button class="btn" (click)="open(newModal,true)">New Sprint</button>
       </div>
       <div class="col-{breakpoint}-auto">
-        <select class="form-control" [ngModel]="selectedSprint" (ngModelChange)="setSelectedSprint($event)" name="sel3">
+        <select class="form-control" [(ngModel)]="selectedSprint" (ngModelChange)="setSelectedSprint($event)" name="sel3">
             <option [ngValue]="sprint" *ngFor="let sprint of sprints">Sprint - No. {{sprint.sprintNo}}</option>
           </select>
       </div>
@@ -41,23 +41,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Burndown Chart -->
-  <div class="row">
-    <div class="col">
-      <div *ngIf="selectedSprint._id" class="card">
-        <h5 class="card-header">
-          <i class="fa fa-line-chart text-success" aria-hidden="true"></i> - Burndown-Chart</h5>
-        <div class="card-block">
-          <div class="card-text">
-            <!-- Implement burndown -->
-            <app-burndown-chart *ngIf="selectedSprint._id" [sprint]="selectedSprint"></app-burndown-chart>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Sprint edit -->
 <div class="row">
@@ -141,7 +124,6 @@
           </button>
           <strong>Hint: </strong>You can set the sprint duration in general project setup.
         </div>
-
       </div>
     </div>
   </div>
