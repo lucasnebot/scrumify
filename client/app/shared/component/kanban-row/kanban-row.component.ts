@@ -108,7 +108,6 @@ export class KanbanRowComponent implements OnInit {
     if (!this.tasks.length) {
       status = 'no_tasks';
     }
-
     return status;
   }
 
@@ -184,22 +183,26 @@ export class KanbanRowComponent implements OnInit {
     if (task.status != newState) {
       task.status = newState;
       if (task.status.toUpperCase() == 'DONE') {
+        console.log('set to done');
         task.doneTimestamp = moment().format();
         //if task has been dropped to done, maybe all story points are used
         //and the bli needs to be set to done as well.
-        if (
-          this.getBliStatus() == 'done' &&
-          this.getAvailableStoryPoints() == 0
-        ) {
+        console.log(this.getAvailableStoryPoints());
+        if (this.getAvailableStoryPoints() == 0) {
+          console.log('should go here ');
+          console.log(this.getAvailableStoryPoints());
           this.backlogService
             .edit(this.backlogItem._id, { status: 'DONE' })
             .subscribe(result => {
               console.log('bli set to DONE' + task.doneTimestamp);
+              this.backlogItem.status = 'DONE';
             });
         }
       }
     }
 
-    this.taskService.edit(task._id, task).subscribe(result => {});
+    this.taskService.edit(task._id, task).subscribe(result => {
+      //task updated
+    });
   }
 }
