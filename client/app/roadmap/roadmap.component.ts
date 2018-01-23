@@ -5,6 +5,7 @@ import {
   AuthService,
   ProjectService
 } from '../shared/service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-roadmap',
@@ -17,7 +18,7 @@ export class RoadmapComponent implements OnInit {
   milestone: Milestone = {
     title: '',
     description: '',
-    date: '',
+    date: moment().format('YYYY-MM-DD'),
     project: this.projectService.project._id
   };
 
@@ -40,7 +41,7 @@ export class RoadmapComponent implements OnInit {
       // Clear Form and hide it
       this.milestone.title = '';
       this.milestone.description = '';
-      this.milestone.date = '';
+      this.milestone.date = moment().format('YYYY-MM-DD');
     }
     this.formHidden = !this.formHidden;
   }
@@ -53,20 +54,21 @@ export class RoadmapComponent implements OnInit {
       project: this.milestone.project
     };
     this.milestoneService.add(milestone).subscribe(resp => {
-      this.ngOnInit();
+      this.milestones.push(resp);
+      this.sortMilestones();
     });
   }
 
-  deleteMilestone(id: string): void {
+  deleteMilestone(id: string, index: number): void {
     this.milestoneService.delete(id).subscribe(resp => {
-      this.ngOnInit();
+      this.milestones.splice(index,1);
     });
   }
 
-  achieveMilestone(id: string): void {
+  achieveMilestone(id: string, index: number): void {
     let update = { achieved: true };
     this.milestoneService.edit(id, update).subscribe(resp => {
-      this.ngOnInit();
+    this.milestones[index].achieved = true;
     });
   }
 
