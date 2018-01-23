@@ -50,6 +50,11 @@ export class SprintPlanningComponent implements OnInit {
     this.sprintService.getAll({ project: activeProject._id }).subscribe(result => {
       this.sprints = result;
 
+      // Sort Sprints by end date asc
+      this.sprints.sort((a, b) => {
+        return +new Date(a.end) - +new Date(b.end);
+      });
+
       // Select active Sprint as default
       if (activeProject.activeSprint) {
         this.selectedSprint = this.sprints.filter(sprint => {
@@ -59,8 +64,8 @@ export class SprintPlanningComponent implements OnInit {
         })[0];
 
         // Set default settings for new Sprint
-        this.newSprint.start = moment(this.selectedSprint.end).add(1, 'day').format('YYYY-MM-DD');
-        this.newSprint.end = moment(this.selectedSprint.end)
+        this.newSprint.start = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');;
+        this.newSprint.end = moment(this.getLatestSprint().end)
                             .add(this.projectService.project.sprintDuration + 1, 'day').format('YYYY-MM-DD');
 
         this.getSprintItems();
@@ -126,7 +131,7 @@ export class SprintPlanningComponent implements OnInit {
    */
   open(content, initial?) {
     if (!initial) {
-      const minDate = moment(this.getLatestSprint().end).format('YYYY-MM-DD');
+      const minDate = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');
       this.sprintMinDate = minDate;
       this.newSprint.start = minDate;
       this.calcEndDate();
@@ -149,7 +154,11 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   getLatestSprint() {
-    if (this.sprints.length > 0) return this.sprints[this.sprints.length - 1];
+    if (this.sprints.length > 0) {
+      return this.sprints[this.sprints.length - 1];
+    } else {
+      return this.newSprint;
+    }
   }
 
   saveBliToSprint() {
