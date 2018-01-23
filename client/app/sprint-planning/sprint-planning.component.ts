@@ -163,6 +163,7 @@ export class SprintPlanningComponent implements OnInit {
     this.sprintService
       // Write Bli's to Sprint
       .add(this.selectedSprint).subscribe(savedSprint => {
+        this.selectedSprint = savedSprint;
         // Change Status to SPRINT
         this.backlogService
           .editMany(

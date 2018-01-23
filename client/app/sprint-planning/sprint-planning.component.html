@@ -1,6 +1,10 @@
 <div class="mainContainer">
 
   <h2>Sprint Planning </h2>
+  <p>
+    In the Sprint Planning, the User Stories, which are approved and estimated, are taken up
+    for discussion and will be added into the Sprint Backlog accordingly
+  </p>
   <br>
   <!-- Sprint Creation and dropdown -->
   <div class="container">
@@ -9,7 +13,7 @@
         <button class="btn" (click)="open(newModal,true)">New Sprint</button>
       </div>
       <div class="col-{breakpoint}-auto">
-        <select class="form-control" [ngModel]="selectedSprint" (ngModelChange)="setSelectedSprint($event)" name="sel3">
+        <select class="form-control" [(ngModel)]="selectedSprint" (ngModelChange)="setSelectedSprint($event)" name="sel3">
             <option [ngValue]="sprint" *ngFor="let sprint of sprints">Sprint - No. {{sprint.sprintNo}}</option>
           </select>
       </div>
@@ -125,7 +129,6 @@
           </button>
           <strong>Hint: </strong>You can set the sprint duration in general project setup.
         </div>
-
       </div>
     </div>
   </div>
