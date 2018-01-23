@@ -1,6 +1,12 @@
 <div class="mainContainer">
   <h2>Backlog</h2>
-  <br>
+  <p>Here, the
+    <strong>Product Owner</strong> can add new Items to the Backlog. Items can be Epics or User Stories, while only a User Story
+    can be estimated. To convert from one to another just hit the
+    <strong>edit button</strong> of an existing item.</p>
+  The order of the items is also the prioritisation and can be changed via
+  <strong>drag and drop</strong>.
+  <br><br>
 
   <div class="row">
     <div class="col-10">
@@ -15,28 +21,29 @@
             <th></th>
           </tr>
         </thead>
-        <tbody dnd-sortable-container [sortableData]="backlogItems">
-          <tr *ngFor="let item of backlogItems; let i = index" class="" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-            <td><span class="badge badge-info">{{backlogService.getType(item)}}</span></td>
-            <th>{{item.title}}</th>
+        <tbody dnd-sortable-container [sortableData]="backlogItems" drag>
+          <tr *ngFor="let item of backlogItems; let i = index" class="" dnd-sortable [dragEnabled]="authService.allowedFor(['Product Owner'])" [sortableIndex]="i" (onDropSuccess)="updateOrder()">
+            <td>
+              <span class="badge badge-info">{{backlogService.getType(item)}}</span>
+            </td>
+            <th>{{item.title |truncate: 15}}</th>
             <td>{{item.description | truncate: 15}}</td>
-            <td>{{item.estimation || 'Not estimated yet'}}</td>
+            <td>{{item.estimation|| 'Not estimated yet'}}</td>
             <td>
               <span class="badge badge-primary">{{backlogService.getReadableStatus(item.status)}}</span>
             </td>
             <td>
-              <button type="button" class="btn btn-sm fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
-              <button type="button" class="btn btn-sm fa fa fa-trash-o " (click)="remove(i)"></button>
+              <div *ngIf="authService.allowedFor(['Product Owner'])">
+                <button type="button" class="btn btn-sm fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
+                <button type="button" class="btn btn-sm fa fa fa-trash-o " (click)="remove(i)"></button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
     <p>
-      <button class="btn" (click)="getBacklogItems()">Get Data</button>
-      <br>
-      <br>
-      <button class="btn" (click)="open(newModal,0)">New Item</button>
+      <button *ngIf="authService.allowedFor(['Product Owner'])" class="btn" (click)="open(newModal,0)">New Item</button>
     </p>
 
     <!-- MODAL EDIT BEGIN -->
@@ -74,8 +81,9 @@
       <div class="modal-header">
         <h4 class="modal-title">New {{newMode}}</h4>
       </div>
-      <div class="modal-body">
-        <form #f="ngForm">
+      <form ngNativeValidate (ngSubmit)="saveNewItem()" ngNat #f="ngForm">
+
+        <div class="modal-body">
           <!-- Datatoggles not working, design screwed up -->
           <div class="btn-group">
             <label class="btn btn-primary">
@@ -85,26 +93,26 @@
               <input type="radio" value="Epic" name="options" id="options2" autocomplete="off" [(ngModel)]="newMode"> Epic
             </label>
           </div>
-        </form>
 
-        <div class="form-group">
-          <label for="bli-titel">Title</label>
-          <input [(ngModel)]="newBacklogItem.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
-            required>
-        </div>
+          <div class="form-group">
+            <label for="bli-titel">Title</label>
+            <input [(ngModel)]="newBacklogItem.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
+              required>
+          </div>
 
-        <div class="form-group">
+          <div class="form-group">
             <label for="description">Description</label>
             <textarea [(ngModel)]="newBacklogItem.description" type="text" class="form-control" id="description" placeholder="Description"
               name="description" required minlength="10"></textarea>
+          </div>
         </div>
-      </div>
 
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveNewItem()">Save</button>
-        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+      </form>
     </ng-template>
 
   </div>
