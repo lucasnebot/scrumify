@@ -3,7 +3,7 @@
     <div class="col-2">
         <div class="card text-center {{getCardStatusClass()}}">
             <div class="card-block">
-                <h4 class="card-title">{{backlogItem.title | truncate: 15}}</h4>
+                <h4 class="card-title">{{backlogItem.title | truncate: 9}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
                     <br>{{getUsedStoryPoints()}} / {{backlogItem.estimation}}</h6>
                 <p class="card-text">{{backlogItem.description | truncate: 15}}</p>
@@ -103,33 +103,35 @@
     <div class="modal-header">
         <h4 class="modal-title">Task Details</h4>
     </div>
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="bli-titel">Title</label>
-            <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
-                required>
+<form (ngSubmit)="editTask()"ngNativeValidate>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="bli-titel">Title</label>
+                <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
+                    required>
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
+                    name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="estimation">Estimation</label>
+                <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
+                    name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
+            </div>
+            <div class="form-group">
+                <label for="assignedDeveloper">Assigned Devloper</label>
+                <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control">
+                    <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
+                </select>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
-                name="description" required minlength="5"></textarea>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
         </div>
-        <div class="form-group">
-            <label for="estimation">Estimation</label>
-            <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
-                name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
-        </div>
-        <div class="form-group">
-            <label for="assignedDeveloper">Assigned Devloper</label>
-            <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control">
-                <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
-            </select>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="editTask()">Edit</button>
-        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-    </div>
+</form>
 </ng-template>
 <!--MODAL TASK DETAILS END -->
