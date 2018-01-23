@@ -9,12 +9,14 @@ export default class UserCtrl extends baseDAO {
   signUp = (req, res): void => {
     authService.hashPassword(req.body.password).then(hash => {
       req.body.password = hash;
+      req.body.email = req.body.email.toLowerCase();
       this.create(req, res);
     });
   }
 
   signIn = async (req, res: Response) => {
     try {
+      req.body.email = req.body.email.toLowerCase();
       // Find User by email
       const user = await this.model.findOne({email : req.body.email});
 
