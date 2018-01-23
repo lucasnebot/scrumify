@@ -52,7 +52,7 @@
   <!-- Burndown Chart -->
   <div class="row">
     <div class="col">
-      <div class="card">
+      <div *ngIf="selectedSprint._id" class="card">
         <h5 class="card-header">
           <i class="fa fa-line-chart text-success" aria-hidden="true"></i> - Burndown-Chart</h5>
         <div class="card-block">
@@ -69,7 +69,7 @@
 <!-- Sprint edit -->
 <div class="row">
   <div class="col">
-    <div class="card">
+    <div *ngIf="!selectedSprint._id" class="card">
       <h5 class="card-header">
         <i class="fa fa-pencil text-success" aria-hidden="true"></i> - Edit</h5>
       <div class="card-block">
@@ -117,7 +117,8 @@
             </table>
           </div>
           <br>
-          <button class="btn btn-primary" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
+          <button class="btn btn-success" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
+          <button class="btn btn-danger" [disabled]="selectedSprint._id" (click)="cancelSprintCreation()">Cancel</button>
         </div>
       </div>
     </div>
@@ -156,7 +157,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="saveSprint()">Save</button>
+      <button type="button" class="btn btn-success" (click)="setSelectedSprint(newSprint)">Apply</button>
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
   </ng-template>

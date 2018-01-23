@@ -32,8 +32,8 @@ export class SprintPlanningComponent implements OnInit {
   constructor(public projectService: ProjectService, public backlogService: BacklogService, public sprintService: SprintService,
     private modalService: NgbModal) {
     this.newSprint = {
-      start: '',
-      end: '',
+      start: moment().format('YYYY-MM-DD'),
+      end: moment().add(this.projectService.project.sprintDuration, 'days').format('YYYY-MM-DD'),
       sprintNo: 0,
       backlogItems: [],
       project: this.projectService.project._id
@@ -64,7 +64,8 @@ export class SprintPlanningComponent implements OnInit {
         })[0];
 
         // Set default settings for new Sprint
-        this.newSprint.start = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');;
+        this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
+        this.newSprint.start = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');
         this.newSprint.end = moment(this.getLatestSprint().end)
                             .add(this.projectService.project.sprintDuration + 1, 'day').format('YYYY-MM-DD');
 
@@ -130,25 +131,13 @@ export class SprintPlanningComponent implements OnInit {
    * If inital is not set, a sprint is added to existing sprint list. Therefore a min property is bound to the datepicker.
    */
   open(content, initial?) {
-    if (!initial) {
-      const minDate = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');
-      this.sprintMinDate = minDate;
-      this.newSprint.start = minDate;
-      this.calcEndDate();
-    } else {
-      this.sprintMinDate = moment().format('YYYY-MM-DD');
-    }
     this.modal = this.modalService.open(content);
     this.modal.result.then(result => { }, reason => { });
   }
 
   saveSprint() {
-    if (this.getLatestSprint()) {
-      this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
-    }
     this.sprintService.add(this.newSprint).subscribe(() => {
       this.getSprints(this.newSprint.sprintNo);
-      this.modal.close();
     });
     this.projectService.setActiveSprint(this.newSprint);
   }
@@ -185,22 +174,13 @@ export class SprintPlanningComponent implements OnInit {
       });
   }
 
-  allowDropFunction() {
-    () => {
-      return true;
-    };
-  }
-
   setSelectedSprint(sprint: Sprint) {
     this.selectedSprint = sprint;
     this.getSprintItems();
+    this.modal.close();
   }
 
-  calcEndDate() {
-    const sprintDuration = this.projectService.project.sprintDuration;
-    this.newSprint.end = moment(this.newSprint.start)
-      .add(sprintDuration, 'days')
-      .format('YYYY-MM-DD');
-    // this.projectService.project.sprintDuration
-  }
+  cancelSprintCreation() {
+      this.selectedSprint = this.getLatestSprint();
+    }
 }
