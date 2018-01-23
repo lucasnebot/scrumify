@@ -3,28 +3,21 @@
   <h2>Sprint Planning </h2>
   <br>
   <!-- Sprint Creation and dropdown -->
-  <div class="btn-group">
-    <div class="btn-group mr-2" role="group" aria-label="First group">
-      <button class="btn" (click)="open(newModal,true)">New Sprint</button>
-    </div>
-    <div class="btn-group mr-2" role="group" aria-label="Second group">
-      <div class="dropdown show">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
-          Select Sprint
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button class="dropdown-item" *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)">
-            Sprint - No. {{sprint.sprintNo}}
-          </button>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-2">
+        <button class="btn" (click)="open(newModal,true)">New Sprint</button>
+      </div>
+      <div class="col-{breakpoint}-auto">
+        <select class="form-control" [ngModel]="selectedSprint" (ngModelChange)="setSelectedSprint($event)" name="sel3">
+            <option [ngValue]="sprint" *ngFor="let sprint of sprints">Sprint - No. {{sprint.sprintNo}}</option>
+          </select>
       </div>
     </div>
   </div>
   <br>
 
   <hr>
-
   <!-- Sprint details -->
   <div class="row">
     <div class="col">
@@ -74,90 +67,86 @@
         <i class="fa fa-pencil text-success" aria-hidden="true"></i> - Edit</h5>
       <div class="card-block">
         <div class="card-text">
-          <div style="border: 1px solid lightgrey">
-            <table class="table">
-              <tbody>
-                <tr>
-                  <td>
-                    <!-- Ready for Sprint -->
-                    <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
-                      <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
-                      <li *ngFor="let item of backlogItems; let i = index" dnd-sortable [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing"
-                        [sortableIndex]="i" draggable="true" class="list-group-item " [dragData]="i">{{item.title}}</li>
-                    </ul>
-                  </td>
-                  <td>
-                    <!-- Initial Sprint Setup-->
-                    <div *ngIf="sprints.length == 0; else sprintView">
-                      <ul class="list-group">
-                        <li class="list-group-item">
-                          Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
-                          <button class="btn" (click)="open(newModal,true)">New Sprint</button>
-                        </li>
-                      </ul>
-                    </div>
-                    <!-- Sprint View -->
-                    <ng-template #sprintView>
-                      <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
-                        <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
-                        <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing"
-                          [attr.disabled]="!enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
-                      </ul>
-                      <br>
-                      <br>
-                      <br>
-                      <div *ngIf="sprintTooFull()" class="alert alert-info show" role="alert">
-                        <strong>Hint: </strong>The sprint is too full ! You can't safe it until you remove some Backlog Items from
-                        it.
-                      </div>
-                    </ng-template>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="row">
+            <div class="col">
+              <div style="border: 1px solid lightgrey">
+                <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
+                  <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
+                  <li *ngFor="let item of backlogItems; let i = index" dnd-sortable [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing"
+                    [sortableIndex]="i" draggable="true" class="list-group-item " [dragData]="i">{{item.title}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col">
+              <!-- Initial Sprint Setup-->
+              <div *ngIf="sprints.length == 0; else sprintView">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
+                    <button class="btn" (click)="open(newModal,true)">New Sprint</button>
+                  </li>
+                </ul>
+              </div>
+              <!-- Sprint View -->
+              <ng-template #sprintView>
+                <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
+                  <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
+                  <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing"
+                    [attr.disabled]="!enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
+                </ul>
+                <br>
+                <br>
+                <br>
+                <div *ngIf="sprintTooFull()" class="alert alert-info show" role="alert">
+                  <strong>Hint: </strong>The sprint is too full ! You can't safe it until you remove some Backlog Items from it.
+                </div>
+              </ng-template>
+            </div>
           </div>
-          <br>
-          <button class="btn btn-success" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
-          <button class="btn btn-danger" [disabled]="selectedSprint._id" (click)="cancelSprintCreation()">Cancel</button>
         </div>
+        <br>
+        <button class="btn btn-success" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
+        <button class="btn btn-danger" [disabled]="selectedSprint._id" (click)="cancelSprintCreation()">Cancel</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- MODAL NEW BEGIN -->
-  <ng-template #newModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">New Sprint</h4>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col">
-          <div class="form-group">
-            <label for="sprint-start-date">Start Date</label>
-            <input [(ngModel)]="newSprint.start" type="date" value="newSprint.start" class="form-control" id="sprint-start-date" [min]="sprintMinDate"
-              placeholder="Enter Date" name="sprint-start-date" (ngModelChange)="calcEndDate()" required>
-          </div>
-        </div>
-        <div class="col">
-          <div class="form-group">
-            <label for="sprint-end-date">End Date</label>
-            <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
-              disabled>
-          </div>
-        </div>
-        <div class="col">
-          <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>Hint: </strong>You can set the sprint duration in general project setup.
-          </div>
-
+<!-- MODAL NEW BEGIN -->
+<ng-template #newModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">New Sprint</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="sprint-start-date">Start Date</label>
+          <input [(ngModel)]="newSprint.start" type="date" value="newSprint.start" class="form-control" id="sprint-start-date" [min]="sprintMinDate"
+            placeholder="Enter Date" name="sprint-start-date" (ngModelChange)="calcEndDate()" required>
         </div>
       </div>
+      <div class="col">
+        <div class="form-group">
+          <label for="sprint-end-date">End Date</label>
+          <input [(ngModel)]="newSprint.end" type="date" class="form-control" id="sprint-start-date" placeholder="Enter Date" name="sprint-start-date"
+            disabled>
+        </div>
+      </div>
+      <div class="col">
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <strong>Hint: </strong>You can set the sprint duration in general project setup.
+        </div>
+
+      </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="setSelectedSprint(newSprint)">Apply</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-    </div>
-  </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="setSelectedSprint(newSprint)">Apply</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
