@@ -59,8 +59,9 @@ export class SprintPlanningComponent implements OnInit {
         })[0];
 
         // Set default settings for new Sprint
-        this.newSprint.start = moment(this.selectedSprint.end).add(1, 'day').toLocaleString();
-        this.newSprint.end = moment(this.selectedSprint.end).add(this.projectService.project.sprintDuration + 1, 'day').toLocaleString();
+        this.newSprint.start = moment(this.selectedSprint.end).add(1, 'day').format('YYYY-MM-DD');
+        this.newSprint.end = moment(this.selectedSprint.end)
+                            .add(this.projectService.project.sprintDuration + 1, 'day').format('YYYY-MM-DD');
 
         this.getSprintItems();
       }
