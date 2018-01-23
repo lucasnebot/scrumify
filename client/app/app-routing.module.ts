@@ -9,6 +9,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { AuthGuardService, ProjectGuardService } from './shared/service';
 import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import {ProjectExplorerComponent } from './project-explorer/project-explorer.component';
+import { BurndownChartComponent } from './burndown-chart/burndown-chart.component';
 
 
 const routes: Routes = [

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 import 'rxjs/add/operator/mergeMap';
+import { SprintService } from '../shared/service/sprint.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-project-explorer',
@@ -28,7 +30,8 @@ export class ProjectExplorerComponent implements OnInit {
     protected projectService: ProjectService,
     public authService: AuthService,
     protected router: Router,
-    protected userService: UserService
+    protected userService: UserService,
+    private sprintService: SprintService
   ) {}
 
   ngOnInit() {
@@ -47,6 +50,20 @@ export class ProjectExplorerComponent implements OnInit {
     localStorage.setItem(LS_PROJECT,JSON.stringify(project));
     //! Used for effort estimation | TODO: change location?
     this.projectService.getNumberOfDevelopers();
+
+    // Set active sprint if date fits in current range!
+    this.sprintService.getAll({project: project._id})
+    .map(sprints => {
+      sprints.filter(sprint => {
+        if ( moment(Date.now()).isBetween(sprint.start, sprint.end)) {
+          this.projectService.setActiveSprint(sprint);
+          return true;
+        }
+        return false;
+      });
+    })
+    .subscribe();
+
     this.router.navigate(['/']);
   }
   displayUserProjects() {

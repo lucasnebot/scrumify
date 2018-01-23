@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Project } from '../model';
 import { GenericService, HttpClient } from './generic.service';
 import { UserService } from './user.service';
+import * as moment from 'moment';
+import { Sprint } from '../model/sprint';
 
 export const LS_PROJECT = 'scrumifyProject';
 
@@ -32,7 +34,6 @@ export class ProjectService extends GenericService<Project> {
     return this.getAll({ _id: { $in: ids } });
   }
 
- 
   /**
    * Saves the number of developers in the given project into the project singleton service
    */
@@ -42,5 +43,21 @@ export class ProjectService extends GenericService<Project> {
       .subscribe(resp => {
         this.numberOfDevelopers = resp.length;
       });
+  }
+
+  /**
+   * Set active sprint
+   * @param sprint
+   */
+  setActiveSprint(sprint: Sprint) {
+    // Set sprint as active sprint if date fits
+    if ( moment(Date.now()).isBetween(sprint.start, sprint.end)) {
+      const currentProject = this.project;
+      currentProject.activeSprint = sprint._id;
+      console.log('Active Sprint: ' + JSON.stringify(currentProject.activeSprint));
+      this.edit(currentProject._id, currentProject).subscribe(project => {
+        this.project = project;
+      });
+    }
   }
 }

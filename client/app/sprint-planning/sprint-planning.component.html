@@ -1,73 +1,123 @@
 <div class="mainContainer">
+
   <h2>Sprint Planning </h2>
   <br>
+  <!-- Sprint Creation and dropdown -->
+  <div class="btn-group">
+    <div class="btn-group mr-2" role="group" aria-label="First group">
+      <button class="btn" (click)="open(newModal,true)">New Sprint</button>
+    </div>
+    <div class="btn-group mr-2" role="group" aria-label="Second group">
+      <div class="dropdown show">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          Select Sprint
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button class="dropdown-item" *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)">
+            Sprint - No. {{sprint.sprintNo}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   <br>
 
+  <hr>
+
+  <!-- Sprint details -->
   <div class="row">
-    <div class="col-4">
-      <span class="h4">Ready For Sprint</span>
-    </div>
-    <div class="col-6">
-      <span class="h4">Sprint #{{selectedSprint.sprintNo}} {{selectedSprint.start | amDateFormat:'LL'}} - {{selectedSprint.end | amDateFormat:'LL'}}</span>
-      <label for="progressbar">Storypoint Usage: {{getTotalStoryPointUsage()}} / {{projectService.project.storyPointsPerSprint}}</label>
-      <p>
-        <ngb-progressbar id="progressbar" [type]="sprintTooFull() ? 'danger' : 'info'" [value]="(getTotalStoryPointUsage() / projectService.project.storyPointsPerSprint)*100"></ngb-progressbar>
-      </p>
-    </div>
-    <div class="col-2">
-      <span class="h4">Select Sprint</span>
+    <div class="col">
+      <!-- Project Card -->
+      <div class="card">
+        <h5 class="card-header">
+          <i class="fa fa-refresh text-success" aria-hidden="true"></i> - Sprint No. {{selectedSprint.sprintNo}}</h5>
+        <div class="card-block">
+          <div class="card-text">
+            <strong>Start: </strong>{{selectedSprint.start | amDateFormat:'dddd, MMMM D YYYY'}}
+            <br>
+            <strong>End: </strong>{{selectedSprint.end | amDateFormat:'dddd, MMMM D YYYY'}}
+            <br>
+            <br>
+            <label for="progressbar">Storypoint Usage: {{getTotalStoryPointUsage()}} / {{projectService.project.storyPointsPerSprint}}</label>
+            <p>
+              <ngb-progressbar id="progressbar" [type]="sprintTooFull() ? 'danger' : 'info'" [value]="(getTotalStoryPointUsage() / projectService.project.storyPointsPerSprint)*100"></ngb-progressbar>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Burndown Chart -->
   <div class="row">
-    <div class="col-4">
-      <!-- Ready for Sprint -->
-      <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
-        <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
-        <li *ngFor="let item of backlogItems; let i = index" dnd-sortable  [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing" [sortableIndex]="i" draggable="true" class="list-group-item "
-          [dragData]="i">{{item.title}}</li>
-      </ul>
-    </div>
-    <div class="col-6">
-      <!-- Initial Sprint Setup-->
-      <div *ngIf="sprints.length == 0; else sprintView">
-        <ul class="list-group">
-          <li class="list-group-item">
-            Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
-            <button class="btn" (click)="open(newModal,true)">New Sprint</button>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Sprint View -->
-      <ng-template #sprintView>
-        <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
-          <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
-          <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
-        </ul>
-        <br>
-        <button class="btn btn-primary" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
-        <!-- TODO if 3 days before sprint -->
-        <button *ngIf="true" class="btn" (click)="open(newModal)">New Sprint</button>
-        <br>
-        <br>
-        <div *ngIf="sprintTooFull()" class="alert alert-info show" role="alert">
-          <strong>Hint: </strong>The sprint is too full ! You can't safe it until you remove some Backlog Items from it.
-        </div>
-        <div *ngIf="!enableEditing" class="alert alert-info show" role="alert">
-            <strong>Hint: </strong>This sprint has already been planned, you can not alter it.
+    <div class="col">
+      <div class="card">
+        <h5 class="card-header">
+          <i class="fa fa-line-chart text-success" aria-hidden="true"></i> - Burndown-Chart</h5>
+        <div class="card-block">
+          <div class="card-text">
+            <!-- Implement burndown -->
+            <app-burndown-chart *ngIf="selectedSprint._id" [sprint]="selectedSprint"></app-burndown-chart>
           </div>
-      </ng-template>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
 
-
-    <!-- Sprint Selection -->
-    <div class="col-2">
-      <div *ngIf="sprints.length > 0">
-        <div class="list-group">
-          <a *ngFor="let sprint of sprints" (click)="setSelectedSprint(sprint)" [class.list-group-item-info]="sprint.sprintNo == selectedSprint.sprintNo"
-            class="list-group-item list-group-item-action">Sprint # {{sprint.sprintNo}}</a>
-          <!-- {{sprint.start | amDateFormat:'LL'}} - {{sprint.end | amDateFormat:'LL'}} -->
+<!-- Sprint edit -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <h5 class="card-header">
+        <i class="fa fa-pencil text-success" aria-hidden="true"></i> - Edit</h5>
+      <div class="card-block">
+        <div class="card-text">
+          <div style="border: 1px solid lightgrey">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>
+                    <!-- Ready for Sprint -->
+                    <ul class="list-group" dnd-sortable-container [sortableData]="backlogItems" [dropZones]="['dropzone1']">
+                      <li *ngIf="backlogItems.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to remove them from the Sprint</li>
+                      <li *ngFor="let item of backlogItems; let i = index" dnd-sortable [dragEnabled]="enableEditing" [attr.disabled]="!enableEditing"
+                        [sortableIndex]="i" draggable="true" class="list-group-item " [dragData]="i">{{item.title}}</li>
+                    </ul>
+                  </td>
+                  <td>
+                    <!-- Initial Sprint Setup-->
+                    <div *ngIf="sprints.length == 0; else sprintView">
+                      <ul class="list-group">
+                        <li class="list-group-item">
+                          Whoops ! Seems like you have not started the inital sprint yet. You may do so now.
+                          <button class="btn" (click)="open(newModal,true)">New Sprint</button>
+                        </li>
+                      </ul>
+                    </div>
+                    <!-- Sprint View -->
+                    <ng-template #sprintView>
+                      <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
+                        <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
+                        <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="enableEditing"
+                          [attr.disabled]="!enableEditing">Title: {{item.title}} Estimation: {{item.estimation}}</li>
+                      </ul>
+                      <br>
+                      <br>
+                      <br>
+                      <div *ngIf="sprintTooFull()" class="alert alert-info show" role="alert">
+                        <strong>Hint: </strong>The sprint is too full ! You can't safe it until you remove some Backlog Items from
+                        it.
+                      </div>
+                    </ng-template>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <button class="btn btn-primary" [disabled]="sprintTooFull() || !enableEditing || backlogItemsForSprint.length == 0" (click)="saveBliToSprint()">Save</button>
         </div>
       </div>
     </div>
@@ -83,8 +133,8 @@
         <div class="col">
           <div class="form-group">
             <label for="sprint-start-date">Start Date</label>
-            <input [(ngModel)]="newSprint.start" type="date" class="form-control" id="sprint-start-date" [min]="sprintMinDate" placeholder="Enter Date"
-              name="sprint-start-date" (ngModelChange)="calcEndDate()" required>
+            <input [(ngModel)]="newSprint.start" type="date" value="newSprint.start" class="form-control" id="sprint-start-date" [min]="sprintMinDate"
+              placeholder="Enter Date" name="sprint-start-date" (ngModelChange)="calcEndDate()" required>
           </div>
         </div>
         <div class="col">
