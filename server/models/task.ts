@@ -12,19 +12,19 @@ export const taskSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['TODO','DOING', 'REVIEW','DONE'],
+        enum: ['TODO', 'DOING', 'REVIEW', 'DONE'],
         default: 'TODO',
         required: false
-      },
-      estimation: {
-          type: Number,
-          required: false
-      },
-      backlogItem:{
-        type: [mongoose.Schema.Types.ObjectId]
-      },
-    User: {
-        type: [mongoose.Schema.Types.ObjectId]
+    },
+    estimation: {
+        type: Number,
+        required: false
+    },
+    backlogItem: {
+        type: mongoose.Schema.Types.ObjectId
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId
     },
     doneTimestamp: {
         type: Date,

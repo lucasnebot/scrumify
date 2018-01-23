@@ -50,9 +50,23 @@ export class KanbanRowComponent implements OnInit {
     this.taskService.add(this.newTask).subscribe((newTask: Task) => {
       this.tasks.push(newTask);
       this.sortTasks();
+
+      //if new status is not done
+      this.backlogService
+        .edit(this.backlogItem._id, { status: 'SPRINT' })
+        .subscribe(result => {
+          this.backlogItem = result;
+        });
+
       this.modal.close();
       //reset form
       this.newTask = this.getEmptyTask();
+    });
+  }
+
+  getDeveloperById(id: string): User {
+    return this.developers.find(dev => {
+      if (dev._id == id) return true;
     });
   }
 
@@ -65,6 +79,37 @@ export class KanbanRowComponent implements OnInit {
         }
       });
     });
+  }
+
+  getCardStatusClass(): string {
+    let active_status = 'card-outline-primary';
+    let no_tasks_status = 'card-outline-secondary';
+    let done_status = 'card-outline-success';
+
+    switch (this.getBliStatus()) {
+      case 'active':
+        return active_status;
+      case 'no_tasks':
+        return no_tasks_status;
+      case 'done':
+        return done_status;
+      default:
+        return done_status;
+    }
+  }
+
+  getBliStatus(): string {
+    let status = 'done';
+    this.tasks.forEach(task => {
+      if (task.status.toLowerCase() != 'done') {
+        status = 'active';
+      }
+    });
+    if (!this.tasks.length) {
+      status = 'no_tasks';
+    }
+
+    return status;
   }
 
   getUsedStoryPoints() {
@@ -80,16 +125,14 @@ export class KanbanRowComponent implements OnInit {
   }
 
   open(content, task?: Task) {
-
     //reset stuff
-    this.errorNotFound = false
+    this.errorNotFound = false;
     this.userFound = null;
-    this.userSearchString = "";
+    this.userSearchString = '';
     //
     if (task != null) {
       this.selectedTask = task;
-    }
-    else{
+    } else {
       this.selectedTask = this.getEmptyTask();
     }
     this.modal = this.modalService.open(content);
@@ -105,8 +148,13 @@ export class KanbanRowComponent implements OnInit {
       });
   }
 
-  removeTask(index: number) {
-    this.taskService.delete(this.tasks[index]._id).subscribe(result => {
+  removeTask(id: string) {
+    this.taskService.delete(id).subscribe(result => {
+      let index = this.tasks.findIndex(task => {
+        if (task._id == id) {
+          return true;
+        }
+      });
       this.tasks.splice(index, 1);
       this.sortTasks();
     });
@@ -132,48 +180,26 @@ export class KanbanRowComponent implements OnInit {
     let stateIndex = myArray[0].id;
     //
     let newState = this.taskStates[stateIndex].toUpperCase();
-    console.log(event.target);
-    
-    
     //if state has changed
     if (task.status != newState) {
       task.status = newState;
       if (task.status.toUpperCase() == 'DONE') {
         task.doneTimestamp = moment().format();
+        //if task has been dropped to done, maybe all story points are used
+        //and the bli needs to be set to done as well.
+        if (
+          this.getBliStatus() == 'done' &&
+          this.getAvailableStoryPoints() == 0
+        ) {
+          this.backlogService
+            .edit(this.backlogItem._id, { status: 'DONE' })
+            .subscribe(result => {
+              console.log('bli set to DONE' + task.doneTimestamp);
+            });
+        }
       }
-
-      this.taskService.edit(task._id, task).subscribe(result => {
-      });
     }
+
+    this.taskService.edit(task._id, task).subscribe(result => {});
   }
-
-  searchForUser(mode: String){
-    if(mode == 'new'){
-      this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
-        if(result.length > 0){
-          this.errorNotFound = false;
-          this.newTask.user = result[0]._id;
-          this.userFound = result[0];
-        }
-        else{
-          this.errorNotFound = true;
-          this.userFound = null;
-        }
-      }))
-
-      if(mode == 'edit'){
-        this.userService.getAll({name: this.userSearchString}).subscribe((result=>{
-          if(result.length > 0){
-            this.errorNotFound = false;
-            this.selectedTask.user = result[0]._id;
-          }
-          else{
-            this.errorNotFound = true;
-            this.userFound = null;
-          }
-        }))
-      }
-    }
-    }
-
 }

@@ -1,6 +1,16 @@
-<div class="row">
-    <div class="col-2 "></div>
-    <div *ngFor="let state of taskStates" class="col text-center h5">{{state}}</div>
+<div class="mainContainer">
+    <h2>Scrumboard</h2>
+    <p>
+        The Scrumboard is where all the
+        <strong>Developers</strong> can see the Backlog Items in the current sprint, which is
+        <strong>Sprint {{sprintNo}}</strong>.   They can devide a backlog item in smaller task, and assign them to themselfes or other
+        developers, and then put them in diffrent states according to the progress they have made.
+    </p>
+    <p>A Backlog Item is done, as soons as all <strong>Story Points</strong> are used up and all <strong>Tasks</strong> are done.</p>
+    <hr>
+    <div class="row">
+        <div class="col-2 "></div>
+        <div *ngFor="let state of taskStates" class="col text-center h5">{{state}}</div>
+    </div>
+    <app-kanban-row *ngFor="let item of backlogItems; let i = index" [backlogItem]="item" [taskStates]="taskStates" [developers]="developers"></app-kanban-row>
 </div>
-<app-kanban-row *ngFor="let item of backlogItems; let i = index" [backlogItem]="item" [taskStates]="taskStates" [developers]="developers"></app-kanban-row>
-      

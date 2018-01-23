@@ -3,7 +3,7 @@
     <div class="col-2">
         <div class="card text-center">
             <div class="card-block">
-                <h4 class="card-title">{{backlogItem.title | truncate: 15}}</h4>
+                <h4 class="card-title">{{backlogItem.title | truncate: 9}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
                     <br>{{getUsedStoryPoints()}} / {{backlogItem.estimation}}</h6>
                 <p class="card-text">{{backlogItem.description | truncate: 15}}</p>
@@ -11,7 +11,7 @@
             <div class="card-footer">
                 <ul class="nav">
                     <li class="nav-item">
-                        <button type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
+                        <button *ngIf="getUsedStoryPoints() < backlogItem.estimation" type="button" class="btn btn-sm fa fa-plus" (click)="open(newTaskModal)"></button>
                     </li>
                 </ul>
             </div>
@@ -27,11 +27,11 @@
                 </div>
             </div>
             <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
-                [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
+            [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
                 <div [id]="i" class="card-block">
-                        <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
-                        <h6 [id]="i" class="card-subtitle mb-2 text-muted">
-                        <span [id]="i" *ngIf="task.user">Assigned</span>
+                    <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
+                    <h6 [id]="i" class="card-subtitle mb-2 text-muted">
+                        <span [id]="i" *ngIf="task.user">Assigned to {{getDeveloperById(task.user).name}}</span>
                         <span [id]="i" *ngIf="!task.user">Not Assigned</span>
                     </h6>
                     <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
@@ -39,7 +39,7 @@
                 <div [id]="i" class="card-footer">
                     <span>
                         <button type="button" class="btn btn-sm fa fa-search" (click)="open(editTaskModal,task)"></button>
-                        <button *ngIf="state.toUpperCase() != 'DONE'" type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(j)"></button>
+                        <button *ngIf="state.toUpperCase() != 'DONE'" type="button" class="btn btn-sm fa fa-trash-o" (click)="removeTask(task._id)"></button>
                     </span>
                 </div>
             </div>
@@ -63,55 +63,39 @@
     <div class="modal-header">
         <h4 class="modal-title">New Task</h4>
     </div>
-    <div class="modal-body">
+    <form ngNativeValidate (ngSubmit)="saveNewTask()">
+        <div class="modal-body">
 
-        <div class="form-group">
-            <label for="bli-titel">Title</label>
-            <input [(ngModel)]="newTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
-                required>
-        </div>
 
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea [(ngModel)]="newTask.description" type="text" class="form-control" id="description" placeholder="Description" name="description"
-                required minlength="5"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="estimation">Estimation</label>
-            <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
-                min="1" [max]="getAvailableStoryPoints()" required>
-        </div>
-
-        <div class="form-group">
-            <label for="newTaskuserAssignment">Assign to User</label>
-            <div class="input-group">
-                <input [(ngModel)]="userSearchString" id="newTaskuserAssignment" type="text" class="form-control" placeholder="Search for User by Lastname"
-                    name="newTaskuserAssignment" required>
-                <div class="input-group-btn">
-                    <button class="btn btn-default" (click)="searchForUser('new')" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
+            <div class="form-group">
+                <label for="bli-titel">Title</label>
+                <input [(ngModel)]="newTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
+                    required>
             </div>
-            <br> Currently Assigned:
-            <div *ngIf="userFound" class="list-group">
-                <li class="list-group-item justify-content-between"> {{userFound.name}}, {{userFound.surname}}
-                    <button type="button" class="btn btn-sm fa fa-trash-o" (click)="userFound = null"></button>
 
-                </li>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea [(ngModel)]="newTask.description" type="text" class="form-control" id="description" placeholder="Description" name="description"
+                    required></textarea>
             </div>
-            <br>
-            <div *ngIf="errorNotFound" class="alert alert-warning" role="alert">
-                <strong>We are sorry.</strong> We could not find anybody by that name !
+            <div class="form-group">
+                <label for="estimation">Estimation</label>
+                <input [(ngModel)]="newTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation" name="estimation"
+                    min="1" [max]="getAvailableStoryPoints()" required>
             </div>
+            <label for="assignedDeveloper">Assign a Devloper</label>
+            <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="newTask.user" class="form-control">
+                <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
+            </select>
         </div>
-    </div>
 
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveNewTask()">Save</button>
-        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-    </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        </div>
+    </form>
+
 </ng-template>
 <!--MODAL NEW END -->
 
@@ -120,27 +104,35 @@
     <div class="modal-header">
         <h4 class="modal-title">Task Details</h4>
     </div>
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="bli-titel">Title</label>
-            <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
-                required>
+<form (ngSubmit)="editTask()"ngNativeValidate>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="bli-titel">Title</label>
+                <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
+                    required>
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
+                    name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="estimation">Estimation</label>
+                <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
+                    name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
+            </div>
+            <div class="form-group">
+                <label for="assignedDeveloper">Assigned Devloper</label>
+                <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control">
+                    <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
+                </select>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
-                name="description" required minlength="5"></textarea>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Edit</button>
+            <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
         </div>
-        <div class="form-group">
-            <label for="estimation">Estimation</label>
-            <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
-                name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="editTask()">Edit</button>
-        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
-    </div>
+</form>
 </ng-template>
 <!--MODAL TASK DETAILS END -->

@@ -13,9 +13,6 @@ export const sprintSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  backlogItems: {
-    type: [mongoose.Schema.Types.ObjectId]
-  },
   project: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
