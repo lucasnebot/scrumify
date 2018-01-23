@@ -41,22 +41,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Burndown Chart -->
-  <div class="row">
-    <div class="col">
-      <div *ngIf="selectedSprint._id" class="card">
-        <h5 class="card-header">
-          <i class="fa fa-line-chart text-success" aria-hidden="true"></i> - Burndown-Chart</h5>
-        <div class="card-block">
-          <div class="card-text">
-            <!-- Implement burndown -->
-            <app-burndown-chart *ngIf="selectedSprint._id" [sprint]="selectedSprint"></app-burndown-chart>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Sprint edit -->

@@ -13,11 +13,10 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 @Component({
   selector: 'app-burndown-chart',
   templateUrl: './burndown-chart.component.html',
-  styleUrls: ['./burndown-chart.component.css'],
+  styleUrls: ['./burndown-chart.component.css']
 })
-export class BurndownChartComponent implements OnInit, OnChanges {
-
-  @Input() sprint: Sprint;
+export class BurndownChartComponent implements OnInit {
+  private sprint: Sprint;
   private backlogItems: BacklogItem[];
   private totalStoryPoints: number;
   private idealBurnData: Array<any> = [];
@@ -29,7 +28,7 @@ export class BurndownChartComponent implements OnInit, OnChanges {
   lineChartData: Array<any> = [];
   lineChartType = 'line';
   lineChartOptions = {
-    responsive: true,
+    responsive: false,
     title: {
       display: true,
       text: 'Burndown Chart'
@@ -42,48 +41,56 @@ export class BurndownChartComponent implements OnInit, OnChanges {
       borderWidth: 0
     },
     scales: {
-      yAxes: [{
-        ticks: {
-          max: this.totalStoryPoints,
-          min: 0,
-        },
-        display: true,
-        scaleLabel: {
+      yAxes: [
+        {
+          ticks: {
+            max: this.totalStoryPoints,
+            min: 0
+          },
           display: true,
-          labelString: 'Story Points'
+          scaleLabel: {
+            display: true,
+            labelString: 'Story Points'
+          }
         }
-      }],
-    },
+      ]
+    }
   };
 
   public lineChartColors: Array<any> = [
-    { // red
-      borderColor: 'rgba(255,0,0,0.25)',
+    {
+      // red
+      borderColor: 'rgba(255,0,0,0.25)'
     },
-    { // dark grey
-      borderColor: 'rgba(0,120,200,0.75)',
+    {
+      // dark grey
+      borderColor: 'rgba(0,120,200,0.75)'
     }
   ];
 
-
-  constructor(private projectService: ProjectService,
-    private sprintService: SprintService, private taskService: TaskService,
-    private backlogItemService: BacklogService) {
-  }
+  constructor(
+    private projectService: ProjectService,
+    private sprintService: SprintService,
+    private taskService: TaskService,
+    private backlogItemService: BacklogService
+  ) {}
 
   ngOnInit() {
+    this.sprintService
+      .getOne(this.projectService.project.activeSprint)
+      .subscribe(result => {
+        this.sprint = result;
+        this.sprint = result;
+        this.backlogItemService
+          .getAll({ _id: { $in: this.sprint.backlogItems } })
+          .subscribe(items => {
+            this.backlogItems = items;
+            this.setLineChartLabels();
+            this.calculateAverage();
+            this.calculateActual();
+          });
+      });
     this.totalStoryPoints = this.projectService.project.storyPointsPerSprint;
-    this.setLineChartLabels();
-  }
-
-  ngOnChanges(changes) {
-    this.isDataLoaded = false;
-    this.lineChartData = [];
-    this.backlogItemService.getAll({ _id: { $in: this.sprint.backlogItems } }).subscribe(items => {
-      this.backlogItems = items;
-      this.calculateAverage();
-      this.calculateActual();
-    });
   }
 
   private setLineChartLabels() {
@@ -102,7 +109,8 @@ export class BurndownChartComponent implements OnInit, OnChanges {
     const localDataArray: number[] = [];
     let localStoryPoints = this.totalStoryPoints;
 
-    this.taskService.getAll({ status: 'DONE', backlogItem: { $in: this.backlogItems } })
+    this.taskService
+      .getAll({ status: 'DONE', backlogItem: { $in: this.backlogItems } })
       .subscribe(tasks => {
         if (this.lineChartLabels) {
           this.lineChartLabels.forEach(day => {
@@ -121,7 +129,12 @@ export class BurndownChartComponent implements OnInit, OnChanges {
             }
           });
           this.actualBurnData = [
-            { data: localDataArray, label: 'Actual', marker: { radius: 6 }, fill: false }
+            {
+              data: localDataArray,
+              label: 'Actual',
+              marker: { radius: 6 },
+              fill: false
+            }
           ];
         }
         this.lineChartData = this.idealBurnData.concat(this.actualBurnData);
@@ -145,10 +158,14 @@ export class BurndownChartComponent implements OnInit, OnChanges {
     }
     // Set data in object variable
     this.idealBurnData = [
-      { data: localDataArray, label: 'Average (Velocity)', lineWidth: 2, fill: false }
+      {
+        data: localDataArray,
+        label: 'Average (Velocity)',
+        lineWidth: 2,
+        fill: false
+      }
     ];
   }
-
 
   // events
   public chartClicked(e: any): void {
