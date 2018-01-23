@@ -1,7 +1,7 @@
 <div class="row">
 
     <div class="col-2">
-        <div class="card text-center {{getCardStatusClass()}}">
+        <div class="card text-center">
             <div class="card-block">
                 <h4 class="card-title">{{backlogItem.title | truncate: 9}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
@@ -26,7 +26,8 @@
                 <div [id]="i" class="card-block">
                 </div>
             </div>
-            <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)">
+            <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
+            [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
                 <div [id]="i" class="card-block">
                     <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
                     <h6 [id]="i" class="card-subtitle mb-2 text-muted">

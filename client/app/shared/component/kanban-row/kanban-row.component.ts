@@ -185,16 +185,16 @@ export class KanbanRowComponent implements OnInit {
       task.status = newState;
       if (task.status.toUpperCase() == 'DONE') {
         task.doneTimestamp = moment().format();
-        //if task has been dropped to done, maybe its the last
-        //one and the bli needs to be set to done as well.
+        //if task has been dropped to done, maybe all story points are used
+        //and the bli needs to be set to done as well.
         if (
           this.getBliStatus() == 'done' &&
-          this.backlogItem.status != 'DONE'
+          this.getAvailableStoryPoints() == 0
         ) {
           this.backlogService
             .edit(this.backlogItem._id, { status: 'DONE' })
             .subscribe(result => {
-              console.log('bli updated');
+              console.log('bli set to DONE' + task.doneTimestamp);
             });
         }
       }
