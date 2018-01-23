@@ -22,7 +22,7 @@ export class BacklogComponent implements OnInit {
     private backlogService: BacklogService,
     private projectService : ProjectService,
     private modalService: NgbModal,
-    private authService: AuthService
+    protected authService: AuthService
   ) {}
 
   ngOnInit() {
