@@ -148,8 +148,13 @@ export class KanbanRowComponent implements OnInit {
       });
   }
 
-  removeTask(index: number) {
-    this.taskService.delete(this.tasks[index]._id).subscribe(result => {
+  removeTask(id: string) {
+    this.taskService.delete(id).subscribe(result => {
+      let index = this.tasks.findIndex(task => {
+        if (task._id == id) {
+          return true;
+        }
+      });
       this.tasks.splice(index, 1);
       this.sortTasks();
     });
