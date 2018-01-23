@@ -33,7 +33,7 @@
             <h5>{{item.title |truncate: 20}}</h5>
           </div>
           <div class="col-3">{{item.description}}</div>
-          <div class="col-1">{{item.estimation|| '?'}}</div>
+          <div class="col-1"><strong>{{item.estimation|| '?'}}</strong></div>
           <div class="col-2">
             <span class="badge badge-primary">{{backlogService.getReadableStatus(item.status)}}</span>
           </div>
