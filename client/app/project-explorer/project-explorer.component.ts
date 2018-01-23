@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectService, AuthService, UserService, LS_PROJECT } from '../shared/service';
+import {
+  ProjectService,
+  AuthService,
+  UserService,
+  LS_PROJECT
+} from '../shared/service';
 import { Project, User } from '../shared/model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -41,13 +46,12 @@ export class ProjectExplorerComponent implements OnInit {
     } else {
       this.userDataAlreadyLoaded = false;
     }
-
   }
 
   selectProject(project: Project) {
     this.projectService.project = project;
     // Add project to localstorage
-    localStorage.setItem(LS_PROJECT,JSON.stringify(project));
+    localStorage.setItem(LS_PROJECT, JSON.stringify(project));
     //! Used for effort estimation | TODO: change location?
     this.projectService.getNumberOfDevelopers();
 
@@ -75,8 +79,8 @@ export class ProjectExplorerComponent implements OnInit {
       });
   }
   createProject() {
-    if(!this.validateTeam()) {
-      return this.projectForm.teamValid = false;
+    if (!this.validateTeam()) {
+      return (this.projectForm.teamValid = false);
     }
     this.projectService
       .add(this.newProject)
@@ -89,11 +93,11 @@ export class ProjectExplorerComponent implements OnInit {
         let teamIds: string[] = [];
         this.projectForm.usersToBeAdded.forEach((elem: User) => {
           teamIds.push(elem._id);
-        })
+        });
         teamIds.push(this.authService.activeUser._id);
         // UpdateMany
         return this.userService.editMany(
-          {_id : {$in: teamIds}},
+          { _id: { $in: teamIds } },
           { $push: { projects: projectResp._id } }
         );
       })
@@ -113,35 +117,39 @@ export class ProjectExplorerComponent implements OnInit {
     return false;
   }
 
-  openTeamTab(){
-    
-    if(!this.projectForm.teamSelectionVisible && this.projectForm.users.length === 0){
-      this.userService.getAll({role: {$ne: 1}}).subscribe((resp) => {
+  openTeamTab() {
+    if (
+      !this.projectForm.teamSelectionVisible &&
+      this.projectForm.users.length === 0 &&
+      this.projectForm.usersToBeAdded.length === 0
+    ) {
+      // Returns all users from the db
+      this.userService.getAll({ role: { $ne: 1 } }).subscribe(resp => {
         this.projectForm.users = resp;
         //this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
-        this.projectForm.activeTab="Team";
-      })
-
+        this.projectForm.activeTab = 'Team';
+      });
     } else {
-      this.projectForm.activeTab="Team";
+      this.projectForm.activeTab = 'Team';
       //this.projectForm.teamSelectionVisible = !this.projectForm.teamSelectionVisible;
     }
   }
-  switchUser(user: User, from: User[], to: User[]){
+  switchUser(user: User, from: User[], to: User[]) {
     to.push(user);
-    from.splice(from.indexOf(user),1);
+    from.splice(from.indexOf(user), 1);
+    this.projectForm.teamValid = true;
   }
-  validateTeam(): boolean{
+  validateTeam(): boolean {
     let developers = 0;
     let scrumMaster = 0;
     this.projectForm.usersToBeAdded.forEach((user: User) => {
       if (user.role === 0) {
         scrumMaster++;
-      } else if (user.role === 2){
-        developers++
+      } else if (user.role === 2) {
+        developers++;
       }
-    })
-    if(developers >= 3 && scrumMaster === 1){
+    });
+    if (developers >= 3 && scrumMaster === 1) {
       return true;
     }
     return false;

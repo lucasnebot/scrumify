@@ -1,8 +1,11 @@
 <div class="mainContainer">
+
   <h2>Roadmap</h2>
   <p>
-    Here you can see the project roadmap with all its milestones. Only the <strong>Product Owner</strong> can add and edit milestones.
+    Here you can see the project roadmap with all its milestones. Only the
+    <strong>Product Owner</strong> can add and edit milestones.
   </p>
+  
   <!-- Use authService.allowedFor(['RoleX', 'RoleY']) to allow access only for specific roles | Alternative: authService.activeUser.role === X -->
   <button [class.btn-primary]="!formHidden" [disabled]="!authService.allowedFor(['Product Owner'])" class="btn" (click)="toggleForm()">{{formHidden ? 'Add' : 'Save' }} Milestone</button>
   <button [hidden]="formHidden" (click)="formHidden = true" class="btn btn-danger">Close</button>
@@ -27,29 +30,32 @@
     </div>
   </form>
   <hr>
-  <!-- Milestone Card -->
-  <div *ngFor="let m of milestones;" [class.card-outline-primary]="!m.achieved" [class.card-outline-success]="m.achieved"
-    class="card card-outline-primary w-50">
-    <div class="card-block">
-      <div class="row">
-        <div class="col-sm-11">
+  <div class="container">
+    <ul class="timeline">
+      <!--List Entry ngFor here + class inverted every second time-->
+        <li *ngFor="let m of milestones; odd as isOdd; index as i;" [class.timeline-inverted] ="isOdd">
+          <!-- Timeline badge | Change icon if achieved-->
+          <div [ngClass]="{'info': !m.achieved, 'success': m.achieved}" class="timeline-badge"><i [ngClass]="{'fa-flag': !m.achieved,'fa-trophy': m.achieved}" class="fa"></i></div>
+          <!-- TODO: add buttons -->
+          <div class="timeline-panel">
+            <div class="timeline-heading">
+              <h4 class="timeline-title">{{m.title}}</h4>
+              <p><small class="text-muted"><i class="fa fa-calendar"></i> {{m.date | date}}</small></p>
+            </div>
+            <div class="timeline-body">
+              <p>{{m.description}}.</p>
+              <div [hidden]="!authService.allowedFor(['Product Owner'])">
 
-          <h4 [class.text-success]="m.achieved" class="card-title">
-            <i [hidden]="!m.achieved" class="fa fa-trophy"></i> {{m.title}}
-          </h4>
-          <h6 class="card-subtitle mb-2 text-muted">{{m.date | date}}</h6>
-          <p class="card-text">{{m.description}}.</p>
+                <!-- Update Button-->
+                <i [hidden]="m.achieved" (click)="achieveMilestone(m._id,i)" class="fa fa-check"></i>
+                <!-- Delete Button-->
+                <i (click)="deleteMilestone(m._id,i)" class="fa fa-times"></i>
+    
+              </div>
+            </div>
+          </div>
 
-        </div>
-        <div [hidden]="!authService.allowedFor(['Product Owner'])" class="col-sm-1">
-
-          <!-- Update Button-->
-          <i [hidden]="m.achieved" (click)="achieveMilestone(m._id)" class="fa fa-check"></i>
-          <!-- Delete Button-->
-          <i (click)="deleteMilestone(m._id)" class="fa fa-times"></i>
-
-        </div>
-      </div>
-    </div>
-  </div>
+        </li>
+    </ul>
+</div>
 </div>
