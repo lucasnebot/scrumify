@@ -17,7 +17,7 @@
         </thead>
         <tbody dnd-sortable-container [sortableData]="backlogItems">
           <tr *ngFor="let item of backlogItems; let i = index" class="" dnd-sortable [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-            <td><span class="badge badge-info">{{backlogService.getType(item)}}</span></td>
+            <td><span [ngClass]="{'badge-info': item.status !== 'EPIC', 'badge-warning': item.status === 'EPIC'}" class="badge">{{backlogService.getType(item)}}</span></td>
             <th>{{item.title}}</th>
             <td>{{item.description | truncate: 15}}</td>
             <td>{{item.estimation || 'Not estimated yet'}}</td>
