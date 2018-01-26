@@ -1,3 +1,5 @@
+import { AuthService } from './../shared/service/auth.service';
+import { authService } from './../../../server/services/authService';
 import { BacklogItem } from './../shared/model/backlogItem';
 import { BacklogService, ProjectService} from './../shared/service/.';
 import { Component, OnInit } from '@angular/core';
@@ -19,7 +21,8 @@ export class BacklogComponent implements OnInit {
   constructor(
     private backlogService: BacklogService,
     private projectService : ProjectService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {

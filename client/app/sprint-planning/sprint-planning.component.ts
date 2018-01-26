@@ -85,7 +85,7 @@ export class SprintPlanningComponent implements OnInit {
   getSprintItems() {
     this.enableEditing = true;
     // if bli are present
-    if (this.selectedSprint && this.selectedSprint.backlogItems) {
+    if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
       // sprint has already been planned
       this.enableEditing = false;
       // get bli's for current selected sprint
@@ -162,8 +162,8 @@ export class SprintPlanningComponent implements OnInit {
 
     this.sprintService
       // Write Bli's to Sprint
-      .edit(this.selectedSprint._id, this.selectedSprint)
-      .subscribe(() => {
+      .add(this.selectedSprint).subscribe(savedSprint => {
+        this.selectedSprint = savedSprint;
         // Change Status to SPRINT
         this.backlogService
           .editMany(
@@ -177,7 +177,9 @@ export class SprintPlanningComponent implements OnInit {
   setSelectedSprint(sprint: Sprint) {
     this.selectedSprint = sprint;
     this.getSprintItems();
-    this.modal.close();
+    if (this.modal) {
+      this.modal.close();
+    }
   }
 
   cancelSprintCreation() {

@@ -1,7 +1,7 @@
-<div class="row">
+<div class="row">   
 
     <div class="col-2">
-        <div class="card text-center">
+        <div class="card text-center {{getCardStatusClass()}}" style="border-width: 2px;">
             <div class="card-block">
                 <h4 class="card-title">{{backlogItem.title | truncate: 9}}</h4>
                 <h6 class="card-subtitle mb-2 text-muted">StoryPoints:
@@ -27,11 +27,11 @@
                 </div>
             </div>
             <div [id]="i" *ngFor="let task of taskContainer[i]; let j = index" class="card" dnd-sortable [sortableIndex]="j" (onDropSuccess)="updateStatus(task,$event)"
-            [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
+                [attr.disabled]="state.toUpperCase() == 'DONE'" [dragEnabled]="state.toUpperCase() != 'DONE'">
                 <div [id]="i" class="card-block">
                     <h5 [id]="i" class="card-title">{{task.title | truncate: 15}}</h5>
                     <h6 [id]="i" class="card-subtitle mb-2 text-muted">
-                        <span [id]="i" *ngIf="task.user">Assigned to {{getDeveloperById(task.user).name}}</span>
+                        <span [id]="i" *ngIf="task.user"><span class="badge badge-pill badge-primary"><i class="fa fa-user"></i> {{getDeveloperById(task.user).name}}</span></span>
                         <span [id]="i" *ngIf="!task.user">Not Assigned</span>
                     </h6>
                     <p [id]="i" class="card-text">{{task.description | truncate: 15}}</p>
@@ -104,35 +104,35 @@
     <div class="modal-header">
         <h4 class="modal-title">Task Details</h4>
     </div>
-<form (ngSubmit)="editTask()"ngNativeValidate>
+    <form (ngSubmit)="editTask()" ngNativeValidate>
         <div class="modal-body">
             <div class="form-group">
                 <label for="bli-titel">Title</label>
                 <input [(ngModel)]="selectedTask.title" type="text" class="form-control" id="bli-titel" placeholder="Enter Title" name="bli-titel"
-                    required>
+                    required [attr.disabled]="selectedTask.status.toUpperCase() == 'DONE'">
             </div>
-    
+
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea [(ngModel)]="selectedTask.description" type="text" class="form-control" id="description" placeholder="Description"
-                    name="description" required></textarea>
+                    name="description" required [attr.disabled]="selectedTask.status.toUpperCase() == 'DONE'"></textarea>
             </div>
             <div class="form-group">
                 <label for="estimation">Estimation</label>
                 <input [(ngModel)]="selectedTask.estimation" type="number" class="form-control" id="estimation" placeholder="Estimation"
-                    name="estimation" min="1" [max]="getAvailableStoryPoints()" required>
+                    name="estimation" min="1" [max]="getAvailableStoryPoints()" required [attr.disabled]="selectedTask.status.toUpperCase() == 'DONE'">
             </div>
             <div class="form-group">
                 <label for="assignedDeveloper">Assigned Devloper</label>
-                <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control">
+                <select id="assignedDeveloper" name="assignedDeveloper" [(ngModel)]="selectedTask.user" class="form-control" [attr.disabled]="selectedTask.status.toUpperCase() == 'DONE'">
                     <option *ngFor="let dev of developers" [value]="dev._id">{{dev.surname}} {{dev.name}}</option>
                 </select>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Edit</button>
+            <button type="submit" class="btn btn-primary" [attr.disabled]="selectedTask.status.toUpperCase() == 'DONE'">Edit</button>
             <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
         </div>
-</form>
+    </form>
 </ng-template>
 <!--MODAL TASK DETAILS END -->
