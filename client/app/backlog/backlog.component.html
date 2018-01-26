@@ -6,45 +6,46 @@
     <strong>edit button</strong> of an existing item.</p>
   The order of the items is also the prioritisation and can be changed via
   <strong>drag and drop</strong>.
-  <br><br>
-
-  <div class="row">
-    <div class="col-10">
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Estimation</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody dnd-sortable-container [sortableData]="backlogItems" drag>
-          <tr *ngFor="let item of backlogItems; let i = index" class="" dnd-sortable [dragEnabled]="authService.allowedFor(['Product Owner'])" [sortableIndex]="i" (onDropSuccess)="updateOrder()">
-            <td>
-              <span class="badge badge-info">{{backlogService.getType(item)}}</span>
-            </td>
-            <th>{{item.title |truncate: 15}}</th>
-            <td>{{item.description | truncate: 15}}</td>
-            <td>{{item.estimation|| 'Not estimated yet'}}</td>
-            <td>
-              <span class="badge badge-primary">{{backlogService.getReadableStatus(item.status)}}</span>
-            </td>
-            <td>
-              <div *ngIf="authService.allowedFor(['Product Owner'])">
-                <button type="button" class="btn btn-sm fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
-                <button type="button" class="btn btn-sm fa fa fa-trash-o " (click)="remove(i)"></button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <br>
+  <br>
+  <button *ngIf="authService.allowedFor(['Product Owner'])" class="btn btn-primary" (click)="open(newModal,0)"><i class="fa fa-plus" aria-hidden="true"></i> New Item</button><br><br>
+  <div class="card x-mini-card" style="background-color:#ECECEC;border-color:#ECECEC">
+    <div class="card-block">
+      <div class="row no-gutters">
+        <div class="col-1">Type</div>
+        <div class="col-3">Title</div>
+        <div class="col-3">Description</div>
+        <div class="col-1">Estimation</div>
+        <div class="col-2">Status</div>
+        <div class="col-2"></div>
+      </div>
     </div>
-    <p>
-      <button *ngIf="authService.allowedFor(['Product Owner'])" class="btn" (click)="open(newModal,0)">New Item</button>
-    </p>
+  </div>
+  <div dnd-sortable-container [sortableData]="backlogItems">
+    <div *ngFor="let item of backlogItems; let i = index" class="card x-mini-card" dnd-sortable [dragEnabled]="authService.allowedFor(['Product Owner'])"
+      [sortableIndex]="i" (onDropSuccess)="updateOrder()">
+      <div class="card-block">
+        <div class="row no-gutters">
+          <div class="col-1">
+            <span class="badge badge-info">{{backlogService.getType(item)}}</span>
+          </div>
+          <div class="col-3">
+            <h5>{{item.title |truncate: 20}}</h5>
+          </div>
+          <div class="col-3">{{item.description}}</div>
+          <div class="col-1"><strong>{{item.estimation|| '?'}}</strong></div>
+          <div class="col-2">
+            <span class="badge badge-primary">{{backlogService.getReadableStatus(item.status)}}</span>
+          </div>
+          <div class="col-2">
+            <button type="button" class="btn fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
+            <button type="button" class="btn fa fa fa-trash-o " (click)="remove(i)"></button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <!-- MODAL EDIT BEGIN -->
     <ng-template #editModal let-c="close" let-d="dismiss">
@@ -79,7 +80,7 @@
     <!-- MODAL NEW BEGIN -->
     <ng-template #newModal let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <h4 class="modal-title">New {{newMode}}</h4>
+        <h4 class="modal-title">New Backlog Item</h4>
       </div>
       <form ngNativeValidate (ngSubmit)="saveNewItem()" ngNat #f="ngForm">
 
@@ -115,5 +116,4 @@
       </form>
     </ng-template>
 
-  </div>
 </div>

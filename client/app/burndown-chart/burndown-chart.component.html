@@ -2,7 +2,7 @@
   <div class="col-md-6">
     <div *ngIf="isDataLoaded">
       <div style="display: block;">
-        <canvas *ngIf="isDataLoaded" baseChart width="600" height="600" [(datasets)]="lineChartData" [(labels)]="lineChartLabels" [options]="lineChartOptions"
+        <canvas *ngIf="isDataLoaded" baseChart width="1024" height="700" [(datasets)]="lineChartData" [(labels)]="lineChartLabels" [options]="lineChartOptions"
           [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)"
           (chartClick)="chartClicked($event)"></canvas>
       </div>
