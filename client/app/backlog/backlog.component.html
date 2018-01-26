@@ -27,7 +27,7 @@
       <div class="card-block">
         <div class="row no-gutters">
           <div class="col-1">
-            <span class="badge badge-info">{{backlogService.getType(item)}}</span>
+            <span [ngClass]="{'badge-info': item.status !== 'EPIC', 'badge-warning': item.status === 'EPIC'}" class="badge">{{backlogService.getType(item)}}</span>
           </div>
           <div class="col-3">
             <h5>{{item.title |truncate: 20}}</h5>
@@ -40,7 +40,6 @@
           <div class="col-2">
             <button type="button" class="btn fa fa-pencil-square-o " (click)="open(editModal,i)"></button>
             <button type="button" class="btn fa fa fa-trash-o " (click)="remove(i)"></button>
-
           </div>
         </div>
       </div>
