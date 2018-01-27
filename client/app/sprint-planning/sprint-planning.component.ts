@@ -13,11 +13,12 @@ import { ActivatedRoute } from '@angular/router/';
 })
 export class SprintPlanningComponent implements OnInit {
   modal;
-  enableEditing = true;
+  createNewSprint = false;
   backlogItems: BacklogItem[] = [];
   backlogItemsForSprint: BacklogItem[] = [];
 
   newSprint: Sprint;
+  activeSprint: Sprint;
   selectedSprint: Sprint;
   sprints: Sprint[];
 
@@ -41,6 +42,10 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   initialize() {
+    // Aktuellen Sprint holen
+    this.sprintService.getOne(this.projectService.project.activeSprint).subscribe(result => {
+      this.activeSprint = result;
+    });
     // Wenn keine Sprints vorhanden sind default => neuen Sprint selektiren
     if (this.sprints.length === 0) {
       // Objekt für neuen Sprint initialisieren
@@ -49,7 +54,7 @@ export class SprintPlanningComponent implements OnInit {
         end: moment().add(this.projectService.project.sprintDuration, 'days').format('YYYY-MM-DD'),
         sprintNo: 1,
         backlogItems: [],
-        project: this.projectService.project._id
+        project: this.projectService.project._id,
       };
       this.selectedSprint = this.newSprint;
     } else {
@@ -61,6 +66,7 @@ export class SprintPlanningComponent implements OnInit {
         sprintNo: latestSprint.sprintNo + 1,
         backlogItems: [],
         project: this.projectService.project._id
+
       };
       this.selectedSprint = this.sprints[0];
       this.getSprintItems();
@@ -80,18 +86,13 @@ export class SprintPlanningComponent implements OnInit {
    * Lädt alle Backlogitems des ausgewählten Sprints
    */
   getSprintItems() {
-    this.enableEditing = true;
     // if bli are present
     if (this.selectedSprint && this.selectedSprint.backlogItems.length > 0) {
       // sprint has already been planned
-      this.enableEditing = false;
       // get bli's for current selected sprint
       this.backlogService
         .getAll({ _id: { $in: this.selectedSprint.backlogItems } })
         .subscribe(result => {
-          if (result.length > 0) {
-            this.enableEditing = false;
-          }
           this.backlogItemsForSprint = result;
         });
     } else {
@@ -149,7 +150,7 @@ export class SprintPlanningComponent implements OnInit {
    * Fügt die ausgewählten Items dem Sprint hinzu und speichert diesen ab.
    */
   saveBliToSprint() {
-    this.enableEditing = false;
+    this.createNewSprint = false;
     this.backlogItemsForSprint.forEach(item => {
       // no array entry yet
       if (!this.selectedSprint.backlogItems) {
@@ -180,13 +181,14 @@ export class SprintPlanningComponent implements OnInit {
   createSprint(sprint: Sprint) {
     this.sprints.push(sprint);
     this.setSelectedSprint(sprint);
+    this.createNewSprint = true;
   }
 
   /**
    * Bricht die Erstellung eines neuen Sprints ab
    */
   cancelSprintCreation() {
-    this.enableEditing = false;
+    this.createNewSprint = false;
     this.sprints.pop();
     this.initialize();
   }
