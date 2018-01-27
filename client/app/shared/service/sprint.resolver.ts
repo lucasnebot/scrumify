@@ -11,6 +11,7 @@ export class SprintResolver implements Resolve<Sprint> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
         console.log('Active Project: ' + this.projectService.project._id);
-        return this.sprintService.getAll({ project: this.projectService.project._id });
+        return this.sprintService.getAll({ project: this.projectService.project._id,
+            start: { $gte : Date.now() });
     }
 }

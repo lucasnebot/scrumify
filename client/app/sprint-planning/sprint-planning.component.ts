@@ -21,6 +21,7 @@ export class SprintPlanningComponent implements OnInit {
   activeSprint: Sprint;
   selectedSprint: Sprint;
   sprints: Sprint[];
+  upcomingSprints: Sprint[];
 
   constructor(public projectService: ProjectService, public backlogService: BacklogService, public sprintService: SprintService
     , private modalService: NgbModal, private route: ActivatedRoute) {
@@ -30,7 +31,7 @@ export class SprintPlanningComponent implements OnInit {
       this.sprints = data['sprints'];
 
       // Sprint Daten (falls vorhanden) nach Datum sortieren
-      this.sprints.sort((a, b) => {
+      this.sprints = this.sprints.sort((a, b) => {
         return +new Date(a.end) - +new Date(b.end);
       });
       this.initialize();
@@ -45,7 +46,15 @@ export class SprintPlanningComponent implements OnInit {
     // Aktuellen Sprint holen
     this.sprintService.getOne(this.projectService.project.activeSprint).subscribe(result => {
       this.activeSprint = result;
+
+      // Aktuellen sprint rausfiltern
+      if (this.activeSprint) {
+        this.upcomingSprints = this.sprints.filter(element => {
+          return element._id !== this.activeSprint._id;
+        });
+      }
     });
+
     // Wenn keine Sprints vorhanden sind default => neuen Sprint selektiren
     if (this.sprints.length === 0) {
       // Objekt für neuen Sprint initialisieren
@@ -171,6 +180,7 @@ export class SprintPlanningComponent implements OnInit {
           )
           .subscribe(result => { });
       });
+    this.initialize();
   }
 
   /**
