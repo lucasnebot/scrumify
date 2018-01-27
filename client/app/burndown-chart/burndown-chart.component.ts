@@ -73,7 +73,7 @@ export class BurndownChartComponent implements OnInit {
     private sprintService: SprintService,
     private taskService: TaskService,
     private backlogItemService: BacklogService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.sprintService
@@ -87,7 +87,11 @@ export class BurndownChartComponent implements OnInit {
             this.backlogItems = items;
             this.setLineChartLabels();
             this.calculateAverage();
+            // Noch nichts berechnen, wenn der Sprint noch nicht angefangen hat
+            if (moment().isBefore(moment(this.sprint.start)) === false) {
             this.calculateActual();
+            }
+            this.isDataLoaded = true;
           });
       });
     this.totalStoryPoints = this.projectService.project.storyPointsPerSprint;
@@ -113,18 +117,18 @@ export class BurndownChartComponent implements OnInit {
       .getAll({ status: 'DONE', backlogItem: { $in: this.backlogItems } })
       .subscribe(tasks => {
         if (this.lineChartLabels) {
+          // For each value of the x-axis
           this.lineChartLabels.forEach(day => {
             const a = moment(day);
-            let apply = false;
-            tasks.forEach(task => {
-              const b = moment(task.doneTimestamp).format('DD. MMM');
-
-              if (a.diff(b, 'days') === 0) {
-                localStoryPoints = localStoryPoints - task.estimation;
-                apply = true;
-              }
-            });
-            if (apply) {
+            const c = moment();
+            if (c.isBefore(a, 'date') === true) {
+              tasks.forEach(task => {
+                const b = moment(task.doneTimestamp).format('DD. MMM');
+                // Current day on the x-axis equals day on y-axis
+                if (a.diff(b, 'days') === 0) {
+                  localStoryPoints = localStoryPoints - task.estimation;
+                }
+              });
               localDataArray.push(localStoryPoints);
             }
           });
@@ -138,7 +142,6 @@ export class BurndownChartComponent implements OnInit {
           ];
         }
         this.lineChartData = this.idealBurnData.concat(this.actualBurnData);
-        this.isDataLoaded = true;
       });
   }
 
@@ -165,6 +168,7 @@ export class BurndownChartComponent implements OnInit {
         fill: false
       }
     ];
+    this.lineChartData = this.idealBurnData;
   }
 
   // events
