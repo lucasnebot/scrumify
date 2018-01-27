@@ -41,6 +41,7 @@ import { BliCardComponent } from './shared/component/bli-card/bli-card.component
 import { ProjectExplorerComponent } from './project-explorer/project-explorer.component';
 import { KanbanRowComponent } from './shared/component/kanban-row/kanban-row.component';
 import { BurndownChartComponent } from './burndown-chart/burndown-chart.component';
+import { SprintResolver } from './shared/service/sprint.resolver';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { BurndownChartComponent } from './burndown-chart/burndown-chart.componen
       multi: true
     },
     SprintService,
+    SprintResolver,
     EstimationHelperService,
     ProjectGuardService
   ],
