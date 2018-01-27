@@ -8,7 +8,7 @@
     <div class="navbar-nav ml-auto">
       <!-- Repetetive use of ngIf could surely be optimized -->
       <a *ngIf="!authService.authenticated" class="nav-item nav-link" routerLink="/signUp">Sign Up</a>
-      <a class="nav-item nav-link active" routerLink="/">Home
+      <a class="nav-item nav-link active" routerLink="/">Dashboard
         <span class="sr-only">Current</span>
       </a>
       <a *ngIf="authService.authenticated" class="nav-item nav-link" routerLink="/backlog">Backlog</a>
