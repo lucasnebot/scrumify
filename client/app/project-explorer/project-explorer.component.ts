@@ -12,6 +12,7 @@ import 'rxjs/add/observable/zip';
 import 'rxjs/add/operator/mergeMap';
 import { SprintService } from '../shared/service/sprint.service';
 import * as moment from 'moment';
+import { LS_SPRINT } from '../shared/service/project.service';
 
 @Component({
   selector: 'app-project-explorer',
@@ -37,7 +38,7 @@ export class ProjectExplorerComponent implements OnInit {
     protected router: Router,
     protected userService: UserService,
     private sprintService: SprintService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (this.authService.activeUser.projects) {
@@ -52,21 +53,22 @@ export class ProjectExplorerComponent implements OnInit {
     this.projectService.project = project;
     // Add project to localstorage
     localStorage.setItem(LS_PROJECT, JSON.stringify(project));
-    //! Used for effort estimation | TODO: change location?
+    // ! Used for effort estimation | TODO: change location?
     this.projectService.getNumberOfDevelopers();
 
-    // Set active sprint if date fits in current range!
-    this.sprintService.getAll({project: project._id})
-    .map(sprints => {
-      sprints.filter(sprint => {
-        if ( moment(Date.now()).isBetween(sprint.start, sprint.end)) {
-          this.projectService.setActiveSprint(sprint);
-          return true;
-        }
-        return false;
-      });
-    })
-    .subscribe();
+    // Hole und setze den aktuellen Sprint
+    // MEGA WICHTIG!!!
+    this.sprintService.getAll({
+      project: this.projectService.project._id }).map(sprints => {
+        sprints.filter(sprint => {
+          if (moment(Date.now()).isBetween(sprint.start, sprint.end)) {
+            localStorage.setItem(LS_SPRINT, sprint._id);
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }).subscribe();
 
     this.router.navigate(['/']);
   }

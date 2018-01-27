@@ -5,7 +5,6 @@ export class Project extends BaseModel {
     defDone?: string;
     sprintDuration?: number;
     storyPointsPerSprint?: number;
-    activeSprint: string;
     users?: string[];
     backlogitems?: string[];
 }

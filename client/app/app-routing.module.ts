@@ -10,6 +10,7 @@ import { AuthGuardService, ProjectGuardService } from './shared/service';
 import {EffortEstimationComponent } from './effort-estimation/effort-estimation.component';
 import {ProjectExplorerComponent } from './project-explorer/project-explorer.component';
 import { BurndownChartComponent } from './burndown-chart/burndown-chart.component';
+import { SprintResolver } from './shared/service/sprint.resolver';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'roadmap', component: RoadmapComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: '*', component: HomeComponent},
   {path: 'signUp', component: SignUpComponent},
-  {path: 'sprint-planning', component: SprintPlanningComponent, canActivate: [AuthGuardService, ProjectGuardService]},
+  {path: 'sprint-planning', component: SprintPlanningComponent, canActivate: [AuthGuardService, ProjectGuardService]
+    , resolve: {sprints: SprintResolver}},
   {path: 'scrumboard', component: ScrumboardComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'effortEstimation', component: EffortEstimationComponent, canActivate: [AuthGuardService, ProjectGuardService]},
   {path: 'projects', component: ProjectExplorerComponent, canActivate: [AuthGuardService] },
