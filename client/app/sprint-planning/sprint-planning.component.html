@@ -50,8 +50,9 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div *ngIf="upcomingSprints.length > 0" class="card">
+  <div *ngIf="upcomingSprints.length > 0 && !createNewSprint" class="card">
       <h5 class="card-header">
         <i class="fa fa-calendar text-success" aria-hidden="true"></i> - Upcoming Sprints</h5>
       <div class="card-block">
@@ -72,7 +73,6 @@
         </div>
       </div>
     </div>
-  </div>
 
   <!-- Sprint edit -->
   <div *ngIf="createNewSprint">

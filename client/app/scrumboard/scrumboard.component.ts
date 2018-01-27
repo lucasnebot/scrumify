@@ -21,14 +21,12 @@ export class ScrumboardComponent implements OnInit {
   developers: User[] = [];
   sprintNo = 0;
   ngOnInit() {
-
-    //get all bli's of active sprint
-    this.sprintService.getOne(this.projectService.project.activeSprint).subscribe(sprint =>{
+    this.sprintService.getOne(localStorage.getItem('activeSprint')).subscribe(sprint =>{
       this.sprintNo = sprint.sprintNo;
       this.backlogService.getAll({_id: { $in: sprint.backlogItems }}).subscribe(blis =>{
         this.backlogItems = blis;
-      })
-    })
+      });
+    });
 
     this.userService.getAll({ role: 2 , projects: this.projectService.project._id}).subscribe(devs => {
       this.developers = devs;

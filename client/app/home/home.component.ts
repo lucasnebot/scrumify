@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SignInData, Project, User } from '../shared/model';
 import { AuthService, ProjectService, UserService } from '../shared/service';
 import { Router } from '@angular/router';
+import { SprintService } from '../shared/service/sprint.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +15,7 @@ export class HomeComponent implements OnInit {
     email: '',
     password: ''
   };
+  activeSprint: string;
   loginFailed = false;
   users: User[];
 
@@ -20,15 +23,17 @@ export class HomeComponent implements OnInit {
     public authService: AuthService,
     public projectService: ProjectService,
     public userService: UserService,
+    private sprintService: SprintService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    if(this.authService.authenticated && this.projectService.project){
-      //! Only Users from this project are displayed
-      this.userService.getAll({projects: this.projectService.project._id}).subscribe((docs) => {
+    this.activeSprint = localStorage.getItem('activeSprint');
+    if (this.authService.authenticated && this.projectService.project) {
+      // Only Users from this project are displayed
+      this.userService.getAll({ projects: this.projectService.project._id }).subscribe((docs) => {
         this.users = docs;
-      })
+      });
     }
   }
   signIn() {

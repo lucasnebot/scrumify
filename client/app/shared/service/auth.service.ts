@@ -56,6 +56,7 @@ export class AuthService {
     localStorage.removeItem(LS_TOKEN_KEY);
     // !remove project from local storage when logging out
     localStorage.removeItem(LS_PROJECT);
+    localStorage.removeItem('activeSprint');
   }
 
   /**

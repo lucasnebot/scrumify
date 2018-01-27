@@ -113,7 +113,7 @@
     <div class="row">
       <div class="col">
         <!-- Burndown Chart -->
-        <div *ngIf="projectService.project.activeSprint" class="row">
+        <div *ngIf="activeSprint" class="row">
           <div class="col">
             <div class="card">
               <h5 class="card-header">
@@ -121,7 +121,7 @@
               <div class="card-block">
                 <div class="card-text">
                   <!-- Implement burndown -->
-                  <app-burndown-chart *ngIf="projectService.project.activeSprint"></app-burndown-chart>
+                  <app-burndown-chart *ngIf="activeSprint"></app-burndown-chart>
                 </div>
               </div>
             </div>

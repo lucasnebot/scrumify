@@ -43,11 +43,12 @@ export class SprintPlanningComponent implements OnInit {
   }
 
   initialize() {
-    // Aktuellen Sprint holen
-    this.sprintService.getOne(this.projectService.project.activeSprint).subscribe(result => {
-      this.activeSprint = result;
+    // Upcoming sprints setzen
+    this.upcomingSprints = this.sprints;
 
-      // Aktuellen sprint rausfiltern
+    // Aktuellen Sprint holen
+    this.sprintService.getOne(localStorage.getItem('activeSprint')).subscribe(result => {
+      this.activeSprint = result;
       if (this.activeSprint) {
         this.upcomingSprints = this.sprints.filter(element => {
           return element._id !== this.activeSprint._id;
@@ -67,6 +68,7 @@ export class SprintPlanningComponent implements OnInit {
       };
       this.selectedSprint = this.newSprint;
     } else {
+
       // Objekt für neuen Sprint mit richtigen Startwerten versehen
       const latestSprint = this.sprints[this.sprints.length - 1];
       this.newSprint = {
@@ -172,15 +174,23 @@ export class SprintPlanningComponent implements OnInit {
       // Write Bli's to Sprint
       .add(this.selectedSprint).subscribe(savedSprint => {
         this.selectedSprint = savedSprint;
+
+        // MEGA WICHTIG
+        if (moment(Date.now()).isBetween(savedSprint.start, savedSprint.end)) {
+          localStorage.set('activeSprint', savedSprint._id);
+        }
+
         // Change Status to SPRINT
         this.backlogService
           .editMany(
           { _id: { $in: this.selectedSprint.backlogItems } },
           { $set: { status: 'SPRINT' } }
           )
-          .subscribe(result => { });
+          .subscribe(result => {
+            this.initialize();
+          });
       });
-    this.initialize();
+    this.createNewSprint = false;
   }
 
   /**
@@ -189,9 +199,9 @@ export class SprintPlanningComponent implements OnInit {
    * @param sprint
    */
   createSprint(sprint: Sprint) {
+    this.createNewSprint = true;
     this.sprints.push(sprint);
     this.setSelectedSprint(sprint);
-    this.createNewSprint = true;
   }
 
   /**
@@ -201,5 +211,13 @@ export class SprintPlanningComponent implements OnInit {
     this.createNewSprint = false;
     this.sprints.pop();
     this.initialize();
+  }
+
+  calcEndDate() {
+    const sprintDuration = this.projectService.project.sprintDuration;
+    this.newSprint.end = moment(this.newSprint.start)
+      .add(sprintDuration, 'days')
+      .format('YYYY-MM-DD');
+    // this.projectService.project.sprintDuration
   }
 }

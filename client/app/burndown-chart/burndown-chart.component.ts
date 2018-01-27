@@ -77,7 +77,7 @@ export class BurndownChartComponent implements OnInit {
 
   ngOnInit() {
     this.sprintService
-      .getOne(this.projectService.project.activeSprint)
+      .getOne(localStorage.getItem('activeSprint'))
       .subscribe(result => {
         this.sprint = result;
         this.sprint = result;
