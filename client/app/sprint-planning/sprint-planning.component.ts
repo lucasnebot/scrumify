@@ -4,6 +4,7 @@ import { BacklogItem, Sprint } from './../shared/model/.';
 import { BacklogService, SprintService } from './../shared/service/.';
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { ActivatedRoute } from '@angular/router/';
 
 @Component({
   selector: 'app-sprint-planning',
@@ -13,75 +14,71 @@ import * as moment from 'moment';
 export class SprintPlanningComponent implements OnInit {
   modal;
   enableEditing = true;
-  progressBarValue = 0;
-  progressbarLabel: string;
-  currentStoryPointUsage: number;
-  sprintMinDate: string;
   backlogItems: BacklogItem[] = [];
   backlogItemsForSprint: BacklogItem[] = [];
-  sprints: Sprint[] = [];
-  selectedSprint: Sprint = {
-    start: '',
-    end: '',
-    sprintNo: 0,
-    backlogItems: [],
-    project: null
-  };
 
   newSprint: Sprint;
-  constructor(public projectService: ProjectService, public backlogService: BacklogService, public sprintService: SprintService,
-    private modalService: NgbModal) {
-    this.newSprint = {
-      start: moment().format('YYYY-MM-DD'),
-      end: moment().add(this.projectService.project.sprintDuration, 'days').format('YYYY-MM-DD'),
-      sprintNo: 0,
-      backlogItems: [],
-      project: this.projectService.project._id
-    };
-  }
+  selectedSprint: Sprint;
+  sprints: Sprint[];
 
-  ngOnInit() {
-    this.getSprints();
-    this.getBacklogItems();
-  }
+  constructor(public projectService: ProjectService, public backlogService: BacklogService, public sprintService: SprintService
+    , private modalService: NgbModal, private route: ActivatedRoute) {
 
-  getSprints(setSelectedIndex?: number) {
-    const activeProject = this.projectService.project;
-    this.sprintService.getAll({ project: activeProject._id }).subscribe(result => {
-      this.sprints = result;
+    // Sprint Daten von Resolver holen
+    route.data.subscribe(data => {
+      this.sprints = data['sprints'];
 
-      // Sort Sprints by end date asc
+      // Sprint Daten (falls vorhanden) nach Datum sortieren
       this.sprints.sort((a, b) => {
         return +new Date(a.end) - +new Date(b.end);
       });
-
-      // Select active Sprint as default
-      if (activeProject.activeSprint) {
-        this.selectedSprint = this.sprints.filter(sprint => {
-          if (activeProject.activeSprint === sprint._id) {
-            return sprint;
-          }
-        })[0];
-
-        // Set default settings for new Sprint
-        this.newSprint.sprintNo = this.getLatestSprint().sprintNo + 1;
-        this.newSprint.start = moment(this.getLatestSprint().end).add(1, 'day').format('YYYY-MM-DD');
-        this.newSprint.end = moment(this.getLatestSprint().end)
-                            .add(this.projectService.project.sprintDuration + 1, 'day').format('YYYY-MM-DD');
-
-        this.getSprintItems();
-      }
-
-      //
+      this.initialize();
     });
   }
 
+  ngOnInit() {
+    this.getBacklogItems();
+  }
+
+  initialize() {
+    // Wenn keine Sprints vorhanden sind default => neuen Sprint selektiren
+    if (this.sprints.length === 0) {
+      // Objekt für neuen Sprint initialisieren
+      this.newSprint = {
+        start: moment().format('YYYY-MM-DD'),
+        end: moment().add(this.projectService.project.sprintDuration, 'days').format('YYYY-MM-DD'),
+        sprintNo: 1,
+        backlogItems: [],
+        project: this.projectService.project._id
+      };
+      this.selectedSprint = this.newSprint;
+    } else {
+      // Objekt für neuen Sprint mit richtigen Startwerten versehen
+      const latestSprint = this.sprints[this.sprints.length - 1];
+      this.newSprint = {
+        start: moment(latestSprint.end).add(1, 'days').format('YYYY-MM-DD'),
+        end: moment(latestSprint.end).add(this.projectService.project.sprintDuration + 1, 'days').format('YYYY-MM-DD'),
+        sprintNo: latestSprint.sprintNo + 1,
+        backlogItems: [],
+        project: this.projectService.project._id
+      };
+      this.selectedSprint = this.sprints[0];
+      this.getSprintItems();
+    }
+  }
+
+  /**
+   * Lädt alle Backlogitems mit dem Status 'RFS' aus dem aktuellen Projekt
+   */
   getBacklogItems() {
     this.backlogService.getAll({ status: 'RFS', project: this.projectService.project._id }).subscribe(result => {
       this.backlogItems = result;
     });
   }
 
+  /**
+   * Lädt alle Backlogitems des ausgewählten Sprints
+   */
   getSprintItems() {
     this.enableEditing = true;
     // if bli are present
@@ -102,6 +99,21 @@ export class SprintPlanningComponent implements OnInit {
     }
   }
 
+  /**
+   * Setzt den aktuellen Sprint und lädt die zugehörigen Backlogitems
+   * @param sprint
+   */
+  setSelectedSprint(sprint: Sprint) {
+    this.selectedSprint = sprint;
+    this.getSprintItems();
+    if (this.modal) {
+      this.modal.close();
+    }
+  }
+
+  /**
+   * Berechnet die aktuell vergebenen Story Points
+   */
   getTotalStoryPointUsage(): number {
     let usage = 0;
     if (this.backlogItemsForSprint) {
@@ -112,6 +124,9 @@ export class SprintPlanningComponent implements OnInit {
     return usage;
   }
 
+  /**
+   * Warnmeldung in der View
+   */
   sprintTooFull() {
     if (
       this.getTotalStoryPointUsage() >
@@ -122,11 +137,6 @@ export class SprintPlanningComponent implements OnInit {
       return false;
     }
   }
-
-  disableInteraction(): boolean {
-    return this.backlogItemsForSprint.length > 0;
-  }
-
   /**
    * If inital is not set, a sprint is added to existing sprint list. Therefore a min property is bound to the datepicker.
    */
@@ -135,21 +145,9 @@ export class SprintPlanningComponent implements OnInit {
     this.modal.result.then(result => { }, reason => { });
   }
 
-  saveSprint() {
-    this.sprintService.add(this.newSprint).subscribe(() => {
-      this.getSprints(this.newSprint.sprintNo);
-    });
-    this.projectService.setActiveSprint(this.newSprint);
-  }
-
-  getLatestSprint() {
-    if (this.sprints.length > 0) {
-      return this.sprints[this.sprints.length - 1];
-    } else {
-      return this.newSprint;
-    }
-  }
-
+  /**
+   * Fügt die ausgewählten Items dem Sprint hinzu und speichert diesen ab.
+   */
   saveBliToSprint() {
     this.enableEditing = false;
     this.backlogItemsForSprint.forEach(item => {
@@ -174,15 +172,22 @@ export class SprintPlanningComponent implements OnInit {
       });
   }
 
-  setSelectedSprint(sprint: Sprint) {
-    this.selectedSprint = sprint;
-    this.getSprintItems();
-    if (this.modal) {
-      this.modal.close();
-    }
+  /**
+   * Wird aufgerufen wenn aus dem modalen Dialog ein
+   * neuer Sprint erzeugt wird.
+   * @param sprint
+   */
+  createSprint(sprint: Sprint) {
+    this.sprints.push(sprint);
+    this.setSelectedSprint(sprint);
   }
 
+  /**
+   * Bricht die Erstellung eines neuen Sprints ab
+   */
   cancelSprintCreation() {
-      this.selectedSprint = this.getLatestSprint();
-    }
+    this.enableEditing = false;
+    this.sprints.pop();
+    this.initialize();
+  }
 }
