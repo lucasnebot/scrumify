@@ -44,7 +44,7 @@ export class SprintPlanningComponent implements OnInit {
 
   initialize() {
     // Upcoming sprints setzen
-    this.upcomingSprints = this.sprints;
+    this.upcomingSprints = [];
 
     // Aktuellen Sprint holen
     this.sprintService.getOne(localStorage.getItem('activeSprint')).subscribe(result => {
@@ -177,7 +177,7 @@ export class SprintPlanningComponent implements OnInit {
 
         // MEGA WICHTIG
         if (moment().isBetween(savedSprint.start, savedSprint.end)) {
-          localStorage.set('activeSprint', savedSprint._id);
+          localStorage.setItem('activeSprint', savedSprint._id);
         }
 
         // Change Status to SPRINT
@@ -199,9 +199,9 @@ export class SprintPlanningComponent implements OnInit {
    * @param sprint
    */
   createSprint(sprint: Sprint) {
+    this.setSelectedSprint(sprint);
     this.createNewSprint = true;
     this.sprints.push(sprint);
-    this.setSelectedSprint(sprint);
   }
 
   /**
