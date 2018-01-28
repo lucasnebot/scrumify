@@ -121,7 +121,7 @@
                   <ul class="list-group" dnd-sortable-container [sortableData]="backlogItemsForSprint" [dropZones]="['dropzone1']">
                     <li *ngIf="backlogItemsForSprint.length == 0" class="list-group-item list-group-item-action list-group-item-info">Drop Backlog Items here to add them to the sprint</li>
                     <li *ngFor="let item of backlogItemsForSprint; let i = index" dnd-sortable [sortableIndex]="i" class="list-group-item " [dragEnabled]="createNewSprint"
-                      [attr.disabled]="!createNewSprint">{{item.title}} <strong>Estimation:</strong> {{item.estimation}}</li>
+                      [attr.disabled]="!createNewSprint">{{item.title}} <strong> Estimation: </strong> {{item.estimation}}</li>
                   </ul>
                   <br>
                   <br>

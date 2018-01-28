@@ -44,9 +44,10 @@ export class SprintPlanningComponent implements OnInit {
 
   initialize() {
     // Upcoming sprints setzen
-    this.upcomingSprints = [];
+    this.upcomingSprints = this.sprints;
 
-    // Aktuellen Sprint holen
+    if (localStorage.getItem('activeSprint')) {
+      // Aktuellen Sprint holen
     this.sprintService.getOne(localStorage.getItem('activeSprint')).subscribe(result => {
       this.activeSprint = result;
       if (this.activeSprint) {
@@ -55,6 +56,7 @@ export class SprintPlanningComponent implements OnInit {
         });
       }
     });
+    }
 
     // Wenn keine Sprints vorhanden sind default => neuen Sprint selektiren
     if (this.sprints.length === 0) {
