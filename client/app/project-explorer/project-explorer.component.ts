@@ -62,7 +62,7 @@ export class ProjectExplorerComponent implements OnInit {
     this.sprintService.getAll({
       project:  project._id}).map(sprints => {
         sprints.filter(sprint => {
-          if (moment().isBetween(sprint.start, sprint.end)) {
+          if (moment().startOf('day').isSame(moment(sprint.start).startOf('day'), 'day')) {
             localStorage.setItem(LS_SPRINT, sprint._id);
             return true;
           } else {
