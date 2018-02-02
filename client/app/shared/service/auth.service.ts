@@ -23,7 +23,7 @@ export class AuthService {
   activeUser: User;
 
   constructor(private http: HttpClient, protected userService: UserService) {
-    this.checkForSessionToken();
+    //this.checkForSessionToken();
   }
 
   /**

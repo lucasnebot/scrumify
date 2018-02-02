@@ -176,7 +176,7 @@ export class SprintPlanningComponent implements OnInit {
         this.selectedSprint = savedSprint;
 
         // MEGA WICHTIG
-        if (moment(Date.now()).isBetween(savedSprint.start, savedSprint.end)) {
+        if (moment().isBetween(savedSprint.start, savedSprint.end)) {
           localStorage.set('activeSprint', savedSprint._id);
         }
 
