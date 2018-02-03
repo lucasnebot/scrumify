@@ -129,7 +129,7 @@ export class BurndownChartComponent implements OnInit {
           for (const day of this.lineChartLabels) {
             const today = moment().format('DD. MMM');
             const a = moment(day);
-            if (a.isBefore(moment(today), 'day')) {
+            if (a.isSameOrBefore(moment(today), 'day')) {
               tasks.forEach(task => {
                 const b = moment(task.doneTimestamp).format('DD. MMM');
                 // Current day on the x-axis equals day on y-axis
@@ -139,7 +139,6 @@ export class BurndownChartComponent implements OnInit {
               });
               localDataArray.push(localStoryPoints);
             } else {
-              localDataArray.push(localStoryPoints);
               break;
             }
           }
