@@ -87,11 +87,7 @@ export class BurndownChartComponent implements OnInit {
             this.backlogItems = items;
             this.setLineChartLabels();
             this.calculateAverage();
-            // Noch nichts berechnen, wenn der Sprint noch nicht angefangen hat
-            if (moment().isBefore(moment(this.sprint.start)) === false) {
             this.calculateActual();
-            }
-            this.isDataLoaded = true;
           });
       });
     this.totalStoryPoints = this.projectService.project.storyPointsPerSprint;
@@ -120,8 +116,6 @@ export class BurndownChartComponent implements OnInit {
           // For each value of the x-axis
           this.lineChartLabels.forEach(day => {
             const a = moment(day);
-            const c = moment();
-            if (c.isBefore(a, 'date') === true) {
               tasks.forEach(task => {
                 const b = moment(task.doneTimestamp).format('DD. MMM');
                 // Current day on the x-axis equals day on y-axis
@@ -130,7 +124,6 @@ export class BurndownChartComponent implements OnInit {
                 }
               });
               localDataArray.push(localStoryPoints);
-            }
           });
           this.actualBurnData = [
             {
@@ -142,6 +135,7 @@ export class BurndownChartComponent implements OnInit {
           ];
         }
         this.lineChartData = this.idealBurnData.concat(this.actualBurnData);
+        this.isDataLoaded = true;
       });
   }
 

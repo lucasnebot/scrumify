@@ -53,13 +53,14 @@ export class ProjectExplorerComponent implements OnInit {
     this.projectService.project = project;
     // Add project to localstorage
     localStorage.setItem(LS_PROJECT, JSON.stringify(project));
+    localStorage.removeItem(LS_SPRINT);
     // ! Used for effort estimation | TODO: change location?
     this.projectService.getNumberOfDevelopers();
 
     // Hole und setze den aktuellen Sprint
     // MEGA WICHTIG!!!
     this.sprintService.getAll({
-      project: this.projectService.project._id }).map(sprints => {
+      project:  project._id}).map(sprints => {
         sprints.filter(sprint => {
           if (moment(Date.now()).isBetween(sprint.start, sprint.end)) {
             localStorage.setItem(LS_SPRINT, sprint._id);
@@ -68,9 +69,9 @@ export class ProjectExplorerComponent implements OnInit {
             return false;
           }
         });
-      }).subscribe();
-
-    this.router.navigate(['/']);
+      }).subscribe(data => {
+        this.router.navigate(['/']);
+      });
   }
   displayUserProjects() {
     this.projectService
