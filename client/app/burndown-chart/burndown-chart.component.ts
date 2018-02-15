@@ -111,11 +111,25 @@ export class BurndownChartComponent implements OnInit {
 
     this.taskService
       .getAll({ status: 'DONE', backlogItem: { $in: this.backlogItems } })
+      .map(tasks => {
+        // Sortiere die Tasks nach dem Datum der fertigstellung
+        tasks.sort((a, b) => {
+          return +new Date(a.doneTimestamp) - +new Date(b.doneTimestamp);
+        });
+
+        tasks = tasks.filter(task => {
+          return moment(task.doneTimestamp).isSameOrBefore(moment());
+        });
+
+        return tasks;
+      })
       .subscribe(tasks => {
         if (this.lineChartLabels) {
           // For each value of the x-axis
-          this.lineChartLabels.forEach(day => {
-            const a = moment(day);
+          for (const day of this.lineChartLabels) {
+            const today = moment().format('DD. MMM');
+            if (moment(day).isSameOrBefore(moment(today), 'day')) {
+              const a = moment(day);
               tasks.forEach(task => {
                 const b = moment(task.doneTimestamp).format('DD. MMM');
                 // Current day on the x-axis equals day on y-axis
@@ -124,7 +138,10 @@ export class BurndownChartComponent implements OnInit {
                 }
               });
               localDataArray.push(localStoryPoints);
-          });
+            } else {
+              break;
+            }
+          }
           this.actualBurnData = [
             {
               data: localDataArray,
