@@ -111,20 +111,38 @@ export class BurndownChartComponent implements OnInit {
 
     this.taskService
       .getAll({ status: 'DONE', backlogItem: { $in: this.backlogItems } })
+      .map(tasks => {
+        // Sortiere die Tasks nach dem Datum der fertigstellung
+        tasks.sort((a, b) => {
+          return +new Date(a.doneTimestamp) - +new Date(b.doneTimestamp);
+        });
+
+        tasks = tasks.filter(task => {
+          return moment(task.doneTimestamp).isSameOrBefore(moment(), 'day');
+        });
+
+        return tasks;
+      })
       .subscribe(tasks => {
         if (this.lineChartLabels) {
           // For each value of the x-axis
-          this.lineChartLabels.forEach(day => {
+          for (const day of this.lineChartLabels) {
+            const today = moment().format('DD. MMM');
             const a = moment(day);
+            if (a.isBefore(moment(today), 'day')) {
               tasks.forEach(task => {
                 const b = moment(task.doneTimestamp).format('DD. MMM');
                 // Current day on the x-axis equals day on y-axis
-                if (a.diff(b, 'days') === 0) {
+                if (a.isSame(b, 'day')) {
                   localStoryPoints = localStoryPoints - task.estimation;
                 }
               });
               localDataArray.push(localStoryPoints);
-          });
+            } else {
+              localDataArray.push(localStoryPoints);
+              break;
+            }
+          }
           this.actualBurnData = [
             {
               data: localDataArray,
