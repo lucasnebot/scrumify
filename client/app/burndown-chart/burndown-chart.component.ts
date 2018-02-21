@@ -118,7 +118,7 @@ export class BurndownChartComponent implements OnInit {
         });
 
         tasks = tasks.filter(task => {
-          return moment(task.doneTimestamp).isSameOrBefore(moment());
+          return moment(task.doneTimestamp).isSameOrBefore(moment(), 'day');
         });
 
         return tasks;
@@ -128,17 +128,18 @@ export class BurndownChartComponent implements OnInit {
           // For each value of the x-axis
           for (const day of this.lineChartLabels) {
             const today = moment().format('DD. MMM');
-            if (moment(day).isSameOrBefore(moment(today), 'day')) {
-              const a = moment(day);
+            const a = moment(day);
+            if (a.isBefore(moment(today), 'day')) {
               tasks.forEach(task => {
                 const b = moment(task.doneTimestamp).format('DD. MMM');
                 // Current day on the x-axis equals day on y-axis
-                if (a.diff(b, 'days') === 0) {
+                if (a.isSame(b, 'day')) {
                   localStoryPoints = localStoryPoints - task.estimation;
                 }
               });
               localDataArray.push(localStoryPoints);
             } else {
+              localDataArray.push(localStoryPoints);
               break;
             }
           }
